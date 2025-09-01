@@ -1,0 +1,104 @@
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle, Users, Shield, Star } from "lucide-react";
+// import logoFull from "@/assets/logo-full.png";
+
+export default function Hero() {
+  return (
+    <section className="relative min-h-screen bg-gradient-subtle overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/10" />
+      
+      {/* Navigation */}
+      <nav className="relative z-10 flex items-center justify-between p-6 max-w-7xl mx-auto">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <div className="w-4 h-4 bg-primary-foreground rounded-sm" />
+          </div>
+          <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
+        </div>
+        <div className="hidden md:flex items-center gap-6">
+          <a href="#how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</a>
+          <a href="#features" className="text-foreground/70 hover:text-foreground transition-colors">Features</a>
+          <a href="#pricing" className="text-foreground/70 hover:text-foreground transition-colors">Pricing</a>
+          <Button variant="outline" size="sm">Sign In</Button>
+          <Button variant="hero" size="sm">Get Started</Button>
+        </div>
+      </nav>
+
+      {/* Hero Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-32">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <div className="text-center lg:text-left animate-fade-in-up">
+            <Badge variant="secondary" className="mb-6 px-4 py-2">
+              <Shield className="w-4 h-4 mr-2" />
+              Verified Professionals Only
+            </Badge>
+            
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-foreground mb-6 leading-tight">
+              Find & Hire
+              <span className="block bg-gradient-hero bg-clip-text text-transparent">
+                Verified Pros
+              </span>
+              Remotely
+            </h1>
+            
+            <p className="text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
+              Connect with KYC-verified professionals worldwide. Run physical projects remotely with secure payments, milestone tracking, and real-time collaboration.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
+              <Button variant="hero" size="lg" className="text-lg px-8 py-6">
+                Find Professionals
+              </Button>
+              <Button variant="outline" size="lg" className="text-lg px-8 py-6">
+                Join as Professional
+              </Button>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="flex items-center justify-center lg:justify-start gap-8 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-success" />
+                <span>KYC Verified</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="w-5 h-5 text-success" />
+                <span>Global Network</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5 text-success" />
+                <span>Secure Payments</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Content - Stats/Visual */}
+          <div className="relative">
+            <div className="bg-card rounded-2xl shadow-elegant p-8 border border-border/50">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="text-center">
+                  <div className="text-3xl font-heading font-bold text-primary mb-2">10K+</div>
+                  <div className="text-sm text-muted-foreground">Verified Professionals</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-heading font-bold text-primary mb-2">98%</div>
+                  <div className="text-sm text-muted-foreground">Success Rate</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-heading font-bold text-primary mb-2">50+</div>
+                  <div className="text-sm text-muted-foreground">Countries</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-heading font-bold text-primary mb-2">24/7</div>
+                  <div className="text-sm text-muted-foreground">Support</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
