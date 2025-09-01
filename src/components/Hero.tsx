@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Users, Shield, Star } from "lucide-react";
-// import logoFull from "@/assets/logo-full.png";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
@@ -21,8 +21,12 @@ export default function Hero() {
           <a href="#how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</a>
           <a href="#features" className="text-foreground/70 hover:text-foreground transition-colors">Features</a>
           <a href="#pricing" className="text-foreground/70 hover:text-foreground transition-colors">Pricing</a>
-          <Button variant="outline" size="sm">Sign In</Button>
-          <Button variant="hero" size="sm">Get Started</Button>
+          <Button variant="outline" size="sm" asChild>
+            <Link to="/auth">Sign In</Link>
+          </Button>
+          <Button variant="hero" size="sm" asChild>
+            <Link to="/auth">Get Started</Link>
+          </Button>
         </div>
       </nav>
 
@@ -49,11 +53,11 @@ export default function Hero() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
-              <Button variant="hero" size="lg" className="text-lg px-8 py-6">
-                Find Professionals
+              <Button variant="hero" size="lg" className="text-lg px-8 py-6" asChild>
+                <Link to="/auth">Find Professionals</Link>
               </Button>
-              <Button variant="outline" size="lg" className="text-lg px-8 py-6">
-                Join as Professional
+              <Button variant="outline" size="lg" className="text-lg px-8 py-6" asChild>
+                <Link to="/auth">Join as Professional</Link>
               </Button>
             </div>
 

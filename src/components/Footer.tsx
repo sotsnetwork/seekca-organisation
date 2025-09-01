@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
-// import logoIcon from "@/assets/logo-icon.png";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const footerLinks = {
   product: [
@@ -78,13 +78,13 @@ export default function Footer() {
           <div>
             <h3 className="font-heading font-semibold text-foreground mb-4">Company</h3>
             <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+            {footerLinks.company.map((link) => (
+              <li key={link.name}>
+                <Link to={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                  {link.name}
+                </Link>
+              </li>
+            ))}
             </ul>
           </div>
 
