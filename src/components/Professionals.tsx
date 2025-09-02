@@ -34,6 +34,7 @@ export default function Professionals() {
 
   // Mock data - in a real app, this would come from your Supabase database
   const mockProfessionals: Professional[] = [
+    // Nigeria professionals
     {
       id: "1",
       name: "Sarah Johnson",
@@ -99,16 +100,81 @@ export default function Professionals() {
       description: "Mobile development specialist with cross-platform expertise.",
       verified: true,
     },
+    // US professionals
+    {
+      id: "6",
+      name: "Alex Thompson",
+      title: "Frontend Developer",
+      location: "San Francisco, USA",
+      country: "USA",
+      skills: ["React", "Vue.js", "CSS", "JavaScript"],
+      rating: 4.8,
+      hourlyRate: 45,
+      completedProjects: 52,
+      description: "Frontend specialist with modern web technologies.",
+      verified: true,
+    },
+    {
+      id: "7",
+      name: "Emma Wilson",
+      title: "Product Manager",
+      location: "New York, USA",
+      country: "USA",
+      skills: ["Agile", "Scrum", "Product Strategy", "User Research"],
+      rating: 4.7,
+      hourlyRate: 50,
+      completedProjects: 38,
+      description: "Strategic product leader with startup experience.",
+      verified: true,
+    },
+    // UK professionals
+    {
+      id: "8",
+      name: "Oliver Brown",
+      title: "Backend Developer",
+      location: "London, UK",
+      country: "UK",
+      skills: ["Python", "Django", "PostgreSQL", "AWS"],
+      rating: 4.9,
+      hourlyRate: 42,
+      completedProjects: 41,
+      description: "Backend expert specializing in scalable APIs.",
+      verified: true,
+    },
+    // Canada professionals
+    {
+      id: "9",
+      name: "Sophie Martin",
+      title: "UX Researcher",
+      location: "Toronto, Canada",
+      country: "Canada",
+      skills: ["User Testing", "Analytics", "Research Methods", "Prototyping"],
+      rating: 4.8,
+      hourlyRate: 38,
+      completedProjects: 29,
+      description: "Research-driven UX professional.",
+      verified: true,
+    },
   ];
 
   useEffect(() => {
     // Simulate API call
     setTimeout(() => {
-      setProfessionals(mockProfessionals);
-      setFilteredProfessionals(mockProfessionals);
+      // Filter professionals by user's country
+      const userCountry = user?.user_metadata?.country;
+      let countryProfessionals = mockProfessionals;
+      
+      if (userCountry) {
+        countryProfessionals = mockProfessionals.filter(
+          prof => prof.country.toLowerCase() === userCountry.toLowerCase()
+        );
+      }
+      
+      setProfessionals(countryProfessionals);
+      setFilteredProfessionals(countryProfessionals);
       setLoading(false);
     }, 1000);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     // Filter professionals based on search and filters
