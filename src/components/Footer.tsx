@@ -2,6 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
+import { useAuth } from "@/hooks/use-auth";
 
 const footerLinks = {
   product: [
@@ -31,6 +32,8 @@ const footerLinks = {
 };
 
 export default function Footer() {
+  const { user } = useAuth();
+
   return (
     <footer className="bg-card border-t border-border">
       <div className="max-w-7xl mx-auto px-6 py-16">
@@ -42,7 +45,10 @@ export default function Footer() {
               <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">
-              The global marketplace for verified professionals. Connect, collaborate, and complete projects remotely with confidence.
+              {user 
+                ? `Welcome back, ${user.user_metadata?.full_name || 'Professional'}! You're part of our global marketplace for verified professionals.`
+                : "The global marketplace for verified professionals. Connect, collaborate, and complete projects remotely with confidence."
+              }
             </p>
             <div className="flex items-center gap-4">
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
