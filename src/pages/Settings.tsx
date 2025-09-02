@@ -1,244 +1,236 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Bell, Shield, User, CreditCard, Globe } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { ArrowLeft, Save, Bell, Shield, User, Globe } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Settings() {
+  const { user } = useAuth();
+  const [settings, setSettings] = useState({
+    emailNotifications: true,
+    projectUpdates: true,
+    marketingEmails: false,
+    twoFactorAuth: false,
+    profileVisibility: 'public',
+    language: 'en',
+    timezone: 'UTC',
+  });
+
+  const handleSave = () => {
+    // TODO: Implement settings save logic with Supabase
+    console.log('Settings saved:', settings);
+  };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-muted-foreground mb-4">Please sign in to view your settings.</p>
+          <Button asChild>
+            <Link to="/auth">Sign In</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-6 py-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-heading font-bold text-foreground">Settings</h1>
-          <p className="text-muted-foreground">Manage your account settings and preferences</p>
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-8">
+          <Button variant="outline" size="sm" asChild>
+            <Link to="/">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Home
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-3xl font-heading font-bold text-foreground">Settings</h1>
+            <p className="text-muted-foreground">Manage your account preferences and security</p>
+          </div>
         </div>
 
-        <Tabs defaultValue="account" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="account" className="flex items-center gap-2">
-              <User className="w-4 h-4" />
-              Account
-            </TabsTrigger>
-            <TabsTrigger value="notifications" className="flex items-center gap-2">
-              <Bell className="w-4 h-4" />
-              Notifications
-            </TabsTrigger>
-            <TabsTrigger value="security" className="flex items-center gap-2">
-              <Shield className="w-4 h-4" />
-              Security
-            </TabsTrigger>
-            <TabsTrigger value="billing" className="flex items-center gap-2">
-              <CreditCard className="w-4 h-4" />
-              Billing
-            </TabsTrigger>
-            <TabsTrigger value="preferences" className="flex items-center gap-2">
-              <Globe className="w-4 h-4" />
-              Preferences
-            </TabsTrigger>
-          </TabsList>
+        <div className="space-y-6">
+          {/* Notifications */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <Bell className="w-5 h-5 text-primary" />
+                <div>
+                  <CardTitle>Notifications</CardTitle>
+                  <CardDescription>Manage how you receive notifications</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="emailNotifications">Email Notifications</Label>
+                  <p className="text-sm text-muted-foreground">Receive important updates via email</p>
+                </div>
+                <Switch
+                  id="emailNotifications"
+                  checked={settings.emailNotifications}
+                  onCheckedChange={(checked) => setSettings(prev => ({ ...prev, emailNotifications: checked }))}
+                />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="projectUpdates">Project Updates</Label>
+                  <p className="text-sm text-muted-foreground">Get notified about project milestones and changes</p>
+                </div>
+                <Switch
+                  id="projectUpdates"
+                  checked={settings.projectUpdates}
+                  onCheckedChange={(checked) => setSettings(prev => ({ ...prev, projectUpdates: checked }))}
+                />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="marketingEmails">Marketing Emails</Label>
+                  <p className="text-sm text-muted-foreground">Receive promotional content and newsletters</p>
+                </div>
+                <Switch
+                  id="marketingEmails"
+                  checked={settings.marketingEmails}
+                  onCheckedChange={(checked) => setSettings(prev => ({ ...prev, marketingEmails: checked }))}
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-          <TabsContent value="account" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Account Information</CardTitle>
-                <CardDescription>Update your account details and profile information</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="firstName">First Name</Label>
-                    <Input id="firstName" placeholder="John" />
-                  </div>
-                  <div>
-                    <Label htmlFor="lastName">Last Name</Label>
-                    <Input id="lastName" placeholder="Doe" />
-                  </div>
-                </div>
+          {/* Security */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <Shield className="w-5 h-5 text-primary" />
                 <div>
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="john@example.com" />
+                  <CardTitle>Security</CardTitle>
+                  <CardDescription>Manage your account security settings</CardDescription>
                 </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
                 <div>
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <Input id="phone" placeholder="+1 (555) 123-4567" />
+                  <Label htmlFor="twoFactorAuth">Two-Factor Authentication</Label>
+                  <p className="text-sm text-muted-foreground">Add an extra layer of security to your account</p>
                 </div>
-                <Button>Save Changes</Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                <Switch
+                  id="twoFactorAuth"
+                  checked={settings.twoFactorAuth}
+                  onCheckedChange={(checked) => setSettings(prev => ({ ...prev, twoFactorAuth: checked }))}
+                />
+              </div>
+              <Separator />
+              <div>
+                <Label htmlFor="currentPassword">Current Password</Label>
+                <Input
+                  id="currentPassword"
+                  type="password"
+                  placeholder="Enter current password"
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label htmlFor="newPassword">New Password</Label>
+                <Input
+                  id="newPassword"
+                  type="password"
+                  placeholder="Enter new password"
+                  className="mt-2"
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-          <TabsContent value="notifications" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Notification Preferences</CardTitle>
-                <CardDescription>Choose how you want to be notified</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="emailNotifications">Email Notifications</Label>
-                    <p className="text-sm text-muted-foreground">Receive notifications via email</p>
-                  </div>
-                  <Switch id="emailNotifications" />
+          {/* Privacy */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <User className="w-5 h-5 text-primary" />
+                <div>
+                  <CardTitle>Privacy</CardTitle>
+                  <CardDescription>Control your profile visibility and data sharing</CardDescription>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="pushNotifications">Push Notifications</Label>
-                    <p className="text-sm text-muted-foreground">Receive push notifications in browser</p>
-                  </div>
-                  <Switch id="pushNotifications" />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="messageNotifications">Message Notifications</Label>
-                    <p className="text-sm text-muted-foreground">Get notified when you receive new messages</p>
-                  </div>
-                  <Switch id="messageNotifications" defaultChecked />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="projectUpdates">Project Updates</Label>
-                    <p className="text-sm text-muted-foreground">Notifications about project milestones</p>
-                  </div>
-                  <Switch id="projectUpdates" defaultChecked />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="profileVisibility">Profile Visibility</Label>
+                <select
+                  id="profileVisibility"
+                  value={settings.profileVisibility}
+                  onChange={(e) => setSettings(prev => ({ ...prev, profileVisibility: e.target.value }))}
+                  className="mt-2 w-full px-3 py-2 border border-input rounded-md bg-background"
+                >
+                  <option value="public">Public - Anyone can view</option>
+                  <option value="professional">Professional - Only verified professionals</option>
+                  <option value="private">Private - Only you can view</option>
+                </select>
+              </div>
+            </CardContent>
+          </Card>
 
-          <TabsContent value="security" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Password & Security</CardTitle>
-                <CardDescription>Manage your password and security settings</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+          {/* Preferences */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <Globe className="w-5 h-5 text-primary" />
                 <div>
-                  <Label htmlFor="currentPassword">Current Password</Label>
-                  <Input id="currentPassword" type="password" />
+                  <CardTitle>Preferences</CardTitle>
+                  <CardDescription>Customize your experience</CardDescription>
                 </div>
-                <div>
-                  <Label htmlFor="newPassword">New Password</Label>
-                  <Input id="newPassword" type="password" />
-                </div>
-                <div>
-                  <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                  <Input id="confirmPassword" type="password" />
-                </div>
-                <Button>Update Password</Button>
-              </CardContent>
-            </Card>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="language">Language</Label>
+                <select
+                  id="language"
+                  value={settings.language}
+                  onChange={(e) => setSettings(prev => ({ ...prev, language: e.target.value }))}
+                  className="mt-2 w-full px-3 py-2 border border-input rounded-md bg-background"
+                >
+                  <option value="en">English</option>
+                  <option value="es">Spanish</option>
+                  <option value="fr">French</option>
+                  <option value="de">German</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="timezone">Timezone</Label>
+                <select
+                  id="timezone"
+                  value={settings.timezone}
+                  onChange={(e) => setSettings(prev => ({ ...prev, timezone: e.target.value }))}
+                  className="mt-2 w-full px-3 py-2 border border-input rounded-md bg-background"
+                >
+                  <option value="UTC">UTC (Coordinated Universal Time)</option>
+                  <option value="EST">EST (Eastern Standard Time)</option>
+                  <option value="PST">PST (Pacific Standard Time)</option>
+                  <option value="GMT">GMT (Greenwich Mean Time)</option>
+                </select>
+              </div>
+            </CardContent>
+          </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Two-Factor Authentication</CardTitle>
-                <CardDescription>Add an extra layer of security to your account</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label>Enable 2FA</Label>
-                    <p className="text-sm text-muted-foreground">Secure your account with 2FA</p>
-                  </div>
-                  <Switch />
-                </div>
-                <Button variant="outline">Setup Authenticator App</Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="billing" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Billing Information</CardTitle>
-                <CardDescription>Manage your billing details and subscription</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label>Current Plan</Label>
-                  <p className="text-lg font-semibold">Professional Plan</p>
-                  <p className="text-sm text-muted-foreground">$29/month • Renews on Jan 15, 2025</p>
-                </div>
-                <div className="flex gap-2">
-                  <Button>Upgrade Plan</Button>
-                  <Button variant="outline">Manage Subscription</Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Payment Method</CardTitle>
-                <CardDescription>Update your payment information</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="cardNumber">Card Number</Label>
-                  <Input id="cardNumber" placeholder="**** **** **** 1234" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="expiry">Expiry Date</Label>
-                    <Input id="expiry" placeholder="MM/YY" />
-                  </div>
-                  <div>
-                    <Label htmlFor="cvv">CVV</Label>
-                    <Input id="cvv" placeholder="123" />
-                  </div>
-                </div>
-                <Button>Update Payment Method</Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="preferences" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>App Preferences</CardTitle>
-                <CardDescription>Customize your app experience</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="language">Language</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="es">Español</SelectItem>
-                      <SelectItem value="fr">Français</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="timezone">Timezone</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select timezone" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="utc">UTC</SelectItem>
-                      <SelectItem value="est">Eastern Time</SelectItem>
-                      <SelectItem value="pst">Pacific Time</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label>Dark Mode</Label>
-                    <p className="text-sm text-muted-foreground">Use dark theme</p>
-                  </div>
-                  <Switch />
-                </div>
-                <Button>Save Preferences</Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+          {/* Save Button */}
+          <div className="flex justify-end">
+            <Button onClick={handleSave} className="flex items-center gap-2">
+              <Save className="w-4 h-4" />
+              Save Settings
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
