@@ -1,10 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Users, Shield, Star } from "lucide-react";
+import { CheckCircle, Users, Shield, Star, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Hero() {
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
   return (
     <section className="relative min-h-screen bg-gradient-subtle overflow-hidden">
       {/* Background Pattern */}
@@ -20,12 +27,25 @@ export default function Hero() {
           <a href="#how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</a>
           <a href="#features" className="text-foreground/70 hover:text-foreground transition-colors">Features</a>
           <a href="#pricing" className="text-foreground/70 hover:text-foreground transition-colors">Pricing</a>
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/auth">Sign In</Link>
-          </Button>
-          <Button variant="hero" size="sm" asChild>
-            <Link to="/auth">Get Started</Link>
-          </Button>
+          
+          {user ? (
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-foreground/70">Welcome, {user.user_metadata?.full_name || user.email}</span>
+              <Button variant="outline" size="sm" onClick={handleSignOut}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/auth">Sign In</Link>
+              </Button>
+              <Button variant="hero" size="sm" asChild>
+                <Link to="/auth">Get Started</Link>
+              </Button>
+            </>
+          )}
         </div>
       </nav>
 
@@ -40,24 +60,51 @@ export default function Hero() {
             </Badge>
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-foreground mb-6 leading-tight">
-              Find & Hire
-              <span className="block bg-gradient-hero bg-clip-text text-transparent">
-                Verified Pros
-              </span>
-              Remotely
+              {user ? (
+                <>
+                  Welcome back,
+                  <span className="block bg-gradient-hero bg-clip-text text-transparent">
+                    {user.user_metadata?.full_name || 'Professional'}
+                  </span>
+                </>
+              ) : (
+                <>
+                  Find & Hire
+                  <span className="block bg-gradient-hero bg-clip-text text-transparent">
+                    Verified Pros
+                  </span>
+                  Remotely
+                </>
+              )}
             </h1>
             
             <p className="text-xl text-muted-foreground mb-8 max-w-xl mx-auto lg:mx-0">
-              Connect with KYC-verified professionals worldwide. Run physical projects remotely with secure payments, milestone tracking, and real-time collaboration.
+              {user 
+                ? "Ready to continue your journey? Explore new opportunities or manage your existing projects."
+                : "Connect with KYC-verified professionals worldwide. Run physical projects remotely with secure payments, milestone tracking, and real-time collaboration."
+              }
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
-              <Button variant="hero" size="lg" className="text-lg px-8 py-6" asChild>
-                <Link to="/auth">Find Professionals</Link>
-              </Button>
-              <Button variant="outline" size="lg" className="text-lg px-8 py-6" asChild>
-                <Link to="/auth">Join as Professional</Link>
-              </Button>
+              {user ? (
+                <>
+                  <Button variant="hero" size="lg" className="text-lg px-8 py-6">
+                    View Dashboard
+                  </Button>
+                  <Button variant="outline" size="lg" className="text-lg px-8 py-6">
+                    Browse Projects
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="hero" size="lg" className="text-lg px-8 py-6" asChild>
+                    <Link to="/auth">Find Professionals</Link>
+                  </Button>
+                  <Button variant="outline" size="lg" className="text-lg px-8 py-6" asChild>
+                    <Link to="/auth">Join as Professional</Link>
+                  </Button>
+                </>
+              )}
             </div>
 
             {/* Trust Indicators */}
