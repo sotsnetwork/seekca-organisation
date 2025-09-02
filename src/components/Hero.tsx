@@ -1,16 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Users, Shield, Star, LogOut } from "lucide-react";
+import { CheckCircle, Users, Shield, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
 import { useAuth } from "@/hooks/use-auth";
+import UserProfileDropdown from "./UserProfileDropdown";
 
 export default function Hero() {
-  const { user, signOut } = useAuth();
-
-  const handleSignOut = async () => {
-    await signOut();
-  };
+  const { user } = useAuth();
 
   return (
     <section className="relative min-h-screen bg-gradient-subtle overflow-hidden">
@@ -29,13 +26,7 @@ export default function Hero() {
           <a href="#pricing" className="text-foreground/70 hover:text-foreground transition-colors">Pricing</a>
           
           {user ? (
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-foreground/70">Welcome, {user.user_metadata?.full_name || user.email}</span>
-              <Button variant="outline" size="sm" onClick={handleSignOut}>
-                <LogOut className="w-4 h-4 mr-2" />
-                Sign Out
-              </Button>
-            </div>
+            <UserProfileDropdown />
           ) : (
             <>
               <Button variant="outline" size="sm" asChild>
