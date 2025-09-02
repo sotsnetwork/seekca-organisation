@@ -21,7 +21,8 @@ export default function Auth() {
     fullName: '', 
     email: '', 
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    country: ''
   });
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -75,6 +76,7 @@ export default function Auth() {
         options: {
           data: {
             full_name: signUpData.fullName,
+            country: signUpData.country,
           }
         }
       });
@@ -84,7 +86,7 @@ export default function Auth() {
       } else {
         setMessage({ type: 'success', text: 'Account created successfully! Please check your email to verify your account.' });
         // Clear form
-        setSignUpData({ fullName: '', email: '', password: '', confirmPassword: '' });
+        setSignUpData({ fullName: '', email: '', password: '', confirmPassword: '', country: '' });
         // Switch to sign in tab
         setTimeout(() => setActiveTab('signin'), 2000);
       }
@@ -227,6 +229,17 @@ export default function Auth() {
                       placeholder="Confirm your password"
                       value={signUpData.confirmPassword}
                       onChange={(e) => handleInputChange('signup', 'confirmPassword', e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="country">Country</Label>
+                    <Input
+                      id="country"
+                      type="text"
+                      placeholder="Enter your country"
+                      value={signUpData.country}
+                      onChange={(e) => handleInputChange('signup', 'country', e.target.value)}
                       required
                     />
                   </div>
