@@ -24,6 +24,7 @@ export default function Auth() {
     confirmPassword: '',
     country: ''
   });
+  const [forgotPasswordData, setForgotPasswordData] = useState({ email: '' });
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,11 +98,42 @@ export default function Auth() {
     }
   };
 
-  const handleInputChange = (form: 'signin' | 'signup', field: string, value: string) => {
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage(null);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(forgotPasswordData.email, {
+        redirectTo: `${window.location.origin}/auth?tab=signin&reset=true`,
+      });
+
+      if (error) {
+        setMessage({ type: 'error', text: error.message });
+      } else {
+        setMessage({ 
+          type: 'success', 
+          text: 'Password reset email sent! Please check your inbox and follow the instructions to reset your password.' 
+        });
+        // Clear form
+        setForgotPasswordData({ email: '' });
+        // Switch to sign in tab after a delay
+        setTimeout(() => setActiveTab('signin'), 3000);
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'An unexpected error occurred' });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleInputChange = (form: 'signin' | 'signup' | 'forgot', field: string, value: string) => {
     if (form === 'signin') {
       setSignInData(prev => ({ ...prev, [field]: value }));
-    } else {
+    } else if (form === 'signup') {
       setSignUpData(prev => ({ ...prev, [field]: value }));
+    } else if (form === 'forgot') {
+      setForgotPasswordData(prev => ({ ...prev, [field]: value }));
     }
   };
 
@@ -137,9 +169,10 @@ export default function Auth() {
         )}
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="signin">Sign In</TabsTrigger>
             <TabsTrigger value="signup">Get Started</TabsTrigger>
+            <TabsTrigger value="forgot">Reset Password</TabsTrigger>
           </TabsList>
 
           <TabsContent value="signin">
@@ -171,6 +204,15 @@ export default function Auth() {
                       onChange={(e) => handleInputChange('signin', 'password', e.target.value)}
                       required
                     />
+                  </div>
+                  <div className="text-right">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('forgot')}
+                      className="text-sm text-primary hover:underline"
+                    >
+                      Forgot your password?
+                    </button>
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? "Signing in..." : "Sign In"}
@@ -246,6 +288,42 @@ export default function Auth() {
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? "Creating account..." : "Create Account"}
                   </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="forgot">
+            <Card>
+              <CardHeader>
+                <CardTitle>Reset Password</CardTitle>
+                <CardDescription>Enter your email address and we'll send you a link to reset your password</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleForgotPassword} className="space-y-4">
+                  <div>
+                    <Label htmlFor="forgotEmail">Email</Label>
+                    <Input
+                      id="forgotEmail"
+                      type="email"
+                      placeholder="Enter your email address"
+                      value={forgotPasswordData.email}
+                      onChange={(e) => handleInputChange('forgot', 'email', e.target.value)}
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? "Sending reset email..." : "Send Reset Email"}
+                  </Button>
+                  <div className="text-center">
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('signin')}
+                      className="text-sm text-muted-foreground hover:text-foreground"
+                    >
+                      Back to Sign In
+                    </button>
+                  </div>
                 </form>
               </CardContent>
             </Card>
