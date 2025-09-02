@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
+import logoIcon from "@/assets/logo-icon.png";
 
 const footerLinks = {
   product: [
@@ -37,9 +38,7 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <div className="w-4 h-4 bg-primary-foreground rounded-sm" />
-            </div>
+            <img src={logoIcon} alt="SeekCa" className="w-8 h-8" />
               <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">
