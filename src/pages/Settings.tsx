@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Save, Bell, Shield, User, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
@@ -166,16 +167,16 @@ export default function Settings() {
             <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="profileVisibility">Profile Visibility</Label>
-                <select
-                  id="profileVisibility"
-                  value={settings.profileVisibility}
-                  onChange={(e) => setSettings(prev => ({ ...prev, profileVisibility: e.target.value }))}
-                  className="mt-2 w-full px-3 py-2 border border-input rounded-md bg-background"
-                >
-                  <option value="public">Public - Anyone can view</option>
-                  <option value="professional">Professional - Only verified professionals</option>
-                  <option value="private">Private - Only you can view</option>
-                </select>
+                <Select value={settings.profileVisibility} onValueChange={(value) => setSettings(prev => ({ ...prev, profileVisibility: value }))}>
+                  <SelectTrigger className="mt-2">
+                    <SelectValue placeholder="Select visibility" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="public">Public - Anyone can view</SelectItem>
+                    <SelectItem value="professional">Professional - Only verified professionals</SelectItem>
+                    <SelectItem value="private">Private - Only you can view</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </CardContent>
           </Card>
@@ -194,31 +195,31 @@ export default function Settings() {
             <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="language">Language</Label>
-                <select
-                  id="language"
-                  value={settings.language}
-                  onChange={(e) => setSettings(prev => ({ ...prev, language: e.target.value }))}
-                  className="mt-2 w-full px-3 py-2 border border-input rounded-md bg-background"
-                >
-                  <option value="en">English</option>
-                  <option value="es">Spanish</option>
-                  <option value="fr">French</option>
-                  <option value="de">German</option>
-                </select>
+                <Select value={settings.language} onValueChange={(value) => setSettings(prev => ({ ...prev, language: value }))}>
+                  <SelectTrigger className="mt-2">
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="es">Spanish</SelectItem>
+                    <SelectItem value="fr">French</SelectItem>
+                    <SelectItem value="de">German</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label htmlFor="timezone">Timezone</Label>
-                <select
-                  id="timezone"
-                  value={settings.timezone}
-                  onChange={(e) => setSettings(prev => ({ ...prev, timezone: e.target.value }))}
-                  className="mt-2 w-full px-3 py-2 border border-input rounded-md bg-background"
-                >
-                  <option value="UTC">UTC (Coordinated Universal Time)</option>
-                  <option value="EST">EST (Eastern Standard Time)</option>
-                  <option value="PST">PST (Pacific Standard Time)</option>
-                  <option value="GMT">GMT (Greenwich Mean Time)</option>
-                </select>
+                <Select value={settings.timezone} onValueChange={(value) => setSettings(prev => ({ ...prev, timezone: value }))}>
+                  <SelectTrigger className="mt-2">
+                    <SelectValue placeholder="Select timezone" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="UTC">UTC (Coordinated Universal Time)</SelectItem>
+                    <SelectItem value="EST">EST (Eastern Standard Time)</SelectItem>
+                    <SelectItem value="PST">PST (Pacific Standard Time)</SelectItem>
+                    <SelectItem value="GMT">GMT (Greenwich Mean Time)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </CardContent>
           </Card>

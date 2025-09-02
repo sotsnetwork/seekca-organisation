@@ -257,7 +257,7 @@ export default function Professionals() {
                 <SelectValue placeholder="Filter by skill" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Skills</SelectItem>
+                <SelectItem value="all">All Skills</SelectItem>
                 <SelectItem value="react">React</SelectItem>
                 <SelectItem value="node">Node.js</SelectItem>
                 <SelectItem value="python">Python</SelectItem>
@@ -270,7 +270,7 @@ export default function Professionals() {
                 <SelectValue placeholder="Max hourly rate" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Any Rate</SelectItem>
+                <SelectItem value="any">Any Rate</SelectItem>
                 <SelectItem value="20">$20 or less</SelectItem>
                 <SelectItem value="30">$30 or less</SelectItem>
                 <SelectItem value="40">$40 or less</SelectItem>
