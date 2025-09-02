@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Users, Shield, Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import logoIcon from "@/assets/logo-icon.png";
 
 export default function Hero() {
   return (
@@ -12,9 +13,7 @@ export default function Hero() {
       {/* Navigation */}
       <nav className="relative z-10 flex items-center justify-between p-6 max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <div className="w-4 h-4 bg-primary-foreground rounded-sm" />
-          </div>
+          <img src={logoIcon} alt="SeekCa" className="w-8 h-8" />
           <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
         </div>
         <div className="hidden md:flex items-center gap-6">
