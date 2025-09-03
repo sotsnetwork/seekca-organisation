@@ -41,10 +41,10 @@ export default function Professionals() {
     {
       id: "1",
       name: "Sarah Johnson",
-      title: "Home Renovation Specialist",
+      title: "Kitchen & Bathroom Remodeling Specialist",
       location: "Lagos, Nigeria",
       country: "Nigeria",
-      skills: ["Kitchen Remodeling", "Bathroom Renovation", "Painting", "Tile Installation"],
+      skills: ["Kitchen Remodeling", "Bathroom Remodeling", "Interior Painting", "Tile Installation", "Flooring Installation", "Cabinet Installation", "Countertop Installation"],
       rating: 4.9,
       hourlyRate: 25,
       completedProjects: 47,
@@ -57,7 +57,7 @@ export default function Professionals() {
       title: "Plumbing & Electrical Expert",
       location: "Abuja, Nigeria",
       country: "Nigeria",
-      skills: ["Pipe Installation", "Electrical Wiring", "Drainage Systems", "Circuit Repair"],
+      skills: ["Plumbing", "Electrical Work", "HVAC Services", "Appliance Repairs", "Garage Door Repairs", "Furnace Repairs"],
       rating: 4.8,
       hourlyRate: 30,
       completedProjects: 32,
@@ -196,13 +196,16 @@ export default function Professionals() {
     if (skillFilter && skillFilter !== 'all') {
       // Map filter values to service categories
       const serviceCategories: { [key: string]: string[] } = {
-        'cleaning': ['cleaning', 'maintenance', 'deep cleaning', 'carpet cleaning', 'window washing'],
-        'renovation': ['renovation', 'remodeling', 'kitchen', 'bathroom', 'painting', 'tile'],
-        'plumbing': ['plumbing', 'electrical', 'pipe', 'wiring', 'drainage', 'circuit'],
-        'landscaping': ['landscaping', 'garden', 'lawn', 'tree', 'irrigation', 'outdoor'],
-        'auto': ['auto', 'car', 'engine', 'brake', 'oil', 'diagnostic'],
-        'handyman': ['handyman', 'assembly', 'repair', 'installation', 'maintenance'],
-        'organization': ['organization', 'decluttering', 'closet', 'storage', 'moving']
+        'exterior': ['roofing', 'house painting', 'window washing', 'chimney', 'pools', 'gutter', 'deck', 'siding', 'concrete', 'masonry'],
+        'cleaning': ['cleaning', 'maintenance', 'deep cleaning', 'carpet cleaning', 'window washing', 'organization', 'junk removal', 'duct cleaning', 'pool cleaning'],
+        'repairs': ['plumbing', 'locksmith', 'appliance repair', 'garage door', 'handyman', 'furnace', 'hvac', 'electrical', 'windows', 'doors', 'contracting', 'carpentry', 'bathroom'],
+        'renovations': ['kitchen remodeling', 'flooring', 'interior design', 'carpet installation', 'interior painting', 'basement'],
+        'landscaping': ['lawn care', 'landscaping design', 'gardening', 'tree trimming', 'sprinkler', 'artificial turf', 'stump grinding', 'sod', 'arborist'],
+        'installation': ['holiday lights', 'tv mounting', 'security camera', 'appliance installation', 'furniture assembly', 'ceiling fan', 'generator', 'art hanging', 'gym equipment'],
+        'pest': ['pest control', 'mosquito', 'rodent', 'bee removal', 'bed bug', 'wasp', 'termites', 'dead animal'],
+        'trending': ['event planning', 'heat pump', 'foundation inspection', 'karaoke rental', 'after school lessons', 'concrete delivery'],
+        'events': ['caterers', 'makeup artists', 'dj', 'photographers', 'wedding planners', 'limo', 'car rental'],
+        'wellness': ['personal trainer', 'life coach', 'nutritionist', 'yoga']
       };
       
       const categoryKeywords = serviceCategories[skillFilter] || [];
@@ -318,12 +321,12 @@ export default function Professionals() {
           <div className="grid md:grid-cols-4 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-              <Input
-                placeholder="Search for services..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
+                             <Input
+                 placeholder="Search for skills, services, or professionals..."
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
+                 className="pl-10"
+               />
             </div>
             <Select value={skillFilter} onValueChange={setSkillFilter}>
               <SelectTrigger>
@@ -331,13 +334,16 @@ export default function Professionals() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Services</SelectItem>
-                <SelectItem value="cleaning">Cleaning & Maintenance</SelectItem>
-                <SelectItem value="renovation">Home Renovation</SelectItem>
-                <SelectItem value="plumbing">Plumbing & Electrical</SelectItem>
-                <SelectItem value="landscaping">Landscaping & Garden</SelectItem>
-                <SelectItem value="auto">Auto Repair</SelectItem>
-                <SelectItem value="handyman">Handyman Services</SelectItem>
-                <SelectItem value="organization">Home Organization</SelectItem>
+                <SelectItem value="exterior">Exterior Home Care</SelectItem>
+                <SelectItem value="cleaning">Cleaning & Organization</SelectItem>
+                <SelectItem value="repairs">Home Repairs & Maintenance</SelectItem>
+                <SelectItem value="renovations">Renovations & Upgrades</SelectItem>
+                <SelectItem value="landscaping">Landscaping & Outdoor Services</SelectItem>
+                <SelectItem value="installation">Installation & Assembly</SelectItem>
+                <SelectItem value="pest">Pest Control</SelectItem>
+                <SelectItem value="trending">Trending Services</SelectItem>
+                <SelectItem value="events">Events</SelectItem>
+                <SelectItem value="wellness">Health & Wellness</SelectItem>
               </SelectContent>
             </Select>
             <Select value={rateFilter} onValueChange={setRateFilter}>
