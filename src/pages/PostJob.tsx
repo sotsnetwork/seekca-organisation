@@ -138,18 +138,24 @@ export default function PostJob() {
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
-                                         <SelectContent>
-                       <SelectItem value="exterior">Exterior Home Care</SelectItem>
-                       <SelectItem value="cleaning">Cleaning & Organization</SelectItem>
-                       <SelectItem value="repairs">Home Repairs & Maintenance</SelectItem>
-                       <SelectItem value="renovations">Renovations & Upgrades</SelectItem>
-                       <SelectItem value="landscaping">Landscaping & Outdoor Services</SelectItem>
-                       <SelectItem value="installation">Installation & Assembly</SelectItem>
-                       <SelectItem value="pest">Pest Control</SelectItem>
-                       <SelectItem value="trending">Trending Services</SelectItem>
-                       <SelectItem value="events">Events</SelectItem>
-                       <SelectItem value="wellness">Health & Wellness</SelectItem>
-                     </SelectContent>
+                                                              <SelectContent>
+                        <SelectItem value="exterior">Exterior Home Care</SelectItem>
+                        <SelectItem value="cleaning">Cleaning & Organization</SelectItem>
+                        <SelectItem value="repairs">Home Repairs & Maintenance</SelectItem>
+                        <SelectItem value="renovations">Renovations & Upgrades</SelectItem>
+                        <SelectItem value="landscaping">Landscaping & Outdoor Services</SelectItem>
+                        <SelectItem value="installation">Installation & Assembly</SelectItem>
+                        <SelectItem value="pest">Pest Control</SelectItem>
+                        <SelectItem value="architecture">Architecture & Design</SelectItem>
+                        <SelectItem value="surveying">Surveying & Engineering</SelectItem>
+                        <SelectItem value="automotive">Automotive & Mechanical</SelectItem>
+                        <SelectItem value="welding">Welding & Metalwork</SelectItem>
+                        <SelectItem value="construction">Construction & Trades</SelectItem>
+                        <SelectItem value="specialized">Specialized Services</SelectItem>
+                        <SelectItem value="trending">Trending Services</SelectItem>
+                        <SelectItem value="events">Events</SelectItem>
+                        <SelectItem value="wellness">Health & Wellness</SelectItem>
+                      </SelectContent>
                   </Select>
                 </div>
               </div>
