@@ -144,20 +144,86 @@ export default function Professionals() {
       description: "Professional gardener and landscaper. Creating beautiful outdoor spaces.",
       verified: true,
     },
-    // Canada professionals - Local physical services
-    {
-      id: "9",
-      name: "Sophie Martin",
-      title: "Home Organization Expert",
-      location: "Toronto, Canada",
-      country: "Canada",
-      skills: ["Closet Organization", "Decluttering", "Storage Solutions", "Moving Prep"],
-      rating: 4.8,
-      hourlyRate: 38,
-      completedProjects: 29,
-      description: "Professional organizer helping create functional and beautiful living spaces.",
-      verified: true,
-    },
+         // Canada professionals - Local physical services
+     {
+       id: "9",
+       name: "Sophie Martin",
+       title: "Home Organization Expert",
+       location: "Toronto, Canada",
+       country: "Canada",
+       skills: ["Closet Organization", "Decluttering", "Storage Solutions", "Moving Prep"],
+       rating: 4.8,
+       hourlyRate: 38,
+       completedProjects: 29,
+       description: "Professional organizer helping create functional and beautiful living spaces.",
+       verified: true,
+     },
+     // New professionals with missing skill categories
+     {
+       id: "10",
+       name: "Robert Williams",
+       title: "Licensed Architect & Designer",
+       location: "Lagos, Nigeria",
+       country: "Nigeria",
+       skills: ["Architectural Design", "Building Plans", "Structural Engineering", "3D Modeling", "Site Planning", "Sustainable Design"],
+       rating: 4.9,
+       hourlyRate: 45,
+       completedProjects: 23,
+       description: "Registered architect with 8+ years designing residential and commercial buildings. Specializes in sustainable and modern designs.",
+       verified: true,
+     },
+     {
+       id: "11",
+       name: "Ahmed Hassan",
+       title: "Land Surveyor & Civil Engineer",
+       location: "Abuja, Nigeria",
+       country: "Nigeria",
+       skills: ["Land Surveying", "Property Boundaries", "Topographic Surveys", "GPS Surveying", "Civil Engineering", "Construction Surveying"],
+       rating: 4.7,
+       hourlyRate: 40,
+       completedProjects: 31,
+       description: "Professional surveyor and civil engineer. Accurate property measurements and construction site surveying.",
+       verified: true,
+     },
+     {
+       id: "12",
+       name: "Maria Rodriguez",
+       title: "Certified Auto Mechanic",
+       location: "Port Harcourt, Nigeria",
+       country: "Nigeria",
+       skills: ["Auto Repair", "Engine Repair", "Brake Service", "Diagnostic Testing", "Transmission Repair", "Electrical Systems"],
+       rating: 4.8,
+       hourlyRate: 35,
+       completedProjects: 67,
+       description: "ASE certified mechanic with 12+ years experience. All major car brands and comprehensive auto services.",
+       verified: true,
+     },
+     {
+       id: "13",
+       name: "John O'Connor",
+       title: "Professional Welder & Metal Fabricator",
+       location: "Enugu, Nigeria",
+       country: "Nigeria",
+       skills: ["Arc Welding", "MIG Welding", "TIG Welding", "Metal Fabrication", "Steel Work", "Pipe Welding", "Custom Metal Projects"],
+       rating: 4.6,
+       hourlyRate: 32,
+       completedProjects: 42,
+       description: "Skilled welder specializing in structural steel, custom metalwork, and industrial fabrication projects.",
+       verified: true,
+     },
+     {
+       id: "14",
+       name: "David Thompson",
+       title: "General Contractor & Builder",
+       location: "Kano, Nigeria",
+       country: "Nigeria",
+       skills: ["General Contracting", "Carpentry", "Masonry", "Concrete Work", "Framing", "Foundation Work", "Project Management"],
+       rating: 4.9,
+       hourlyRate: 38,
+       completedProjects: 28,
+       description: "Experienced contractor handling complete construction projects from foundation to finish.",
+       verified: true,
+     },
   ];
 
   useEffect(() => {
@@ -194,19 +260,25 @@ export default function Professionals() {
     }
 
     if (skillFilter && skillFilter !== 'all') {
-      // Map filter values to service categories
-      const serviceCategories: { [key: string]: string[] } = {
-        'exterior': ['roofing', 'house painting', 'window washing', 'chimney', 'pools', 'gutter', 'deck', 'siding', 'concrete', 'masonry'],
-        'cleaning': ['cleaning', 'maintenance', 'deep cleaning', 'carpet cleaning', 'window washing', 'organization', 'junk removal', 'duct cleaning', 'pool cleaning'],
-        'repairs': ['plumbing', 'locksmith', 'appliance repair', 'garage door', 'handyman', 'furnace', 'hvac', 'electrical', 'windows', 'doors', 'contracting', 'carpentry', 'bathroom'],
-        'renovations': ['kitchen remodeling', 'flooring', 'interior design', 'carpet installation', 'interior painting', 'basement'],
-        'landscaping': ['lawn care', 'landscaping design', 'gardening', 'tree trimming', 'sprinkler', 'artificial turf', 'stump grinding', 'sod', 'arborist'],
-        'installation': ['holiday lights', 'tv mounting', 'security camera', 'appliance installation', 'furniture assembly', 'ceiling fan', 'generator', 'art hanging', 'gym equipment'],
-        'pest': ['pest control', 'mosquito', 'rodent', 'bee removal', 'bed bug', 'wasp', 'termites', 'dead animal'],
-        'trending': ['event planning', 'heat pump', 'foundation inspection', 'karaoke rental', 'after school lessons', 'concrete delivery'],
-        'events': ['caterers', 'makeup artists', 'dj', 'photographers', 'wedding planners', 'limo', 'car rental'],
-        'wellness': ['personal trainer', 'life coach', 'nutritionist', 'yoga']
-      };
+             // Map filter values to service categories
+       const serviceCategories: { [key: string]: string[] } = {
+         'exterior': ['roofing', 'house painting', 'window washing', 'chimney', 'pools', 'gutter', 'deck', 'siding', 'concrete', 'masonry'],
+         'cleaning': ['cleaning', 'maintenance', 'deep cleaning', 'carpet cleaning', 'window washing', 'organization', 'junk removal', 'duct cleaning', 'pool cleaning'],
+         'repairs': ['plumbing', 'locksmith', 'appliance repair', 'garage door', 'handyman', 'furnace', 'hvac', 'electrical', 'windows', 'doors', 'contracting', 'carpentry', 'bathroom'],
+         'renovations': ['kitchen remodeling', 'flooring', 'interior design', 'carpet installation', 'interior painting', 'basement'],
+         'landscaping': ['lawn care', 'landscaping design', 'gardening', 'tree trimming', 'sprinkler', 'artificial turf', 'stump grinding', 'sod', 'arborist'],
+         'installation': ['holiday lights', 'tv mounting', 'security camera', 'appliance installation', 'furniture assembly', 'ceiling fan', 'generator', 'art hanging', 'gym equipment'],
+         'pest': ['pest control', 'mosquito', 'rodent', 'bee removal', 'bed bug', 'wasp', 'termites', 'dead animal'],
+         'architecture': ['architectural design', 'building plans', 'structural engineering', 'interior architecture', '3d modeling', 'site planning', 'building codes', 'sustainable design'],
+         'surveying': ['land surveying', 'property boundaries', 'topographic surveys', 'construction surveying', 'gps surveying', 'aerial surveying', 'civil engineering', 'structural engineering'],
+         'automotive': ['auto repair', 'engine repair', 'brake service', 'oil change', 'diagnostic testing', 'transmission repair', 'electrical systems', 'ac heating repair'],
+         'welding': ['arc welding', 'mig welding', 'tig welding', 'stick welding', 'plasma cutting', 'metal fabrication', 'steel work', 'aluminum welding', 'stainless steel welding'],
+         'construction': ['general contracting', 'carpentry', 'masonry', 'concrete work', 'steel erection', 'roofing', 'siding installation', 'foundation work', 'framing'],
+         'specialized': ['glass installation', 'mirror installation', 'window installation', 'door installation', 'security systems', 'home automation', 'solar installation', 'generator installation'],
+         'trending': ['event planning', 'heat pump', 'foundation inspection', 'karaoke rental', 'after school lessons', 'concrete delivery'],
+         'events': ['caterers', 'makeup artists', 'dj', 'photographers', 'wedding planners', 'limo', 'car rental'],
+         'wellness': ['personal trainer', 'life coach', 'nutritionist', 'yoga']
+       };
       
       const categoryKeywords = serviceCategories[skillFilter] || [];
       filtered = filtered.filter(prof =>
@@ -332,19 +404,25 @@ export default function Professionals() {
               <SelectTrigger>
                 <SelectValue placeholder="Filter by service" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Services</SelectItem>
-                <SelectItem value="exterior">Exterior Home Care</SelectItem>
-                <SelectItem value="cleaning">Cleaning & Organization</SelectItem>
-                <SelectItem value="repairs">Home Repairs & Maintenance</SelectItem>
-                <SelectItem value="renovations">Renovations & Upgrades</SelectItem>
-                <SelectItem value="landscaping">Landscaping & Outdoor Services</SelectItem>
-                <SelectItem value="installation">Installation & Assembly</SelectItem>
-                <SelectItem value="pest">Pest Control</SelectItem>
-                <SelectItem value="trending">Trending Services</SelectItem>
-                <SelectItem value="events">Events</SelectItem>
-                <SelectItem value="wellness">Health & Wellness</SelectItem>
-              </SelectContent>
+                             <SelectContent>
+                 <SelectItem value="all">All Services</SelectItem>
+                 <SelectItem value="exterior">Exterior Home Care</SelectItem>
+                 <SelectItem value="cleaning">Cleaning & Organization</SelectItem>
+                 <SelectItem value="repairs">Home Repairs & Maintenance</SelectItem>
+                 <SelectItem value="renovations">Renovations & Upgrades</SelectItem>
+                 <SelectItem value="landscaping">Landscaping & Outdoor Services</SelectItem>
+                 <SelectItem value="installation">Installation & Assembly</SelectItem>
+                 <SelectItem value="pest">Pest Control</SelectItem>
+                 <SelectItem value="architecture">Architecture & Design</SelectItem>
+                 <SelectItem value="surveying">Surveying & Engineering</SelectItem>
+                 <SelectItem value="automotive">Automotive & Mechanical</SelectItem>
+                 <SelectItem value="welding">Welding & Metalwork</SelectItem>
+                 <SelectItem value="construction">Construction & Trades</SelectItem>
+                 <SelectItem value="specialized">Specialized Services</SelectItem>
+                 <SelectItem value="trending">Trending Services</SelectItem>
+                 <SelectItem value="events">Events</SelectItem>
+                 <SelectItem value="wellness">Health & Wellness</SelectItem>
+               </SelectContent>
             </Select>
             <Select value={rateFilter} onValueChange={setRateFilter}>
               <SelectTrigger>
