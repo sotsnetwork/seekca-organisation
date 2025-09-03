@@ -230,7 +230,7 @@ export default function Professionals() {
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="text-center">
             <h1 className="text-4xl font-heading font-bold text-foreground mb-4">
-              Professionals in {user?.user_metadata?.country || 'Your Country'}
+              Professionals Nearby
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Connect with verified professionals from your country. Find the perfect match for your project.
