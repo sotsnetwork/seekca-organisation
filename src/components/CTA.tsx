@@ -1,8 +1,36 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Shield, Users } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function CTA() {
+  const { user } = useAuth();
+
+  // Determine button actions based on user authentication status
+  const getBusinessButtonAction = () => {
+    if (user) {
+      // If user is logged in, they can post jobs
+      return { to: "/post-job", text: "Post Your First Job" };
+    } else {
+      // If not logged in, redirect to auth
+      return { to: "/auth", text: "Sign Up to Post Jobs" };
+    }
+  };
+
+  const getProfessionalButtonAction = () => {
+    if (user) {
+      // If user is logged in, they can access professional features
+      return { to: "/profile", text: "View Professional Profile" };
+    } else {
+      // If not logged in, redirect to auth
+      return { to: "/auth", text: "Join as Professional" };
+    }
+  };
+
+  const businessAction = getBusinessButtonAction();
+  const professionalAction = getProfessionalButtonAction();
+
   return (
     <section className="py-24 bg-background">
       <div className="max-w-7xl mx-auto px-6">
@@ -29,9 +57,11 @@ export default function CTA() {
                   <p className="text-primary-foreground/80 mb-4">
                     Find verified professionals for your remote projects. Access global talent with local expertise.
                   </p>
-                  <Button variant="secondary" size="lg" className="w-full">
-                    Post Your First Job
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                  <Button variant="secondary" size="lg" className="w-full" asChild>
+                    <Link to={businessAction.to}>
+                      {businessAction.text}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Link>
                   </Button>
                 </div>
                 
@@ -43,9 +73,11 @@ export default function CTA() {
                   <p className="text-primary-foreground/80 mb-4">
                     Get verified and access global opportunities. Build your reputation and grow your business.
                   </p>
-                  <Button variant="secondary" size="lg" className="w-full">
-                    Join as Professional
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                  <Button variant="secondary" size="lg" className="w-full" asChild>
+                    <Link to={professionalAction.to}>
+                      {professionalAction.text}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Link>
                   </Button>
                 </div>
               </div>
