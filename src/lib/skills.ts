@@ -221,6 +221,132 @@ export const skillCategories: SkillCategory[] = [
       "Holistic Health",
       "Alternative Medicine"
     ]
+  },
+  {
+    id: "architecture",
+    name: "Architecture & Design",
+    skills: [
+      "Architectural Design",
+      "Building Plans",
+      "Structural Engineering",
+      "Interior Architecture",
+      "3D Modeling",
+      "Site Planning",
+      "Building Codes",
+      "Sustainable Design",
+      "Commercial Architecture",
+      "Residential Architecture",
+      "Renovation Design",
+      "Space Planning",
+      "Material Selection",
+      "Construction Documentation",
+      "Project Management"
+    ]
+  },
+  {
+    id: "surveying",
+    name: "Surveying & Engineering",
+    skills: [
+      "Land Surveying",
+      "Property Boundaries",
+      "Topographic Surveys",
+      "Construction Surveying",
+      "GPS Surveying",
+      "Aerial Surveying",
+      "Civil Engineering",
+      "Structural Engineering",
+      "Mechanical Engineering",
+      "Electrical Engineering",
+      "Geotechnical Engineering",
+      "Environmental Engineering",
+      "Transportation Engineering",
+      "Water Resources Engineering",
+      "Construction Engineering"
+    ]
+  },
+  {
+    id: "automotive",
+    name: "Automotive & Mechanical",
+    skills: [
+      "Auto Repair",
+      "Engine Repair",
+      "Brake Service",
+      "Oil Change",
+      "Diagnostic Testing",
+      "Transmission Repair",
+      "Electrical Systems",
+      "AC/Heating Repair",
+      "Tire Service",
+      "Wheel Alignment",
+      "Exhaust Repair",
+      "Fuel System Repair",
+      "Suspension Repair",
+      "Body Work",
+      "Paint & Refinishing"
+    ]
+  },
+  {
+    id: "welding",
+    name: "Welding & Metalwork",
+    skills: [
+      "Arc Welding",
+      "MIG Welding",
+      "TIG Welding",
+      "Stick Welding",
+      "Plasma Cutting",
+      "Metal Fabrication",
+      "Steel Work",
+      "Aluminum Welding",
+      "Stainless Steel Welding",
+      "Pipe Welding",
+      "Structural Welding",
+      "Sheet Metal Work",
+      "Metal Art",
+      "Welding Repair",
+      "Custom Metal Projects"
+    ]
+  },
+  {
+    id: "construction",
+    name: "Construction & Trades",
+    skills: [
+      "General Contracting",
+      "Carpentry",
+      "Masonry",
+      "Concrete Work",
+      "Steel Erection",
+      "Roofing",
+      "Siding Installation",
+      "Foundation Work",
+      "Framing",
+      "Drywall Installation",
+      "Flooring Installation",
+      "Painting",
+      "Electrical Work",
+      "Plumbing",
+      "HVAC Installation"
+    ]
+  },
+  {
+    id: "specialized",
+    name: "Specialized Services",
+    skills: [
+      "Glass Installation",
+      "Mirror Installation",
+      "Window Installation",
+      "Door Installation",
+      "Security Systems",
+      "Home Automation",
+      "Solar Installation",
+      "Generator Installation",
+      "Water Filtration",
+      "Air Purification",
+      "Soundproofing",
+      "Insulation",
+      "Fire Safety",
+      "Accessibility Modifications",
+      "Emergency Repairs"
+    ]
   }
 ];
 
