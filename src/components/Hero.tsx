@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Users, Shield, Star, User } from "lucide-react";
+import { CheckCircle, Users, Shield, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
 import { useAuth } from "@/hooks/use-auth";
@@ -37,11 +37,6 @@ export default function Hero() {
               <Button variant="hero" size="sm" asChild>
                 <Link to="/auth">Get Started</Link>
               </Button>
-              <Button variant="ghost" size="sm" asChild className="p-2">
-                <Link to="/auth" className="flex items-center justify-center">
-                  <User className="w-5 h-5" />
-                </Link>
-              </Button>
             </>
           )}
         </div>
@@ -52,13 +47,11 @@ export default function Hero() {
             <UserProfileDropdown />
           ) : (
             <>
-              <Button variant="ghost" size="sm" asChild className="p-2">
-                <Link to="/auth" className="flex items-center justify-center">
-                  <User className="w-5 h-5" />
-                </Link>
-              </Button>
               <Button variant="outline" size="sm" asChild>
                 <Link to="/auth">Sign In</Link>
+              </Button>
+              <Button variant="hero" size="sm" asChild>
+                <Link to="/auth">Get Started</Link>
               </Button>
             </>
           )}
