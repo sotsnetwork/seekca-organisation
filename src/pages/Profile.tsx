@@ -4,37 +4,66 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Edit, Save, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, Edit, Save, X, Upload, Camera } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import SkillSelector from "@/components/SkillSelector";
 
 export default function Profile() {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
     fullName: user?.user_metadata?.full_name || '',
+    nickname: user?.user_metadata?.nickname || '',
     country: user?.user_metadata?.country || '',
     bio: user?.user_metadata?.bio || '',
-    skills: user?.user_metadata?.skills || '',
+    skills: user?.user_metadata?.skills || [],
     hourlyRate: user?.user_metadata?.hourlyRate || '',
     location: user?.user_metadata?.location || '',
+    avatarUrl: user?.user_metadata?.avatar_url || '',
   });
+
+  const [selectedSkills, setSelectedSkills] = useState<string[]>(
+    Array.isArray(user?.user_metadata?.skills) 
+      ? user.user_metadata.skills 
+      : user?.user_metadata?.skills?.split(',').filter(Boolean) || []
+  );
 
   const handleSave = () => {
     // TODO: Implement profile update logic with Supabase
+    // Update the profileData with selected skills
+    setProfileData(prev => ({ ...prev, skills: selectedSkills }));
     setIsEditing(false);
   };
 
   const handleCancel = () => {
     setProfileData({
       fullName: user?.user_metadata?.full_name || '',
+      nickname: user?.user_metadata?.nickname || '',
       country: user?.user_metadata?.country || '',
       bio: user?.user_metadata?.bio || '',
-      skills: user?.user_metadata?.skills || '',
+      skills: user?.user_metadata?.skills || [],
       hourlyRate: user?.user_metadata?.hourlyRate || '',
       location: user?.user_metadata?.location || '',
+      avatarUrl: user?.user_metadata?.avatar_url || '',
     });
+    setSelectedSkills(
+      Array.isArray(user?.user_metadata?.skills) 
+        ? user.user_metadata.skills 
+        : user?.user_metadata?.skills?.split(',').filter(Boolean) || []
+    );
     setIsEditing(false);
+  };
+
+  const handleProfilePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // TODO: Implement actual file upload to Supabase storage
+      // For now, create a local URL
+      const imageUrl = URL.createObjectURL(file);
+      setProfileData(prev => ({ ...prev, avatarUrl: imageUrl }));
+    }
   };
 
   const getInitials = (name: string) => {
@@ -81,16 +110,39 @@ export default function Profile() {
           <div className="lg:col-span-1">
             <Card>
               <CardHeader className="text-center">
-                <div className="mx-auto mb-4">
+                <div className="mx-auto mb-4 relative">
                   <Avatar className="w-24 h-24">
-                    <AvatarImage src={user.user_metadata?.avatar_url} />
+                    <AvatarImage src={profileData.avatarUrl || user.user_metadata?.avatar_url} />
                     <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
-                      {getInitials(profileData.fullName)}
+                      {getInitials(profileData.nickname || profileData.fullName)}
                     </AvatarFallback>
                   </Avatar>
+                  {isEditing && (
+                    <div className="absolute -bottom-2 -right-2">
+                      <label htmlFor="profile-picture" className="cursor-pointer">
+                        <div className="bg-primary text-primary-foreground rounded-full p-2 hover:bg-primary/90 transition-colors">
+                          <Camera className="w-4 h-4" />
+                        </div>
+                        <input
+                          id="profile-picture"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleProfilePictureChange}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  )}
                 </div>
-                <CardTitle className="text-xl">{profileData.fullName}</CardTitle>
+                <CardTitle className="text-xl">
+                  {profileData.nickname || profileData.fullName}
+                </CardTitle>
                 <CardDescription>{user.email}</CardDescription>
+                {profileData.nickname && (
+                  <CardDescription className="text-sm text-muted-foreground">
+                    {profileData.fullName}
+                  </CardDescription>
+                )}
               </CardHeader>
               <CardContent>
                 <div className="space-y-3 text-sm">
@@ -147,6 +199,16 @@ export default function Profile() {
                     />
                   </div>
                   <div>
+                    <Label htmlFor="nickname">Nickname (Display Name)</Label>
+                    <Input
+                      id="nickname"
+                      value={profileData.nickname}
+                      onChange={(e) => setProfileData(prev => ({ ...prev, nickname: e.target.value }))}
+                      disabled={!isEditing}
+                      placeholder="Professional name to display"
+                    />
+                  </div>
+                  <div>
                     <Label htmlFor="country">Country</Label>
                     <Input
                       id="country"
@@ -177,14 +239,28 @@ export default function Profile() {
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <Label htmlFor="skills">Skills (comma separated)</Label>
-                    <Input
-                      id="skills"
-                      value={profileData.skills}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, skills: e.target.value }))}
-                      disabled={!isEditing}
-                      placeholder="React, Node.js, TypeScript"
-                    />
+                    <Label>Professional Skills</Label>
+                    {isEditing ? (
+                      <SkillSelector
+                        selectedSkills={selectedSkills}
+                        onSkillsChange={setSelectedSkills}
+                        maxSkills={25}
+                      />
+                    ) : (
+                      <div className="mt-2">
+                        {selectedSkills.length > 0 ? (
+                          <div className="flex flex-wrap gap-2">
+                            {selectedSkills.map((skill) => (
+                              <Badge key={skill} variant="outline">
+                                {skill}
+                              </Badge>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-muted-foreground text-sm">No skills added yet</p>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="md:col-span-2">
                     <Label htmlFor="bio">Bio</Label>
