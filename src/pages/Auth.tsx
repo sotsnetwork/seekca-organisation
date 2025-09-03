@@ -1,11 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -14,6 +14,15 @@ export default function Auth() {
   const [activeTab, setActiveTab] = useState("signin");
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Set active tab based on URL query parameter
+  React.useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab === 'signup') {
+      setActiveTab('signup');
+    }
+  }, [searchParams]);
 
   // Form states
   const [signInData, setSignInData] = useState({ email: '', password: '' });
@@ -24,6 +33,7 @@ export default function Auth() {
     confirmPassword: '',
     country: ''
   });
+  const [forgotPasswordData, setForgotPasswordData] = useState({ email: '' });
 
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -100,11 +110,42 @@ export default function Auth() {
 
 
 
-  const handleInputChange = (form: 'signin' | 'signup', field: string, value: string) => {
+  const handleInputChange = (form: 'signin' | 'signup' | 'forgot', field: string, value: string) => {
     if (form === 'signin') {
       setSignInData(prev => ({ ...prev, [field]: value }));
     } else if (form === 'signup') {
       setSignUpData(prev => ({ ...prev, [field]: value }));
+    } else if (form === 'forgot') {
+      setForgotPasswordData(prev => ({ ...prev, [field]: value }));
+    }
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setMessage(null);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(forgotPasswordData.email, {
+        redirectTo: `${window.location.origin}/auth?tab=signin`,
+      });
+
+      if (error) {
+        setMessage({ type: 'error', text: error.message });
+      } else {
+        setMessage({ 
+          type: 'success', 
+          text: 'Password reset email sent! Please check your email for further instructions.' 
+        });
+        // Clear form
+        setForgotPasswordData({ email: '' });
+        // Switch back to sign in tab after a delay
+        setTimeout(() => setActiveTab('signin'), 3000);
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'An unexpected error occurred' });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -139,11 +180,12 @@ export default function Auth() {
           </div>
         )}
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signin">Sign In</TabsTrigger>
-            <TabsTrigger value="signup">Get Started</TabsTrigger>
-          </TabsList>
+                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+           <TabsList className="grid w-full grid-cols-3">
+             <TabsTrigger value="signin">Sign In</TabsTrigger>
+             <TabsTrigger value="signup">Get Started</TabsTrigger>
+             <TabsTrigger value="forgot">Reset Password</TabsTrigger>
+           </TabsList>
 
           <TabsContent value="signin">
             <Card>
@@ -164,21 +206,30 @@ export default function Auth() {
                       required
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="password">Password</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="Enter your password"
-                      value={signInData.password}
-                      onChange={(e) => handleInputChange('signin', 'password', e.target.value)}
-                      required
-                    />
-                  </div>
+                                     <div>
+                     <Label htmlFor="password">Password</Label>
+                     <Input
+                       id="password"
+                       type="password"
+                       placeholder="Enter your password"
+                       value={signInData.password}
+                       onChange={(e) => handleInputChange('signin', 'password', e.target.value)}
+                       required
+                     />
+                     <div className="text-right mt-2">
+                       <button
+                         type="button"
+                         onClick={() => setActiveTab('forgot')}
+                         className="text-sm text-primary hover:underline"
+                       >
+                         Forgot your password?
+                       </button>
+                     </div>
+                   </div>
 
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Signing in..." : "Sign In"}
-                  </Button>
+                   <Button type="submit" className="w-full" disabled={isLoading}>
+                     {isLoading ? "Signing in..." : "Sign In"}
+                   </Button>
                 </form>
               </CardContent>
             </Card>
@@ -253,10 +304,38 @@ export default function Auth() {
                 </form>
               </CardContent>
             </Card>
-          </TabsContent>
+                     </TabsContent>
+
+           <TabsContent value="forgot">
+             <Card>
+               <CardHeader>
+                 <CardTitle>Reset Password</CardTitle>
+                 <CardDescription>Enter your email to receive password reset instructions</CardDescription>
+               </CardHeader>
+               <CardContent>
+                 <form onSubmit={handleForgotPassword} className="space-y-4">
+                   <div>
+                     <Label htmlFor="forgotEmail">Email</Label>
+                     <Input
+                       id="forgotEmail"
+                       type="email"
+                       placeholder="Enter your email address"
+                       value={forgotPasswordData.email}
+                       onChange={(e) => handleInputChange('forgot', 'email', e.target.value)}
+                       required
+                     />
+                   </div>
+
+                   <Button type="submit" className="w-full" disabled={isLoading}>
+                     {isLoading ? "Sending..." : "Send Reset Email"}
+                   </Button>
+                 </form>
+               </CardContent>
+             </Card>
+           </TabsContent>
 
 
-        </Tabs>
+         </Tabs>
       </div>
     </div>
   );
