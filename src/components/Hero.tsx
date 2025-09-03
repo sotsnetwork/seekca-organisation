@@ -21,41 +21,41 @@ export default function Hero() {
           <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
         </div>
         
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          <a href="#how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</a>
-          <a href="#features" className="text-foreground/70 hover:text-foreground transition-colors">Features</a>
-          <a href="#pricing" className="text-foreground/70 hover:text-foreground transition-colors">Pricing</a>
-          
-          {user ? (
-            <UserProfileDropdown />
-          ) : (
-            <>
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/auth">Sign In</Link>
-              </Button>
-              <Button variant="hero" size="sm" asChild>
-                <Link to="/auth">Get Started</Link>
-              </Button>
-            </>
-          )}
-        </div>
+                 {/* Desktop Navigation */}
+         <div className="hidden md:flex items-center gap-6">
+           <a href="#how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</a>
+           <a href="#features" className="text-foreground/70 hover:text-foreground transition-colors">Features</a>
+           <a href="#pricing" className="text-foreground/70 hover:text-foreground transition-colors">Pricing</a>
+           
+           {user ? (
+             <UserProfileDropdown />
+           ) : (
+             <>
+               <Button variant="outline" size="sm" asChild>
+                 <Link to="/auth">Sign In</Link>
+               </Button>
+               <Button variant="hero" size="sm" asChild>
+                 <Link to="/auth?tab=signup">Get Started</Link>
+               </Button>
+             </>
+           )}
+         </div>
 
-        {/* Mobile Navigation */}
-        <div className="md:hidden flex items-center gap-3">
-          {user ? (
-            <UserProfileDropdown />
-          ) : (
-            <>
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/auth">Sign In</Link>
-              </Button>
-              <Button variant="hero" size="sm" asChild>
-                <Link to="/auth">Get Started</Link>
-              </Button>
-            </>
-          )}
-        </div>
+                 {/* Mobile Navigation */}
+         <div className="md:hidden flex items-center gap-3">
+           {user ? (
+             <UserProfileDropdown />
+           ) : (
+             <>
+               <Button variant="outline" size="sm" asChild>
+                 <Link to="/auth">Sign In</Link>
+               </Button>
+               <Button variant="hero" size="sm" asChild>
+                 <Link to="/auth?tab=signup">Get Started</Link>
+               </Button>
+             </>
+           )}
+         </div>
       </nav>
 
       {/* Hero Content */}
