@@ -5,8 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Star, Briefcase, MessageSquare, Filter } from "lucide-react";
+import { Search, MapPin, Star, Briefcase, MessageSquare, Filter, User } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { Link } from "react-router-dom";
+import logoIcon from "@/assets/logo-icon.png";
+import UserProfileDropdown from "./UserProfileDropdown";
 
 interface Professional {
   id: string;
@@ -244,7 +247,58 @@ export default function Professionals() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
+      {/* Navigation Bar */}
+      <nav className="bg-card border-b border-border">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            {/* Logo and Brand */}
+            <Link to="/" className="flex items-center gap-3">
+              <img src={logoIcon} alt="SeekCa" className="w-8 h-8" />
+              <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
+            </Link>
+
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center gap-6">
+              <Link to="/" className="text-foreground/70 hover:text-foreground transition-colors">
+                Home
+              </Link>
+              <Link to="/about" className="text-foreground/70 hover:text-foreground transition-colors">
+                About
+              </Link>
+              <Link to="/contact" className="text-foreground/70 hover:text-foreground transition-colors">
+                Contact
+              </Link>
+            </div>
+
+            {/* Mobile Navigation */}
+            <div className="md:hidden flex items-center gap-3">
+              <Link to="/" className="text-foreground/70 hover:text-foreground transition-colors text-sm">
+                Home
+              </Link>
+            </div>
+
+            {/* User Profile Section */}
+            <div className="flex items-center gap-3">
+              {user ? (
+                <UserProfileDropdown />
+              ) : (
+                <>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/auth">Sign In</Link>
+                  </Button>
+                  <Button variant="ghost" size="sm" asChild className="p-2">
+                    <Link to="/auth" className="flex items-center justify-center">
+                      <User className="w-5 h-5" />
+                    </Link>
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Page Header */}
       <div className="bg-card border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="text-center">
