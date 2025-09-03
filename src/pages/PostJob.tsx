@@ -138,15 +138,18 @@ export default function PostJob() {
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="cleaning">Cleaning & Maintenance</SelectItem>
-                      <SelectItem value="renovation">Home Renovation</SelectItem>
-                      <SelectItem value="plumbing">Plumbing & Electrical</SelectItem>
-                      <SelectItem value="landscaping">Landscaping & Garden</SelectItem>
-                      <SelectItem value="auto">Auto Repair</SelectItem>
-                      <SelectItem value="handyman">Handyman Services</SelectItem>
-                      <SelectItem value="organization">Home Organization</SelectItem>
-                    </SelectContent>
+                                         <SelectContent>
+                       <SelectItem value="exterior">Exterior Home Care</SelectItem>
+                       <SelectItem value="cleaning">Cleaning & Organization</SelectItem>
+                       <SelectItem value="repairs">Home Repairs & Maintenance</SelectItem>
+                       <SelectItem value="renovations">Renovations & Upgrades</SelectItem>
+                       <SelectItem value="landscaping">Landscaping & Outdoor Services</SelectItem>
+                       <SelectItem value="installation">Installation & Assembly</SelectItem>
+                       <SelectItem value="pest">Pest Control</SelectItem>
+                       <SelectItem value="trending">Trending Services</SelectItem>
+                       <SelectItem value="events">Events</SelectItem>
+                       <SelectItem value="wellness">Health & Wellness</SelectItem>
+                     </SelectContent>
                   </Select>
                 </div>
               </div>
