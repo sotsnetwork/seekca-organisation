@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Users, Shield, Star } from "lucide-react";
+import { CheckCircle, Users, Shield, Star, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
 import { useAuth } from "@/hooks/use-auth";
@@ -20,6 +20,8 @@ export default function Hero() {
           <img src={logoIcon} alt="SeekCa" className="w-8 h-8" />
           <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
         </div>
+        
+        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-6">
           <a href="#how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</a>
           <a href="#features" className="text-foreground/70 hover:text-foreground transition-colors">Features</a>
@@ -34,6 +36,29 @@ export default function Hero() {
               </Button>
               <Button variant="hero" size="sm" asChild>
                 <Link to="/auth">Get Started</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild className="p-2">
+                <Link to="/auth" className="flex items-center justify-center">
+                  <User className="w-5 h-5" />
+                </Link>
+              </Button>
+            </>
+          )}
+        </div>
+
+        {/* Mobile Navigation */}
+        <div className="md:hidden flex items-center gap-3">
+          {user ? (
+            <UserProfileDropdown />
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" asChild className="p-2">
+                <Link to="/auth" className="flex items-center justify-center">
+                  <User className="w-5 h-5" />
+                </Link>
+              </Button>
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/auth">Sign In</Link>
               </Button>
             </>
           )}
