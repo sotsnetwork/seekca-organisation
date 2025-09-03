@@ -34,125 +34,125 @@ export default function Professionals() {
 
   // Mock data - in a real app, this would come from your Supabase database
   const mockProfessionals: Professional[] = [
-    // Nigeria professionals
+    // Nigeria professionals - Physical services like Thumbtack
     {
       id: "1",
       name: "Sarah Johnson",
-      title: "Full-Stack Developer",
+      title: "Home Renovation Specialist",
       location: "Lagos, Nigeria",
       country: "Nigeria",
-      skills: ["React", "Node.js", "TypeScript", "MongoDB"],
+      skills: ["Kitchen Remodeling", "Bathroom Renovation", "Painting", "Tile Installation"],
       rating: 4.9,
       hourlyRate: 25,
       completedProjects: 47,
-      description: "Experienced developer with 5+ years building scalable web applications.",
+      description: "Experienced contractor with 5+ years transforming homes. Licensed and insured for all renovation projects.",
       verified: true,
     },
     {
       id: "2",
       name: "Michael Chen",
-      title: "UI/UX Designer",
+      title: "Plumbing & Electrical Expert",
       location: "Abuja, Nigeria",
       country: "Nigeria",
-      skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
+      skills: ["Pipe Installation", "Electrical Wiring", "Drainage Systems", "Circuit Repair"],
       rating: 4.8,
       hourlyRate: 30,
       completedProjects: 32,
-      description: "Creative designer focused on user-centered design solutions.",
+      description: "Certified plumber and electrician. Emergency services available 24/7 for urgent repairs.",
       verified: true,
     },
     {
       id: "3",
       name: "David Okafor",
-      title: "DevOps Engineer",
+      title: "Landscaping & Garden Design",
       location: "Port Harcourt, Nigeria",
       country: "Nigeria",
-      skills: ["AWS", "Docker", "Kubernetes", "CI/CD"],
+      skills: ["Garden Design", "Irrigation Systems", "Tree Trimming", "Outdoor Lighting"],
       rating: 4.7,
       hourlyRate: 35,
       completedProjects: 28,
-      description: "Infrastructure specialist with cloud and automation expertise.",
+      description: "Creative landscaper specializing in sustainable garden designs and maintenance.",
       verified: true,
     },
     {
       id: "4",
       name: "Lisa Adebayo",
-      title: "Data Scientist",
+      title: "Cleaning & Maintenance Pro",
       location: "Ibadan, Nigeria",
       country: "Nigeria",
-      skills: ["Python", "Machine Learning", "SQL", "Data Visualization"],
+      skills: ["Deep Cleaning", "Carpet Cleaning", "Window Washing", "Office Maintenance"],
       rating: 4.9,
       hourlyRate: 40,
       completedProjects: 23,
-      description: "Data expert helping businesses make data-driven decisions.",
+      description: "Professional cleaning services for homes and offices. Eco-friendly products available.",
       verified: true,
     },
     {
       id: "5",
       name: "James Okonkwo",
-      title: "Mobile App Developer",
+      title: "Auto Repair & Maintenance",
       location: "Enugu, Nigeria",
       country: "Nigeria",
-      skills: ["React Native", "Flutter", "iOS", "Android"],
+      skills: ["Engine Repair", "Brake Service", "Oil Change", "Diagnostic Testing"],
       rating: 4.6,
       hourlyRate: 28,
       completedProjects: 35,
-      description: "Mobile development specialist with cross-platform expertise.",
+      description: "Certified mechanic with 10+ years experience. All major car brands serviced.",
       verified: true,
     },
-    // US professionals
+    // US professionals - Local physical services
     {
       id: "6",
       name: "Alex Thompson",
-      title: "Frontend Developer",
+      title: "House Cleaning Specialist",
       location: "San Francisco, USA",
       country: "USA",
-      skills: ["React", "Vue.js", "CSS", "JavaScript"],
+      skills: ["Move-in Cleaning", "Deep Cleaning", "Eco-friendly", "Pet-friendly"],
       rating: 4.8,
       hourlyRate: 45,
       completedProjects: 52,
-      description: "Frontend specialist with modern web technologies.",
+      description: "Professional house cleaning with attention to detail. Bonded and insured.",
       verified: true,
     },
     {
       id: "7",
       name: "Emma Wilson",
-      title: "Product Manager",
+      title: "Handyman Services",
       location: "New York, USA",
       country: "USA",
-      skills: ["Agile", "Scrum", "Product Strategy", "User Research"],
+      skills: ["Furniture Assembly", "Minor Repairs", "Installation", "General Maintenance"],
       rating: 4.7,
       hourlyRate: 50,
       completedProjects: 38,
-      description: "Strategic product leader with startup experience.",
+      description: "Reliable handyman for all your home repair and assembly needs.",
       verified: true,
     },
-    // UK professionals
+    // UK professionals - Local physical services
     {
       id: "8",
       name: "Oliver Brown",
-      title: "Backend Developer",
+      title: "Garden & Landscaping",
       location: "London, UK",
       country: "UK",
-      skills: ["Python", "Django", "PostgreSQL", "AWS"],
+      skills: ["Garden Design", "Lawn Care", "Tree Surgery", "Patio Installation"],
       rating: 4.9,
       hourlyRate: 42,
       completedProjects: 41,
-      description: "Backend expert specializing in scalable APIs.",
+      description: "Professional gardener and landscaper. Creating beautiful outdoor spaces.",
       verified: true,
     },
-    // Canada professionals
+    // Canada professionals - Local physical services
     {
       id: "9",
       name: "Sophie Martin",
-      title: "UX Researcher",
+      title: "Home Organization Expert",
       location: "Toronto, Canada",
       country: "Canada",
-      skills: ["User Testing", "Analytics", "Research Methods", "Prototyping"],
+      skills: ["Closet Organization", "Decluttering", "Storage Solutions", "Moving Prep"],
       rating: 4.8,
       hourlyRate: 38,
       completedProjects: 29,
-      description: "Research-driven UX professional.",
+      description: "Professional organizer helping create functional and beautiful living spaces.",
       verified: true,
     },
   ];
@@ -185,13 +185,32 @@ export default function Professionals() {
         prof =>
           prof.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           prof.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          prof.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()))
+          prof.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          prof.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    if (skillFilter) {
+    if (skillFilter && skillFilter !== 'all') {
+      // Map filter values to service categories
+      const serviceCategories: { [key: string]: string[] } = {
+        'cleaning': ['cleaning', 'maintenance', 'deep cleaning', 'carpet cleaning', 'window washing'],
+        'renovation': ['renovation', 'remodeling', 'kitchen', 'bathroom', 'painting', 'tile'],
+        'plumbing': ['plumbing', 'electrical', 'pipe', 'wiring', 'drainage', 'circuit'],
+        'landscaping': ['landscaping', 'garden', 'lawn', 'tree', 'irrigation', 'outdoor'],
+        'auto': ['auto', 'car', 'engine', 'brake', 'oil', 'diagnostic'],
+        'handyman': ['handyman', 'assembly', 'repair', 'installation', 'maintenance'],
+        'organization': ['organization', 'decluttering', 'closet', 'storage', 'moving']
+      };
+      
+      const categoryKeywords = serviceCategories[skillFilter] || [];
       filtered = filtered.filter(prof =>
-        prof.skills.some(skill => skill.toLowerCase().includes(skillFilter.toLowerCase()))
+        prof.skills.some(skill => 
+          categoryKeywords.some(keyword => 
+            skill.toLowerCase().includes(keyword.toLowerCase())
+          )
+        ) ||
+        prof.title.toLowerCase().includes(skillFilter.toLowerCase()) ||
+        prof.description.toLowerCase().includes(skillFilter.toLowerCase())
       );
     }
 
@@ -246,7 +265,7 @@ export default function Professionals() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
-                placeholder="Search professionals..."
+                placeholder="Search for services..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -254,15 +273,17 @@ export default function Professionals() {
             </div>
             <Select value={skillFilter} onValueChange={setSkillFilter}>
               <SelectTrigger>
-                <SelectValue placeholder="Filter by skill" />
+                <SelectValue placeholder="Filter by service" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Skills</SelectItem>
-                <SelectItem value="react">React</SelectItem>
-                <SelectItem value="node">Node.js</SelectItem>
-                <SelectItem value="python">Python</SelectItem>
-                <SelectItem value="design">Design</SelectItem>
-                <SelectItem value="devops">DevOps</SelectItem>
+                <SelectItem value="all">All Services</SelectItem>
+                <SelectItem value="cleaning">Cleaning & Maintenance</SelectItem>
+                <SelectItem value="renovation">Home Renovation</SelectItem>
+                <SelectItem value="plumbing">Plumbing & Electrical</SelectItem>
+                <SelectItem value="landscaping">Landscaping & Garden</SelectItem>
+                <SelectItem value="auto">Auto Repair</SelectItem>
+                <SelectItem value="handyman">Handyman Services</SelectItem>
+                <SelectItem value="organization">Home Organization</SelectItem>
               </SelectContent>
             </Select>
             <Select value={rateFilter} onValueChange={setRateFilter}>
@@ -287,7 +308,7 @@ export default function Professionals() {
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-muted-foreground">
-            Showing {filteredProfessionals.length} of {professionals.length} professionals
+            Showing {filteredProfessionals.length} of {professionals.length} service providers
           </p>
         </div>
 
