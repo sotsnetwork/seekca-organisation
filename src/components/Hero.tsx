@@ -133,28 +133,14 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right Content - Stats/Visual */}
+          {/* Right Content - Image with shadow */}
           <div className="relative">
-            <div className="bg-card rounded-2xl shadow-elegant p-8 border border-border/50">
-              <div className="grid grid-cols-2 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-heading font-bold text-primary mb-2">10K+</div>
-                  <div className="text-sm text-muted-foreground">Verified Professionals</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-heading font-bold text-primary mb-2">98%</div>
-                  <div className="text-sm text-muted-foreground">Success Rate</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-heading font-bold text-primary mb-2">50+</div>
-                  <div className="text-sm text-muted-foreground">Countries</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-heading font-bold text-primary mb-2">24/7</div>
-                  <div className="text-sm text-muted-foreground">Support</div>
-                </div>
-              </div>
-            </div>
+            <img
+              src="/Seekca%20prof%20images.png"
+              alt="SeekCa Professionals"
+              className="w-full rounded-2xl border border-border/50 shadow-elegant"
+            />
+            <div className="pointer-events-none absolute -bottom-6 left-10 right-10 h-10 rounded-full bg-foreground/10 blur-2xl" />
           </div>
         </div>
       </div>
