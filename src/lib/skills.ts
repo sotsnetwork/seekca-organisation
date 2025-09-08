@@ -18,6 +18,7 @@ export const skillCategories: SkillCategory[] = [
       "Deck Contractors",
       "Siding Installation",
       "Concrete & Masonry",
+      "Masonry Contractors",
       "Exterior Lighting",
       "Fence Installation",
       "Driveway Paving",
