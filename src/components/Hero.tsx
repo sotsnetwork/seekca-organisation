@@ -102,10 +102,10 @@ export default function Hero() {
               ) : (
                 <>
                   <Button variant="hero" size="lg" className="text-lg px-8 py-6" asChild>
-                    <Link to="/auth">Find Professionals</Link>
+                    <Link to="/auth?tab=signup">Find Professionals</Link>
                   </Button>
                   <Button variant="outline" size="lg" className="text-lg px-8 py-6" asChild>
-                    <Link to="/auth">Join as Professional</Link>
+                    <Link to="/auth?tab=signup">Join as Professional</Link>
                   </Button>
                 </>
               )}
