@@ -2,9 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { User, Briefcase, MessageSquare, Settings, Home } from "lucide-react";
 import logoIcon from "@/assets/logo-icon.png";
+import NotificationBell from "./NotificationBell";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function ProfileNavigation() {
   const location = useLocation();
+  const { user } = useAuth();
 
   const navItems = [
     { path: "/profile", label: "Profile", icon: User },
@@ -46,6 +49,7 @@ export default function ProfileNavigation() {
                 </Button>
               );
             })}
+            {user && <NotificationBell />}
           </div>
         </div>
       </div>
