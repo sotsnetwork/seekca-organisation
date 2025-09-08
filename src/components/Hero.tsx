@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
 import { useAuth } from "@/hooks/use-auth";
 import UserProfileDropdown from "./UserProfileDropdown";
+import NotificationBell from "./NotificationBell";
 
 export default function Hero() {
   const { user } = useAuth();
@@ -22,9 +23,12 @@ export default function Hero() {
         </div>
         
                  {/* Desktop Navigation */}
-         <div className="hidden md:flex items-center gap-6">
+         <div className="hidden md:flex items-center gap-4">
            {user ? (
-             <UserProfileDropdown />
+             <>
+               <NotificationBell />
+               <UserProfileDropdown />
+             </>
            ) : (
              <>
                <Button variant="outline" size="sm" asChild>
@@ -38,9 +42,12 @@ export default function Hero() {
          </div>
 
                  {/* Mobile Navigation */}
-         <div className="md:hidden flex items-center gap-3">
+         <div className="md:hidden flex items-center gap-2">
            {user ? (
-             <UserProfileDropdown />
+             <>
+               <NotificationBell />
+               <UserProfileDropdown />
+             </>
            ) : (
              <>
                <Button variant="outline" size="sm" asChild>
