@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Link } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
 import UserProfileDropdown from "./UserProfileDropdown";
+import NotificationBell from "./NotificationBell";
 
 interface Professional {
   id: string;
@@ -355,7 +356,10 @@ export default function Professionals() {
             {/* User Profile Section */}
             <div className="flex items-center gap-3">
               {user ? (
-                <UserProfileDropdown />
+                <>
+                  <NotificationBell />
+                  <UserProfileDropdown />
+                </>
               ) : (
                 <>
                   <Button variant="outline" size="sm" asChild>
