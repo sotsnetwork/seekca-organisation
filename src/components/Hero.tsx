@@ -82,7 +82,7 @@ export default function Hero() {
                   <span className="block bg-gradient-hero bg-clip-text text-transparent">
                     Verified Pros
                   </span>
-                  Remotely
+                  Nearby
                 </>
               )}
             </h1>
