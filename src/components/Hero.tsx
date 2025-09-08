@@ -78,11 +78,10 @@ export default function Hero() {
                 </>
               ) : (
                 <>
-                  Find & Hire
+                  Find & Collab with
                   <span className="block bg-gradient-hero bg-clip-text text-transparent">
                     Verified Pros
                   </span>
-                  Near You
                 </>
               )}
             </h1>
