@@ -136,7 +136,7 @@ export default function Hero() {
           {/* Right Content - Image with shadow */}
           <div className="relative">
             <img
-              src="/Seekca%20prof%20images.png"
+              src="/Seekca%20profs.png"
               alt="SeekCa Professionals"
               className="w-full md:w-[520px] lg:w-[640px] xl:w-[740px] max-w-none h-auto rounded-2xl border border-border/50 shadow-elegant"
             />
