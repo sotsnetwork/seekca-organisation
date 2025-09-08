@@ -138,7 +138,7 @@ export default function Hero() {
             <img
               src="/Seekca%20prof%20images.png"
               alt="SeekCa Professionals"
-              className="w-full rounded-2xl border border-border/50 shadow-elegant"
+              className="w-full md:w-[520px] lg:w:[640px] xl:w-[740px] max-w-none h-auto rounded-2xl border border-border/50 shadow-elegant"
             />
             <div className="pointer-events-none absolute -bottom-6 left-10 right-10 h-10 rounded-full bg-foreground/10 blur-2xl" />
           </div>
