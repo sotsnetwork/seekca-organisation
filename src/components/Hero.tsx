@@ -60,15 +60,15 @@ export default function Hero() {
 
       {/* Hero Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-32">
-        <div className="grid lg:grid-cols-3 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Left Content */}
-          <div className="lg:col-span-2 text-center lg:text-left animate-fade-in-up">
+          <div className="text-center lg:text-left animate-fade-in-up">
             <Badge variant="secondary" className="mb-6 px-4 py-2">
               <Shield className="w-4 h-4 mr-2" />
               Verified Professionals Only
             </Badge>
             
-            <h1 className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-heading font-bold text-foreground mb-8 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6 leading-tight">
               {user ? (
                 <>
                   Welcome back,
@@ -87,14 +87,14 @@ export default function Hero() {
               )}
             </h1>
             
-            <p className="text-2xl md:text-3xl lg:text-4xl text-muted-foreground mb-12 max-w-4xl mx-auto lg:mx-0">
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0">
               {user 
                 ? "Ready to continue your journey? Explore new opportunities or manage your existing projects."
                 : "Connect with KYC-verified professionals worldwide. Run physical projects remotely with secure payments, milestone tracking, and real-time collaboration."
               }
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
               {user ? (
                 <>
                   <Button variant="hero" size="lg" className="text-lg px-8 py-6">
@@ -106,10 +106,10 @@ export default function Hero() {
                 </>
               ) : (
                 <>
-                  <Button variant="hero" size="lg" className="text-xl px-12 py-8" asChild>
+                  <Button variant="hero" size="lg" className="text-lg px-8 py-6" asChild>
                     <Link to="/auth">Find Professionals</Link>
                   </Button>
-                  <Button variant="outline" size="lg" className="text-xl px-12 py-8" asChild>
+                  <Button variant="outline" size="lg" className="text-lg px-8 py-6" asChild>
                     <Link to="/auth">Join as Professional</Link>
                   </Button>
                 </>
@@ -117,17 +117,17 @@ export default function Hero() {
             </div>
 
             {/* Trust Indicators */}
-            <div className="flex items-center justify-center lg:justify-start gap-12 text-lg text-muted-foreground">
-              <div className="flex items-center gap-3">
-                <CheckCircle className="w-6 h-6 text-success" />
+            <div className="flex items-center justify-center lg:justify-start gap-8 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-success" />
                 <span>KYC Verified</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Users className="w-6 h-6 text-success" />
+              <div className="flex items-center gap-2">
+                <Users className="w-5 h-5 text-success" />
                 <span>Global Network</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Star className="w-6 h-6 text-success" />
+              <div className="flex items-center gap-2">
+                <Star className="w-5 h-5 text-success" />
                 <span>Secure Payments</span>
               </div>
             </div>
@@ -138,7 +138,7 @@ export default function Hero() {
             <img
               src="/Seekca%20profs.png"
               alt="SeekCa Professionals"
-              className="w-full md:w-[520px] lg:w-[640px] xl:w-[740px] max-w-none h-auto rounded-2xl border border-border/50 shadow-elegant"
+              className="w-full h-auto rounded-2xl border border-border/50 shadow-elegant"
             />
             <div className="pointer-events-none absolute -bottom-6 left-10 right-10 h-10 rounded-full bg-foreground/10 blur-2xl" />
           </div>
