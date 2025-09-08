@@ -30,16 +30,13 @@ export default function UserProfileDropdown() {
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="flex items-center gap-2">
+        <Button variant="outline" size="sm" className="p-2">
           <Avatar className="w-6 h-6">
             <AvatarImage src={user?.user_metadata?.avatar_url} />
             <AvatarFallback className="text-xs bg-primary text-primary-foreground">
               {initials}
             </AvatarFallback>
           </Avatar>
-          <span className="hidden sm:inline-block text-sm">
-            {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
-          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
