@@ -68,7 +68,7 @@ export default function Hero() {
               Verified Professionals Only
             </Badge>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-foreground mb-6 leading-tight">
               {user ? (
                 <>
                   Welcome back,
