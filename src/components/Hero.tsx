@@ -23,10 +23,6 @@ export default function Hero() {
         
                  {/* Desktop Navigation */}
          <div className="hidden md:flex items-center gap-6">
-           <a href="#how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</a>
-           <a href="#features" className="text-foreground/70 hover:text-foreground transition-colors">Features</a>
-           <a href="#pricing" className="text-foreground/70 hover:text-foreground transition-colors">Pricing</a>
-           
            {user ? (
              <UserProfileDropdown />
            ) : (
