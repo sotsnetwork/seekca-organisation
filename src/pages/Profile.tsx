@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/use-auth";
 import SkillSelector from "@/components/SkillSelector";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import ProfileNavigation from "@/components/ProfileNavigation";
 
 export default function Profile() {
   const { user } = useAuth();
@@ -130,19 +131,12 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-background">
+      <ProfileNavigation />
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Link>
-          </Button>
-          <div>
-            <h1 className="text-3xl font-heading font-bold text-foreground">Profile</h1>
-            <p className="text-muted-foreground">Manage your account and professional information</p>
-          </div>
+        <div className="mb-8">
+          <h1 className="text-3xl font-heading font-bold text-foreground">Profile</h1>
+          <p className="text-muted-foreground">Manage your account and professional information</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
