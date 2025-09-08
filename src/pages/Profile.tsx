@@ -5,14 +5,18 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Edit, Save, X, Upload, Camera } from "lucide-react";
+import { ArrowLeft, Edit, Save, X, Upload, Camera, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import SkillSelector from "@/components/SkillSelector";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Profile() {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [profileData, setProfileData] = useState({
     fullName: user?.user_metadata?.full_name || '',
     nickname: user?.user_metadata?.nickname || '',
@@ -30,11 +34,47 @@ export default function Profile() {
       : user?.user_metadata?.skills?.split(',').filter(Boolean) || []
   );
 
-  const handleSave = () => {
-    // TODO: Implement profile update logic with Supabase
-    // Update the profileData with selected skills
-    setProfileData(prev => ({ ...prev, skills: selectedSkills }));
-    setIsEditing(false);
+  const handleSave = async () => {
+    if (!user) return;
+    
+    setIsSaving(true);
+    try {
+      // Update user metadata with new profile data
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          full_name: profileData.fullName,
+          nickname: profileData.nickname,
+          country: profileData.country,
+          bio: profileData.bio,
+          skills: selectedSkills, // Store as array
+          hourlyRate: profileData.hourlyRate,
+          location: profileData.location,
+          avatar_url: profileData.avatarUrl,
+        }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      // Update local state
+      setProfileData(prev => ({ ...prev, skills: selectedSkills }));
+      setIsEditing(false);
+      
+      toast({
+        title: "Profile Updated",
+        description: "Your profile has been successfully updated.",
+      });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update profile. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleCancel = () => {
@@ -175,11 +215,15 @@ export default function Profile() {
                     </Button>
                   ) : (
                     <div className="flex gap-2">
-                      <Button onClick={handleSave} size="sm">
-                        <Save className="w-4 h-4 mr-2" />
-                        Save
+                      <Button onClick={handleSave} size="sm" disabled={isSaving}>
+                        {isSaving ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <Save className="w-4 h-4 mr-2" />
+                        )}
+                        {isSaving ? "Saving..." : "Save"}
                       </Button>
-                      <Button onClick={handleCancel} variant="outline" size="sm">
+                      <Button onClick={handleCancel} variant="outline" size="sm" disabled={isSaving}>
                         <X className="w-4 h-4 mr-2" />
                         Cancel
                       </Button>
@@ -240,11 +284,16 @@ export default function Profile() {
                   </div>
                   <div className="md:col-span-2">
                     <Label>Professional Skills</Label>
+                    {isEditing && (
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Select up to 5 skills that best represent your expertise. You can update these anytime.
+                      </p>
+                    )}
                     {isEditing ? (
                       <SkillSelector
                         selectedSkills={selectedSkills}
                         onSkillsChange={setSelectedSkills}
-                        maxSkills={25}
+                        maxSkills={5}
                       />
                     ) : (
                       <div className="mt-2">
