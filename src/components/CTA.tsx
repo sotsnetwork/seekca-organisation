@@ -13,8 +13,8 @@ export default function CTA() {
       // If user is logged in, they can post jobs
       return { to: "/post-job", text: "Post Your First Job" };
     } else {
-      // If not logged in, redirect to auth
-      return { to: "/auth", text: "Sign Up to Post Jobs" };
+      // If not logged in, redirect to signup
+      return { to: "/auth?tab=signup", text: "Sign Up to Post Jobs" };
     }
   };
 
@@ -23,8 +23,8 @@ export default function CTA() {
       // If user is logged in, they can access professional features
       return { to: "/profile", text: "View Professional Profile" };
     } else {
-      // If not logged in, redirect to auth
-      return { to: "/auth", text: "Join as Professional" };
+      // If not logged in, redirect to signup
+      return { to: "/auth?tab=signup", text: "Join as Professional" };
     }
   };
 
