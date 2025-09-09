@@ -145,7 +145,7 @@ export default function PortfolioProjectForm({
                 id="title"
                 value={formData.title}
                 onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                placeholder="E.g., E-commerce Platform"
+                placeholder="E.g., Modern Kitchen Renovation"
               />
             </div>
             <div>
@@ -154,7 +154,7 @@ export default function PortfolioProjectForm({
                 id="technologies"
                 value={formData.technologies}
                 onChange={(e) => setFormData(prev => ({ ...prev, technologies: e.target.value }))}
-                placeholder="E.g., React + Node.js + MongoDB"
+                placeholder="E.g., Quartz Countertops + Custom Cabinets + LED Lighting"
               />
             </div>
           </div>
@@ -165,7 +165,7 @@ export default function PortfolioProjectForm({
               id="description"
               value={formData.description}
               onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-              placeholder="Describe your project, what it does, and key features..."
+              placeholder="Describe your project, the work performed, materials used, and key features..."
               rows={4}
             />
           </div>
@@ -238,16 +238,16 @@ export default function PortfolioProjectForm({
                 id="projectUrl"
                 value={formData.projectUrl}
                 onChange={(e) => setFormData(prev => ({ ...prev, projectUrl: e.target.value }))}
-                placeholder="https://your-project.com"
+                placeholder="https://your-portfolio.com/project"
               />
             </div>
             <div>
-              <Label htmlFor="githubUrl">GitHub Repository</Label>
+              <Label htmlFor="githubUrl">Portfolio Gallery</Label>
               <Input
                 id="githubUrl"
                 value={formData.githubUrl}
                 onChange={(e) => setFormData(prev => ({ ...prev, githubUrl: e.target.value }))}
-                placeholder="https://github.com/username/project"
+                placeholder="https://your-portfolio.com/gallery"
               />
             </div>
           </div>
