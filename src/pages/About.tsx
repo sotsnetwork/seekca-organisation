@@ -16,9 +16,6 @@ export default function About() {
               <img src={logoIcon} alt="SeekCa" className="w-8 h-8" />
               <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
             </Link>
-            <Button asChild>
-              <Link to="/auth">Get Started</Link>
-            </Button>
           </div>
         </div>
       </nav>
