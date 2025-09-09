@@ -9,6 +9,7 @@ import { ArrowLeft, Edit, Save, X, Upload, Camera, Loader2 } from "lucide-react"
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import SkillSelector from "@/components/SkillSelector";
+import CountrySelector from "@/components/CountrySelector";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ProfileNavigation from "@/components/ProfileNavigation";
@@ -248,10 +249,10 @@ export default function Profile() {
                   </div>
                   <div>
                     <Label htmlFor="country">Country</Label>
-                    <Input
-                      id="country"
+                    <CountrySelector
                       value={profileData.country}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, country: e.target.value }))}
+                      onValueChange={(value) => setProfileData(prev => ({ ...prev, country: value }))}
+                      placeholder="Select your country"
                       disabled={!isEditing}
                     />
                   </div>
