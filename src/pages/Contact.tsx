@@ -7,8 +7,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
+import UserProfileDropdown from "@/components/UserProfileDropdown";
+import NotificationBell from "@/components/NotificationBell";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Contact() {
+  const { user } = useAuth();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Handle form submission
@@ -24,6 +29,25 @@ export default function Contact() {
               <img src={logoIcon} alt="SeekCa" className="w-8 h-8" />
               <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
             </Link>
+            
+            {/* User Profile Section */}
+            <div className="flex items-center gap-3">
+              {user ? (
+                <>
+                  <NotificationBell />
+                  <UserProfileDropdown />
+                </>
+              ) : (
+                <>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/auth">Sign In</Link>
+                  </Button>
+                  <Button variant="hero" size="sm" asChild>
+                    <Link to="/auth?tab=signup">Get Started</Link>
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </nav>
