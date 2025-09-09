@@ -4,8 +4,13 @@ import { Users, Globe, Shield, Award } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
 import Footer from "@/components/Footer";
+import UserProfileDropdown from "@/components/UserProfileDropdown";
+import NotificationBell from "@/components/NotificationBell";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function About() {
+  const { user } = useAuth();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -16,6 +21,25 @@ export default function About() {
               <img src={logoIcon} alt="SeekCa" className="w-8 h-8" />
               <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
             </Link>
+            
+            {/* User Profile Section */}
+            <div className="flex items-center gap-3">
+              {user ? (
+                <>
+                  <NotificationBell />
+                  <UserProfileDropdown />
+                </>
+              ) : (
+                <>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/auth">Sign In</Link>
+                  </Button>
+                  <Button variant="hero" size="sm" asChild>
+                    <Link to="/auth?tab=signup">Get Started</Link>
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </nav>
