@@ -163,7 +163,7 @@ export default function Portfolio() {
                         <Button variant="outline" size="sm" asChild className="flex-1">
                           <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                             <Github className="w-4 h-4 mr-2" />
-                            Code
+                            Gallery
                           </a>
                         </Button>
                       )}
