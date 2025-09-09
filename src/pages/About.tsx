@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Users, Globe, Shield, Award } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
+import Footer from "@/components/Footer";
 
 export default function About() {
   return (
@@ -125,21 +126,8 @@ export default function About() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">
-            Ready to Join Our Community?
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            Whether you're a business looking for expertise or a professional seeking opportunities, 
-            SeekCa is your gateway to global collaboration.
-          </p>
-          <Button size="lg" asChild>
-            <Link to="/auth">Get Started Today</Link>
-          </Button>
-        </div>
-      </section>
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
