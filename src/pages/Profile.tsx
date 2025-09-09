@@ -19,6 +19,7 @@ export default function Profile() {
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [profileData, setProfileData] = useState({
     fullName: user?.user_metadata?.full_name || '',
     nickname: user?.user_metadata?.nickname || '',
@@ -98,13 +99,57 @@ export default function Profile() {
     setIsEditing(false);
   };
 
-  const handleProfilePictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProfilePictureChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      // TODO: Implement actual file upload to Supabase storage
-      // For now, create a local URL
-      const imageUrl = URL.createObjectURL(file);
-      setProfileData(prev => ({ ...prev, avatarUrl: imageUrl }));
+    if (!file || !user) return;
+
+    try {
+      setIsUploadingAvatar(true);
+
+      const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+      const filePath = `avatars/${user.id}-${Date.now()}.${fileExt}`;
+
+      // Upload to Supabase Storage (ensure an 'avatars' bucket exists and is public)
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file, {
+          upsert: true,
+          contentType: file.type,
+        });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      // Get a public URL for the uploaded image
+      const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+      const publicUrl = data.publicUrl;
+
+      // Optimistically update local state
+      setProfileData(prev => ({ ...prev, avatarUrl: publicUrl }));
+
+      // Persist to user metadata immediately so it survives logout/login
+      const { error: updateError } = await supabase.auth.updateUser({
+        data: { avatar_url: publicUrl },
+      });
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      toast({
+        title: 'Profile photo updated',
+        description: 'Your profile photo has been saved.',
+      });
+    } catch (error) {
+      console.error('Avatar upload failed:', error);
+      toast({
+        title: 'Upload failed',
+        description: 'Could not upload profile photo. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsUploadingAvatar(false);
     }
   };
 
