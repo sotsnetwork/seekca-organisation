@@ -141,11 +141,11 @@ export default function Profile() {
         title: 'Profile photo updated',
         description: 'Your profile photo has been saved.',
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Avatar upload failed:', error);
       toast({
         title: 'Upload failed',
-        description: 'Could not upload profile photo. Please try again.',
+        description: error?.message || 'Could not upload profile photo. Please try again.',
         variant: 'destructive',
       });
     } finally {
