@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import ProfileNavigation from "@/components/ProfileNavigation";
 
 export default function Profile() {
+  const AVATAR_BUCKET = (import.meta as any).env?.VITE_SUPABASE_AVATAR_BUCKET || 'avatars';
   const { user } = useAuth();
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
@@ -111,7 +112,7 @@ export default function Profile() {
 
       // Upload to Supabase Storage (ensure an 'avatars' bucket exists and is public)
       const { error: uploadError } = await supabase.storage
-        .from('avatars')
+        .from(AVATAR_BUCKET)
         .upload(filePath, file, {
           upsert: true,
           contentType: file.type,
@@ -122,7 +123,7 @@ export default function Profile() {
       }
 
       // Get a public URL for the uploaded image
-      const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+      const { data } = supabase.storage.from(AVATAR_BUCKET).getPublicUrl(filePath);
       const publicUrl = data.publicUrl;
 
       // Optimistically update local state
@@ -143,9 +144,12 @@ export default function Profile() {
       });
     } catch (error: any) {
       console.error('Avatar upload failed:', error);
+      const message = String(error?.message || '').toLowerCase().includes('bucket not found')
+        ? `Storage bucket '${AVATAR_BUCKET}' not found. Create it in Supabase Storage or set VITE_SUPABASE_AVATAR_BUCKET to an existing bucket name.`
+        : (error?.message || 'Could not upload profile photo. Please try again.');
       toast({
         title: 'Upload failed',
-        description: error?.message || 'Could not upload profile photo. Please try again.',
+        description: message,
         variant: 'destructive',
       });
     } finally {
