@@ -13,6 +13,7 @@ import CountrySelector from "@/components/CountrySelector";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ProfileNavigation from "@/components/ProfileNavigation";
+import { ProfilePictureCropper } from "@/components/ProfilePictureCropper";
 
 export default function Profile() {
   const AVATAR_BUCKET = (import.meta as any).env?.VITE_SUPABASE_AVATAR_BUCKET || 'avatars';
@@ -21,6 +22,7 @@ export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const [isCropperOpen, setIsCropperOpen] = useState(false);
   const [profileData, setProfileData] = useState({
     fullName: user?.user_metadata?.full_name || '',
     nickname: user?.user_metadata?.nickname || '',
@@ -100,22 +102,20 @@ export default function Profile() {
     setIsEditing(false);
   };
 
-  const handleProfilePictureChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file || !user) return;
+  const handleCroppedImageUpload = async (croppedImageBlob: Blob) => {
+    if (!user) return;
 
     try {
       setIsUploadingAvatar(true);
 
-      const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-      const filePath = `avatars/${user.id}-${Date.now()}.${fileExt}`;
+      const filePath = `avatars/${user.id}-${Date.now()}.jpg`;
 
       // Upload to Supabase Storage (ensure an 'avatars' bucket exists and is public)
       const { error: uploadError } = await supabase.storage
         .from(AVATAR_BUCKET)
-        .upload(filePath, file, {
+        .upload(filePath, croppedImageBlob, {
           upsert: true,
-          contentType: file.type,
+          contentType: 'image/jpeg',
         });
 
       if (uploadError) {
@@ -138,6 +138,8 @@ export default function Profile() {
         throw updateError;
       }
 
+      setIsCropperOpen(false);
+      
       toast({
         title: 'Profile photo updated',
         description: 'Your profile photo has been saved.',
@@ -203,18 +205,18 @@ export default function Profile() {
                   </Avatar>
                   {isEditing && (
                     <div className="absolute -bottom-2 -right-2">
-                      <label htmlFor="profile-picture" className="cursor-pointer">
-                        <div className="bg-primary text-primary-foreground rounded-full p-2 hover:bg-primary/90 transition-colors">
+                      <Button
+                        size="sm"
+                        onClick={() => setIsCropperOpen(true)}
+                        className="rounded-full p-2 h-8 w-8"
+                        disabled={isUploadingAvatar}
+                      >
+                        {isUploadingAvatar ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
                           <Camera className="w-4 h-4" />
-                        </div>
-                        <input
-                          id="profile-picture"
-                          type="file"
-                          accept="image/*"
-                          onChange={handleProfilePictureChange}
-                          className="hidden"
-                        />
-                      </label>
+                        )}
+                      </Button>
                     </div>
                   )}
                 </div>
@@ -370,6 +372,13 @@ export default function Profile() {
             </Card>
           </div>
         </div>
+        
+        <ProfilePictureCropper
+          isOpen={isCropperOpen}
+          onClose={() => setIsCropperOpen(false)}
+          onCropComplete={handleCroppedImageUpload}
+          isUploading={isUploadingAvatar}
+        />
       </div>
     </div>
   );
