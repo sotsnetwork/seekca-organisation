@@ -197,20 +197,20 @@ export default function HelpCenter() {
         </div>
 
         {/* Quick Support Options */}
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-12">
           {supportOptions.map((option) => (
-            <Card key={option.title} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <option.icon className="w-6 h-6 text-primary" />
+            <Card key={option.title} className="hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <CardContent className="p-4 md:p-6 text-center">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+                  <option.icon className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{option.title}</h3>
-                <p className="text-muted-foreground mb-3">{option.description}</p>
-                <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                  <Clock className="w-4 h-4" />
+                <h3 className="text-base md:text-lg font-semibold mb-2">{option.title}</h3>
+                <p className="text-sm md:text-base text-muted-foreground mb-3">{option.description}</p>
+                <div className="flex items-center justify-center gap-2 text-xs md:text-sm text-muted-foreground mb-3">
+                  <Clock className="w-3 h-3 md:w-4 md:h-4" />
                   <span>{option.responseTime}</span>
                 </div>
-                <Button className="mt-4 w-full" disabled={!option.available}>
+                <Button className="w-full text-sm md:text-base" disabled={!option.available}>
                   {option.available ? "Get Help" : "Coming Soon"}
                 </Button>
               </CardContent>
@@ -255,18 +255,18 @@ export default function HelpCenter() {
 
         {/* Contact Support */}
         <Card className="mt-12 bg-gradient-hero border-0">
-          <CardContent className="p-8 text-center text-primary-foreground">
-            <h2 className="text-2xl font-bold mb-4">Still need help?</h2>
-            <p className="text-primary-foreground/90 mb-6">
+          <CardContent className="p-6 md:p-8 text-center text-primary-foreground">
+            <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">Still need help?</h2>
+            <p className="text-sm md:text-base text-primary-foreground/90 mb-4 md:mb-6">
               Our support team is here to help you succeed on SeekCa
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="secondary" size="lg">
-                <MessageCircle className="w-5 h-5 mr-2" />
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center max-w-md mx-auto">
+              <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                <MessageCircle className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                 Start Live Chat
               </Button>
-              <Button variant="outline" size="lg" className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
-                <Mail className="w-5 h-5 mr-2" />
+              <Button variant="outline" size="lg" className="w-full sm:w-auto bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
+                <Mail className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                 Send Email
               </Button>
             </div>

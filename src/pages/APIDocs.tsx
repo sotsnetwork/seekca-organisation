@@ -193,11 +193,11 @@ export default function APIDocs() {
         </div>
 
         <Tabs defaultValue="overview" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="endpoints">Endpoints</TabsTrigger>
-            <TabsTrigger value="examples">Code Examples</TabsTrigger>
-            <TabsTrigger value="sdks">SDKs & Tools</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+            <TabsTrigger value="overview" className="text-xs md:text-sm">Overview</TabsTrigger>
+            <TabsTrigger value="endpoints" className="text-xs md:text-sm">Endpoints</TabsTrigger>
+            <TabsTrigger value="examples" className="text-xs md:text-sm">Examples</TabsTrigger>
+            <TabsTrigger value="sdks" className="text-xs md:text-sm">SDKs</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -216,16 +216,16 @@ export default function APIDocs() {
                   professionals, job postings, messaging, and more.
                 </p>
                 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <div>
-                    <h3 className="font-semibold mb-2">Base URL</h3>
-                    <code className="bg-muted px-3 py-2 rounded text-sm">
+                    <h3 className="font-semibold mb-2 text-sm md:text-base">Base URL</h3>
+                    <code className="bg-muted px-3 py-2 rounded text-xs md:text-sm block break-all">
                       https://api.seekca.com/v1
                     </code>
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-2">Authentication</h3>
-                    <code className="bg-muted px-3 py-2 rounded text-sm">
+                    <h3 className="font-semibold mb-2 text-sm md:text-base">Authentication</h3>
+                    <code className="bg-muted px-3 py-2 rounded text-xs md:text-sm block">
                       Bearer Token
                     </code>
                   </div>
@@ -247,14 +247,14 @@ export default function APIDocs() {
                 <CardTitle>SDK Features</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                   {sdkFeatures.map((feature) => (
-                    <div key={feature.title} className="flex items-start gap-3 p-4 border rounded-lg">
-                      <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
-                        <feature.icon className="w-4 h-4 text-primary" />
+                    <div key={feature.title} className="flex items-start gap-3 p-3 md:p-4 border rounded-lg hover:shadow-sm transition-shadow">
+                      <div className="w-7 h-7 md:w-8 md:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                        <feature.icon className="w-3 h-3 md:w-4 md:h-4 text-primary" />
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-sm">{feature.title}</h4>
+                      <div className="min-w-0">
+                        <h4 className="font-semibold text-xs md:text-sm">{feature.title}</h4>
                         <p className="text-xs text-muted-foreground">{feature.description}</p>
                       </div>
                     </div>

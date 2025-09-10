@@ -251,23 +251,23 @@ export default function Status() {
         </Card>
 
         {/* System Metrics */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
           {systemMetrics.map((metric) => (
-            <Card key={metric.name}>
-              <CardContent className="p-6">
+            <Card key={metric.name} className="hover:shadow-md transition-shadow">
+              <CardContent className="p-4 md:p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs md:text-sm font-medium text-muted-foreground truncate">
                       {metric.name}
                     </p>
-                    <p className="text-2xl font-bold">{metric.value}</p>
+                    <p className="text-xl md:text-2xl font-bold">{metric.value}</p>
                     <div className="flex items-center gap-1 mt-1">
-                      <TrendingUp className="w-3 h-3 text-green-600" />
-                      <span className="text-sm text-green-600">{metric.change}</span>
+                      <TrendingUp className="w-3 h-3 text-green-600 flex-shrink-0" />
+                      <span className="text-xs md:text-sm text-green-600">{metric.change}</span>
                     </div>
                   </div>
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <metric.icon className="w-6 h-6 text-primary" />
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                    <metric.icon className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                   </div>
                 </div>
               </CardContent>
@@ -289,17 +289,17 @@ export default function Status() {
           <CardContent>
             <div className="space-y-4">
               {services.map((service) => (
-                <div key={service.name} className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex items-center gap-4">
+                <div key={service.name} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 border rounded-lg space-y-3 sm:space-y-0">
+                  <div className="flex items-center gap-3 md:gap-4 min-w-0 flex-1">
                     {getStatusIcon(service.status)}
-                    <div>
-                      <h3 className="font-semibold">{service.name}</h3>
-                      <p className="text-sm text-muted-foreground">{service.description}</p>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold text-sm md:text-base">{service.name}</h3>
+                      <p className="text-xs md:text-sm text-muted-foreground">{service.description}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-6">
-                    <div className="text-right">
-                      <div className="text-sm font-medium">{service.uptime}% uptime</div>
+                  <div className="flex items-center justify-between sm:justify-end gap-4 md:gap-6">
+                    <div className="text-left sm:text-right">
+                      <div className="text-xs md:text-sm font-medium">{service.uptime}% uptime</div>
                       <div className="text-xs text-muted-foreground">
                         {service.responseTime}ms avg response
                       </div>

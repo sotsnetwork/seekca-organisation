@@ -226,30 +226,30 @@ export default function Community() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-4 lg:space-y-6">
             {/* Categories */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg">Categories</CardTitle>
+                <CardTitle className="text-base lg:text-lg">Categories</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent className="space-y-1 lg:space-y-2">
                 {categories.map((category) => (
                   <button
                     key={category.name}
                     onClick={() => setSelectedCategory(category.name)}
-                    className={`w-full flex items-center justify-between p-3 rounded-lg text-left transition-colors ${
+                    className={`w-full flex items-center justify-between p-2 lg:p-3 rounded-lg text-left transition-colors ${
                       selectedCategory === category.name
                         ? "bg-primary text-primary-foreground"
                         : "hover:bg-muted"
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-3 h-3 rounded-full ${category.color}`} />
-                      <span className="font-medium">{category.name}</span>
+                    <div className="flex items-center gap-2 lg:gap-3 min-w-0">
+                      <div className={`w-2 h-2 lg:w-3 lg:h-3 rounded-full flex-shrink-0 ${category.color}`} />
+                      <span className="font-medium text-sm lg:text-base truncate">{category.name}</span>
                     </div>
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge variant="secondary" className="text-xs flex-shrink-0">
                       {category.count}
                     </Badge>
                   </button>
@@ -258,25 +258,25 @@ export default function Community() {
             </Card>
 
             {/* Top Contributors */}
-            <Card>
+            <Card className="hidden lg:block">
               <CardHeader>
-                <CardTitle className="text-lg">Top Contributors</CardTitle>
+                <CardTitle className="text-base lg:text-lg">Top Contributors</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {topContributors.map((contributor, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <Avatar className="w-10 h-10">
+              <CardContent className="space-y-3 lg:space-y-4">
+                {topContributors.slice(0, 3).map((contributor, index) => (
+                  <div key={index} className="flex items-center gap-2 lg:gap-3">
+                    <Avatar className="w-8 h-8 lg:w-10 lg:h-10">
                       <AvatarFallback className="text-xs">
                         {contributor.avatar}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-sm">{contributor.name}</div>
+                      <div className="font-medium text-xs lg:text-sm truncate">{contributor.name}</div>
                       <div className="text-xs text-muted-foreground">
                         {contributor.points} points
                       </div>
-                      <div className="flex gap-1 mt-1">
-                        {contributor.badges.map((badge) => (
+                      <div className="flex gap-1 mt-1 flex-wrap">
+                        {contributor.badges.slice(0, 2).map((badge) => (
                           <Badge key={badge} variant="outline" className="text-xs">
                             {badge}
                           </Badge>
@@ -291,16 +291,17 @@ export default function Community() {
 
           {/* Main Content */}
           <div className="lg:col-span-3">
-            <Tabs defaultValue="discussions" className="space-y-6">
-              <div className="flex items-center justify-between">
-                <TabsList>
-                  <TabsTrigger value="discussions">Discussions</TabsTrigger>
-                  <TabsTrigger value="questions">Questions</TabsTrigger>
-                  <TabsTrigger value="announcements">Announcements</TabsTrigger>
+            <Tabs defaultValue="discussions" className="space-y-4 lg:space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <TabsList className="grid w-full sm:w-auto grid-cols-3">
+                  <TabsTrigger value="discussions" className="text-xs md:text-sm">Discussions</TabsTrigger>
+                  <TabsTrigger value="questions" className="text-xs md:text-sm">Questions</TabsTrigger>
+                  <TabsTrigger value="announcements" className="text-xs md:text-sm">News</TabsTrigger>
                 </TabsList>
-                <Button>
+                <Button className="w-full sm:w-auto">
                   <Plus className="w-4 h-4 mr-2" />
-                  New Post
+                  <span className="hidden sm:inline">New Post</span>
+                  <span className="sm:hidden">Post</span>
                 </Button>
               </div>
 
