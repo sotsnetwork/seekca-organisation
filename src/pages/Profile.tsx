@@ -82,18 +82,20 @@ export default function Profile() {
     
     setIsSaving(true);
     try {
-      // Update user metadata with new profile data
-      const { error } = await supabase.auth.updateUser({
-        data: {
+      // Upsert profile data to the profiles table
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          user_id: user.id,
           full_name: data.fullName,
           nickname: data.nickname,
           country: data.country,
           bio: data.bio,
           skills: selectedSkills,
-          hourlyRate: data.hourlyRate,
+          hourly_rate: parseFloat(data.hourlyRate) || null,
           location: data.location,
-        }
-      });
+          avatar_url: profileData.avatarUrl,
+        });
 
       if (error) {
         throw error;
@@ -165,10 +167,20 @@ export default function Profile() {
       // Optimistically update local state
       setProfileData(prev => ({ ...prev, avatarUrl: publicUrl }));
 
-      // Persist to user metadata immediately so it survives logout/login
-      const { error: updateError } = await supabase.auth.updateUser({
-        data: { avatar_url: publicUrl },
-      });
+      // Update avatar URL in profiles table
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .upsert({
+          user_id: user.id,
+          avatar_url: publicUrl,
+          full_name: profileData.fullName,
+          nickname: profileData.nickname,
+          country: profileData.country,
+          bio: profileData.bio,
+          skills: profileData.skills,
+          hourly_rate: parseFloat(profileData.hourlyRate) || null,
+          location: profileData.location,
+        });
 
       if (updateError) {
         throw updateError;
