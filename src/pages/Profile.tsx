@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +18,18 @@ import { useToast } from "@/hooks/use-toast";
 import ProfileNavigation from "@/components/ProfileNavigation";
 import { ProfilePictureCropper } from "@/components/ProfilePictureCropper";
 
+// Profile form validation schema
+const profileFormSchema = z.object({
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  nickname: z.string().min(2, "Nickname must be at least 2 characters"),
+  country: z.string().min(1, "Please select a country"),
+  bio: z.string().max(500, "Bio must be less than 500 characters"),
+  hourlyRate: z.string().optional().or(z.literal("")),
+  location: z.string().min(2, "Location must be at least 2 characters"),
+});
+
+type ProfileFormData = z.infer<typeof profileFormSchema>;
+
 export default function Profile() {
   const AVATAR_BUCKET = (import.meta as any).env?.VITE_SUPABASE_AVATAR_BUCKET || 'avatars';
   const { user } = useAuth();
@@ -23,25 +38,64 @@ export default function Profile() {
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [isCropperOpen, setIsCropperOpen] = useState(false);
-  const [profileData, setProfileData] = useState({
-    fullName: user?.user_metadata?.full_name || '',
-    nickname: user?.user_metadata?.nickname || '',
-    country: user?.user_metadata?.country || '',
-    bio: user?.user_metadata?.bio || '',
-    skills: user?.user_metadata?.skills || [],
-    hourlyRate: user?.user_metadata?.hourlyRate || '',
-    location: user?.user_metadata?.location || '',
-    avatarUrl: user?.user_metadata?.avatar_url || '',
-  });
-
+  
   const [selectedSkills, setSelectedSkills] = useState<string[]>(
     Array.isArray(user?.user_metadata?.skills) 
       ? user.user_metadata.skills 
       : user?.user_metadata?.skills?.split(',').filter(Boolean) || []
   );
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+    watch,
+  } = useForm<ProfileFormData>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      fullName: user?.user_metadata?.full_name || '',
+      nickname: user?.user_metadata?.nickname || '',
+      country: user?.user_metadata?.country || '',
+      bio: user?.user_metadata?.bio || '',
+      hourlyRate: user?.user_metadata?.hourlyRate || '',
+      location: user?.user_metadata?.location || '',
+    },
+  });
+
+  const watchedValues = watch();
+
   const handleSave = async () => {
     if (!user) return;
+    
+    // Basic validation
+    if (profileData.fullName.length < 2) {
+      toast({
+        title: "Validation Error",
+        description: "Full name must be at least 2 characters.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (profileData.nickname.length < 2) {
+      toast({
+        title: "Validation Error",
+        description: "Nickname must be at least 2 characters.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (profileData.bio.length > 500) {
+      toast({
+        title: "Validation Error",
+        description: "Bio must be less than 500 characters.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     setIsSaving(true);
     try {
@@ -286,7 +340,11 @@ export default function Profile() {
                       value={profileData.fullName}
                       onChange={(e) => setProfileData(prev => ({ ...prev, fullName: e.target.value }))}
                       disabled={!isEditing}
+                      className={profileData.fullName.length > 0 && profileData.fullName.length < 2 ? "border-destructive" : ""}
                     />
+                    {profileData.fullName.length > 0 && profileData.fullName.length < 2 && (
+                      <p className="text-sm text-destructive mt-1">Full name must be at least 2 characters</p>
+                    )}
                   </div>
                   <div>
                     <Label htmlFor="nickname">Nickname (Display Name)</Label>
@@ -296,7 +354,11 @@ export default function Profile() {
                       onChange={(e) => setProfileData(prev => ({ ...prev, nickname: e.target.value }))}
                       disabled={!isEditing}
                       placeholder="Professional name to display"
+                      className={profileData.nickname.length > 0 && profileData.nickname.length < 2 ? "border-destructive" : ""}
                     />
+                    {profileData.nickname.length > 0 && profileData.nickname.length < 2 && (
+                      <p className="text-sm text-destructive mt-1">Nickname must be at least 2 characters</p>
+                    )}
                   </div>
                   <div>
                     <Label htmlFor="country">Country</Label>
@@ -365,7 +427,16 @@ export default function Profile() {
                       onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
                       disabled={!isEditing}
                       placeholder="Tell us about yourself and your expertise..."
+                      className={profileData.bio.length > 500 ? "border-destructive" : ""}
                     />
+                    <div className="flex justify-between items-center mt-1">
+                      {profileData.bio.length > 500 && (
+                        <p className="text-sm text-destructive">Bio must be less than 500 characters</p>
+                      )}
+                      <p className="text-sm text-muted-foreground ml-auto">
+                        {profileData.bio.length}/500
+                      </p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
