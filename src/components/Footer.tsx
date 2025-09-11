@@ -19,7 +19,7 @@ const footerLinks = {
   ],
   resources: [
     { name: "Help Center", href: "/help" },
-    { name: "API Docs", href: "/docs" },
+    { name: "API Docs", href: "/api-docs" },
     { name: "Community", href: "/community" },
     { name: "Status", href: "/status" }
   ],
@@ -98,9 +98,9 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                  <Link to={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
