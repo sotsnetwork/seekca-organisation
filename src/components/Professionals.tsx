@@ -944,7 +944,7 @@ export default function Professionals() {
               {sortedProfessionals.map((professional) => {
                 const distance = calculateDistance(professional);
                 return (
-                <Card key={professional.id} className="hover:shadow-lg transition-shadow">
+                  <Card key={professional.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
@@ -1032,7 +1032,7 @@ export default function Professionals() {
                       </div>
                     </div>
                   </CardContent>
-                </Card>
+                  </Card>
                 );
               })}
             </div>
