@@ -1,12 +1,30 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Send, Search } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { ArrowLeft, Send, Search, MessageSquare, Clock, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import { useMessages, useSendMessage } from "@/hooks/use-api";
+import ProfileNavigation from "@/components/ProfileNavigation";
 
 export default function Messages() {
   const { user } = useAuth();
+  const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
+  const [newMessage, setNewMessage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Fetch messages
+  const { data: messages = [], isLoading } = useMessages({
+    conversation_id: selectedConversation || undefined,
+  });
+
+  const sendMessage = useSendMessage();
 
   if (!user) {
     return (
@@ -21,21 +39,39 @@ export default function Messages() {
     );
   }
 
+  const handleSendMessage = () => {
+    if (!newMessage.trim() || !selectedConversation) return;
+
+    sendMessage.mutate({
+      sender_id: user.id,
+      recipient_id: selectedConversation,
+      subject: "New Message",
+      content: newMessage,
+    }, {
+      onSuccess: () => {
+        setNewMessage("");
+      },
+    });
+  };
+
+  // Group messages by conversation
+  const conversations = messages.reduce((acc, message) => {
+    const conversationId = message.job_id || message.recipient_id;
+    if (!acc[conversationId]) {
+      acc[conversationId] = [];
+    }
+    acc[conversationId].push(message);
+    return acc;
+  }, {} as Record<string, typeof messages>);
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <ProfileNavigation />
+      <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Link>
-          </Button>
-          <div>
-            <h1 className="text-3xl font-heading font-bold text-foreground">Messages</h1>
-            <p className="text-muted-foreground">Communicate with clients and professionals</p>
-          </div>
+        <div className="mb-8">
+          <h1 className="text-3xl font-heading font-bold text-foreground">Messages</h1>
+          <p className="text-muted-foreground">Communicate with clients and professionals</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
