@@ -31,7 +31,7 @@ const profileFormSchema = z.object({
 type ProfileFormData = z.infer<typeof profileFormSchema>;
 
 export default function Profile() {
-  const AVATAR_BUCKET = (import.meta as any).env?.VITE_SUPABASE_AVATAR_BUCKET || 'avatars';
+  const AVATAR_BUCKET = 'avatars';
   const { user } = useAuth();
   const { toast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
@@ -44,6 +44,17 @@ export default function Profile() {
       ? user.user_metadata.skills 
       : user?.user_metadata?.skills?.split(',').filter(Boolean) || []
   );
+
+  const [profileData, setProfileData] = useState({
+    fullName: user?.user_metadata?.full_name || '',
+    nickname: user?.user_metadata?.nickname || '',
+    country: user?.user_metadata?.country || '',
+    bio: user?.user_metadata?.bio || '',
+    skills: user?.user_metadata?.skills || [],
+    hourlyRate: user?.user_metadata?.hourlyRate || '',
+    location: user?.user_metadata?.location || '',
+    avatarUrl: user?.user_metadata?.avatar_url || '',
+  });
 
   const {
     register,
@@ -66,50 +77,21 @@ export default function Profile() {
 
   const watchedValues = watch();
 
-  const handleSave = async () => {
+  const onSubmit = async (data: ProfileFormData) => {
     if (!user) return;
-    
-    // Basic validation
-    if (profileData.fullName.length < 2) {
-      toast({
-        title: "Validation Error",
-        description: "Full name must be at least 2 characters.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    if (profileData.nickname.length < 2) {
-      toast({
-        title: "Validation Error",
-        description: "Nickname must be at least 2 characters.",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    if (profileData.bio.length > 500) {
-      toast({
-        title: "Validation Error",
-        description: "Bio must be less than 500 characters.",
-        variant: "destructive",
-      });
-      return;
-    }
     
     setIsSaving(true);
     try {
       // Update user metadata with new profile data
       const { error } = await supabase.auth.updateUser({
         data: {
-          full_name: profileData.fullName,
-          nickname: profileData.nickname,
-          country: profileData.country,
-          bio: profileData.bio,
-          skills: selectedSkills, // Store as array
-          hourlyRate: profileData.hourlyRate,
-          location: profileData.location,
-          avatar_url: profileData.avatarUrl,
+          full_name: data.fullName,
+          nickname: data.nickname,
+          country: data.country,
+          bio: data.bio,
+          skills: selectedSkills,
+          hourlyRate: data.hourlyRate,
+          location: data.location,
         }
       });
 
@@ -118,7 +100,16 @@ export default function Profile() {
       }
 
       // Update local state
-      setProfileData(prev => ({ ...prev, skills: selectedSkills }));
+      setProfileData(prev => ({
+        ...prev,
+        fullName: data.fullName,
+        nickname: data.nickname,
+        country: data.country,
+        bio: data.bio,
+        hourlyRate: data.hourlyRate,
+        location: data.location,
+        skills: selectedSkills
+      }));
       setIsEditing(false);
       
       toast({
@@ -138,16 +129,7 @@ export default function Profile() {
   };
 
   const handleCancel = () => {
-    setProfileData({
-      fullName: user?.user_metadata?.full_name || '',
-      nickname: user?.user_metadata?.nickname || '',
-      country: user?.user_metadata?.country || '',
-      bio: user?.user_metadata?.bio || '',
-      skills: user?.user_metadata?.skills || [],
-      hourlyRate: user?.user_metadata?.hourlyRate || '',
-      location: user?.user_metadata?.location || '',
-      avatarUrl: user?.user_metadata?.avatar_url || '',
-    });
+    reset();
     setSelectedSkills(
       Array.isArray(user?.user_metadata?.skills) 
         ? user.user_metadata.skills 
@@ -254,7 +236,7 @@ export default function Profile() {
                   <Avatar className="w-24 h-24">
                     <AvatarImage src={profileData.avatarUrl || user.user_metadata?.avatar_url} />
                     <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
-                      {getInitials(profileData.nickname || profileData.fullName)}
+                      {getInitials(watchedValues.nickname || watchedValues.fullName || user.user_metadata?.nickname || user.user_metadata?.full_name)}
                     </AvatarFallback>
                   </Avatar>
                   {isEditing && (
@@ -275,12 +257,12 @@ export default function Profile() {
                   )}
                 </div>
                 <CardTitle className="text-xl">
-                  {profileData.nickname || profileData.fullName}
+                  {watchedValues.nickname || watchedValues.fullName || user.user_metadata?.nickname || user.user_metadata?.full_name}
                 </CardTitle>
                 <CardDescription>{user.email}</CardDescription>
-                {profileData.nickname && (
+                {watchedValues.nickname && (
                   <CardDescription className="text-sm text-muted-foreground">
-                    {profileData.fullName}
+                    {watchedValues.fullName}
                   </CardDescription>
                 )}
               </CardHeader>
@@ -315,7 +297,7 @@ export default function Profile() {
                     </Button>
                   ) : (
                     <div className="flex gap-2">
-                      <Button onClick={handleSave} size="sm" disabled={isSaving}>
+                     <Button onClick={handleSubmit(onSubmit)} size="sm" disabled={isSaving}>
                         {isSaving ? (
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                         ) : (
@@ -323,7 +305,10 @@ export default function Profile() {
                         )}
                         {isSaving ? "Saving..." : "Save"}
                       </Button>
-                      <Button onClick={handleCancel} variant="outline" size="sm" disabled={isSaving}>
+                      <Button onClick={() => {
+                        reset();
+                        setIsEditing(false);
+                      }} variant="outline" size="sm" disabled={isSaving}>
                         <X className="w-4 h-4 mr-2" />
                         Cancel
                       </Button>
@@ -337,34 +322,32 @@ export default function Profile() {
                     <Label htmlFor="fullName">Full Name</Label>
                     <Input
                       id="fullName"
-                      value={profileData.fullName}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, fullName: e.target.value }))}
+                      {...register("fullName")}
                       disabled={!isEditing}
-                      className={profileData.fullName.length > 0 && profileData.fullName.length < 2 ? "border-destructive" : ""}
+                      className={errors.fullName ? "border-destructive" : ""}
                     />
-                    {profileData.fullName.length > 0 && profileData.fullName.length < 2 && (
-                      <p className="text-sm text-destructive mt-1">Full name must be at least 2 characters</p>
+                    {errors.fullName && (
+                      <p className="text-sm text-destructive mt-1">{errors.fullName.message}</p>
                     )}
                   </div>
                   <div>
                     <Label htmlFor="nickname">Nickname (Display Name)</Label>
                     <Input
                       id="nickname"
-                      value={profileData.nickname}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, nickname: e.target.value }))}
+                      {...register("nickname")}
                       disabled={!isEditing}
                       placeholder="Professional name to display"
-                      className={profileData.nickname.length > 0 && profileData.nickname.length < 2 ? "border-destructive" : ""}
+                      className={errors.nickname ? "border-destructive" : ""}
                     />
-                    {profileData.nickname.length > 0 && profileData.nickname.length < 2 && (
-                      <p className="text-sm text-destructive mt-1">Nickname must be at least 2 characters</p>
+                    {errors.nickname && (
+                      <p className="text-sm text-destructive mt-1">{errors.nickname.message}</p>
                     )}
                   </div>
                   <div>
                     <Label htmlFor="country">Country</Label>
                     <CountrySelector
-                      value={profileData.country}
-                      onValueChange={(value) => setProfileData(prev => ({ ...prev, country: value }))}
+                      value={watchedValues.country}
+                      onValueChange={(value) => setValue("country", value)}
                       placeholder="Select your country"
                       disabled={!isEditing}
                     />
@@ -373,8 +356,7 @@ export default function Profile() {
                     <Label htmlFor="location">Location</Label>
                     <Input
                       id="location"
-                      value={profileData.location}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, location: e.target.value }))}
+                      {...register("location")}
                       disabled={!isEditing}
                       placeholder="City, Country"
                     />
@@ -384,8 +366,7 @@ export default function Profile() {
                     <Input
                       id="hourlyRate"
                       type="number"
-                      value={profileData.hourlyRate}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, hourlyRate: e.target.value }))}
+                      {...register("hourlyRate")}
                       disabled={!isEditing}
                       placeholder="25"
                     />
@@ -423,18 +404,17 @@ export default function Profile() {
                     <Label htmlFor="bio">Bio</Label>
                     <Input
                       id="bio"
-                      value={profileData.bio}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
+                      {...register("bio")}
                       disabled={!isEditing}
                       placeholder="Tell us about yourself and your expertise..."
-                      className={profileData.bio.length > 500 ? "border-destructive" : ""}
+                      className={errors.bio ? "border-destructive" : ""}
                     />
                     <div className="flex justify-between items-center mt-1">
-                      {profileData.bio.length > 500 && (
-                        <p className="text-sm text-destructive">Bio must be less than 500 characters</p>
+                      {errors.bio && (
+                        <p className="text-sm text-destructive">{errors.bio.message}</p>
                       )}
                       <p className="text-sm text-muted-foreground ml-auto">
-                        {profileData.bio.length}/500
+                        {watchedValues.bio?.length || 0}/500
                       </p>
                     </div>
                   </div>

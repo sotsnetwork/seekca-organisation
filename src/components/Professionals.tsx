@@ -259,60 +259,7 @@ export default function Professionals() {
     return matchesSearch;
   });
 
-  useEffect(() => {
-    // Filter professionals based on search and filters
-    let filtered = professionals;
-
-    if (searchTerm) {
-      filtered = filtered.filter(
-        prof =>
-          prof.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          prof.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          prof.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          prof.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    if (skillFilter && skillFilter !== 'all') {
-             // Map filter values to service categories
-       const serviceCategories: { [key: string]: string[] } = {
-         'exterior': ['roofing', 'house painting', 'window washing', 'chimney', 'pools', 'gutter', 'deck', 'siding', 'concrete', 'masonry'],
-         'cleaning': ['cleaning', 'maintenance', 'deep cleaning', 'carpet cleaning', 'window washing', 'organization', 'junk removal', 'duct cleaning', 'pool cleaning'],
-         'repairs': ['plumbing', 'locksmith', 'appliance repair', 'garage door', 'handyman', 'furnace', 'hvac', 'electrical', 'windows', 'doors', 'contracting', 'carpentry', 'bathroom'],
-         'renovations': ['kitchen remodeling', 'flooring', 'interior design', 'carpet installation', 'interior painting', 'basement'],
-         'landscaping': ['lawn care', 'landscaping design', 'gardening', 'tree trimming', 'sprinkler', 'artificial turf', 'stump grinding', 'sod', 'arborist'],
-         'installation': ['holiday lights', 'tv mounting', 'security camera', 'appliance installation', 'furniture assembly', 'ceiling fan', 'generator', 'art hanging', 'gym equipment'],
-         'pest': ['pest control', 'mosquito', 'rodent', 'bee removal', 'bed bug', 'wasp', 'termites', 'dead animal'],
-         'architecture': ['architectural design', 'building plans', 'structural engineering', 'interior architecture', '3d modeling', 'site planning', 'building codes', 'sustainable design'],
-         'surveying': ['land surveying', 'property boundaries', 'topographic surveys', 'construction surveying', 'gps surveying', 'aerial surveying', 'civil engineering', 'structural engineering'],
-         'automotive': ['auto repair', 'engine repair', 'brake service', 'oil change', 'diagnostic testing', 'transmission repair', 'electrical systems', 'ac heating repair'],
-         'welding': ['arc welding', 'mig welding', 'tig welding', 'stick welding', 'plasma cutting', 'metal fabrication', 'steel work', 'aluminum welding', 'stainless steel welding'],
-         'construction': ['general contracting', 'carpentry', 'masonry', 'concrete work', 'steel erection', 'roofing', 'siding installation', 'foundation work', 'framing'],
-         'specialized': ['glass installation', 'mirror installation', 'window installation', 'door installation', 'security systems', 'home automation', 'solar installation', 'generator installation'],
-         'trending': ['event planning', 'heat pump', 'foundation inspection', 'karaoke rental', 'after school lessons', 'concrete delivery'],
-         'events': ['caterers', 'makeup artists', 'dj', 'photographers', 'wedding planners', 'limo', 'car rental'],
-         'wellness': ['personal trainer', 'life coach', 'nutritionist', 'yoga']
-       };
-      
-      const categoryKeywords = serviceCategories[skillFilter] || [];
-      filtered = filtered.filter(prof =>
-        prof.skills.some(skill => 
-          categoryKeywords.some(keyword => 
-            skill.toLowerCase().includes(keyword.toLowerCase())
-          )
-        ) ||
-        prof.title.toLowerCase().includes(skillFilter.toLowerCase()) ||
-        prof.description.toLowerCase().includes(skillFilter.toLowerCase())
-      );
-    }
-
-    if (rateFilter) {
-      const maxRate = parseInt(rateFilter);
-      filtered = filtered.filter(prof => prof.hourlyRate <= maxRate);
-    }
-
-    setFilteredProfessionals(filtered);
-  }, [searchTerm, skillFilter, rateFilter, professionals]);
+  // No longer need useEffect for filtering as we filter directly in the render
 
   const getInitials = (name: string) => {
     return name

@@ -46,7 +46,14 @@ export default function Contact() {
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    submitContactForm.mutate(data, {
+    submitContactForm.mutate({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phone: data.phone || "",
+      subject: data.subject,
+      message: data.message,
+    }, {
       onSuccess: () => {
         toast({
           title: "Message sent successfully!",
