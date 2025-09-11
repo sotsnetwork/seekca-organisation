@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Star, Briefcase, MessageSquare, Filter, User, Loader2 } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
+import { Search, MapPin, Star, Briefcase, MessageSquare, Filter, User, Loader2, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfessionals } from "@/hooks/use-api";
 import { Link } from "react-router-dom";
@@ -33,6 +37,12 @@ export default function Professionals() {
   const [searchTerm, setSearchTerm] = useState("");
   const [skillFilter, setSkillFilter] = useState("");
   const [rateFilter, setRateFilter] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [ratingFilter, setRatingFilter] = useState("");
+  const [availabilityFilter, setAvailabilityFilter] = useState("");
+  const [verifiedFilter, setVerifiedFilter] = useState(false);
+  const [priceRange, setPriceRange] = useState([0, 100]);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   
   // Use API hook for data fetching
   const { data: apiProfessionals = [], isLoading, error } = useProfessionals({
@@ -248,16 +258,69 @@ export default function Professionals() {
      },
   ];
 
-  // Filter professionals based on search term
+  // Get unique locations for location filter
+  const uniqueLocations = Array.from(new Set(professionals.map(p => p.location))).sort();
+  
+  // Get unique skills for skill filter
+  const allSkills = professionals.flatMap(p => p.skills);
+  const uniqueSkills = Array.from(new Set(allSkills)).sort();
+
+  // Filter professionals based on all criteria
   const filteredProfessionals = professionals.filter(professional => {
+    // Search term filter
     const matchesSearch = searchTerm === "" || 
       professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       professional.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       professional.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       professional.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    return matchesSearch;
+    // Location filter
+    const matchesLocation = locationFilter === "" || 
+      professional.location.toLowerCase().includes(locationFilter.toLowerCase());
+    
+    // Rating filter
+    const matchesRating = ratingFilter === "" || 
+      (ratingFilter === "4+" && professional.rating >= 4) ||
+      (ratingFilter === "4.5+" && professional.rating >= 4.5) ||
+      (ratingFilter === "5" && professional.rating === 5);
+    
+    // Price range filter
+    const matchesPriceRange = professional.hourlyRate >= priceRange[0] && professional.hourlyRate <= priceRange[1];
+    
+    // Verified filter
+    const matchesVerified = !verifiedFilter || professional.verified;
+    
+    // Availability filter (mock - in real app this would come from API)
+    const matchesAvailability = availabilityFilter === "" || 
+      (availabilityFilter === "available" && Math.random() > 0.3) || // Mock availability
+      (availabilityFilter === "busy" && Math.random() < 0.3);
+    
+    return matchesSearch && matchesLocation && matchesRating && matchesPriceRange && matchesVerified && matchesAvailability;
   });
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    setSearchTerm("");
+    setSkillFilter("");
+    setRateFilter("");
+    setLocationFilter("");
+    setRatingFilter("");
+    setAvailabilityFilter("");
+    setVerifiedFilter(false);
+    setPriceRange([0, 100]);
+  };
+
+  // Count active filters
+  const activeFiltersCount = [
+    searchTerm,
+    skillFilter,
+    rateFilter,
+    locationFilter,
+    ratingFilter,
+    availabilityFilter,
+    verifiedFilter,
+    priceRange[0] !== 0 || priceRange[1] !== 100
+  ].filter(Boolean).length;
 
   // No longer need useEffect for filtering as we filter directly in the render
 
@@ -354,57 +417,186 @@ export default function Professionals() {
       {/* Filters and Search */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="bg-card rounded-lg border border-border p-6 mb-8">
-          <div className="grid md:grid-cols-4 gap-4">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                             <Input
-                 placeholder="Search for skills, services, or professionals..."
-                 value={searchTerm}
-                 onChange={(e) => setSearchTerm(e.target.value)}
-                 className="pl-10"
-               />
+              <Input
+                placeholder="Search for skills, services, or professionals..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
             </div>
-            <Select value={skillFilter} onValueChange={setSkillFilter}>
+            <Select value={locationFilter} onValueChange={setLocationFilter}>
               <SelectTrigger>
-                <SelectValue placeholder="Filter by service" />
-              </SelectTrigger>
-                             <SelectContent>
-                 <SelectItem value="all">All Services</SelectItem>
-                 <SelectItem value="exterior">Exterior Home Care</SelectItem>
-                 <SelectItem value="cleaning">Cleaning & Organization</SelectItem>
-                 <SelectItem value="repairs">Home Repairs & Maintenance</SelectItem>
-                 <SelectItem value="renovations">Renovations & Upgrades</SelectItem>
-                 <SelectItem value="landscaping">Landscaping & Outdoor Services</SelectItem>
-                 <SelectItem value="installation">Installation & Assembly</SelectItem>
-                 <SelectItem value="pest">Pest Control</SelectItem>
-                 <SelectItem value="architecture">Architecture & Design</SelectItem>
-                 <SelectItem value="surveying">Surveying & Engineering</SelectItem>
-                 <SelectItem value="automotive">Automotive & Mechanical</SelectItem>
-                 <SelectItem value="welding">Welding & Metalwork</SelectItem>
-                 <SelectItem value="construction">Construction & Trades</SelectItem>
-                 <SelectItem value="specialized">Specialized Services</SelectItem>
-                 <SelectItem value="trending">Trending Services</SelectItem>
-                 <SelectItem value="events">Events</SelectItem>
-                 <SelectItem value="wellness">Health & Wellness</SelectItem>
-               </SelectContent>
-            </Select>
-            <Select value={rateFilter} onValueChange={setRateFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Max hourly rate" />
+                <SelectValue placeholder="Location" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="any">Any Rate</SelectItem>
-                <SelectItem value="20">$20 or less</SelectItem>
-                <SelectItem value="30">$30 or less</SelectItem>
-                <SelectItem value="40">$40 or less</SelectItem>
-                <SelectItem value="50">$50 or less</SelectItem>
+                <SelectItem value="">All Locations</SelectItem>
+                {uniqueLocations.map((location) => (
+                  <SelectItem key={location} value={location}>
+                    {location}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
-            <Button variant="outline" className="flex items-center gap-2">
-              <Filter className="w-4 h-4" />
-              More Filters
-            </Button>
+            <Select value={ratingFilter} onValueChange={setRatingFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="Minimum Rating" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Any Rating</SelectItem>
+                <SelectItem value="4+">4+ Stars</SelectItem>
+                <SelectItem value="4.5+">4.5+ Stars</SelectItem>
+                <SelectItem value="5">5 Stars Only</SelectItem>
+              </SelectContent>
+            </Select>
+            <div className="flex gap-2">
+              <Dialog open={showAdvancedFilters} onOpenChange={setShowAdvancedFilters}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="flex items-center gap-2 flex-1">
+                    <Filter className="w-4 h-4" />
+                    Advanced Filters
+                    {activeFiltersCount > 0 && (
+                      <Badge variant="secondary" className="ml-1">
+                        {activeFiltersCount}
+                      </Badge>
+                    )}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Advanced Filters</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-6">
+                    {/* Skills Filter */}
+                    <div>
+                      <Label className="text-sm font-medium mb-3 block">Skills & Services</Label>
+                      <Select value={skillFilter} onValueChange={setSkillFilter}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a skill or service" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">All Skills</SelectItem>
+                          {uniqueSkills.map((skill) => (
+                            <SelectItem key={skill} value={skill}>
+                              {skill}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Price Range */}
+                    <div>
+                      <Label className="text-sm font-medium mb-3 block">
+                        Hourly Rate: ${priceRange[0]} - ${priceRange[1]}
+                      </Label>
+                      <Slider
+                        value={priceRange}
+                        onValueChange={setPriceRange}
+                        max={100}
+                        min={0}
+                        step={5}
+                        className="w-full"
+                      />
+                    </div>
+
+                    {/* Availability */}
+                    <div>
+                      <Label className="text-sm font-medium mb-3 block">Availability</Label>
+                      <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Availability status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">Any Availability</SelectItem>
+                          <SelectItem value="available">Available Now</SelectItem>
+                          <SelectItem value="busy">Currently Busy</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Verified Only */}
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="verified"
+                        checked={verifiedFilter}
+                        onCheckedChange={(checked) => setVerifiedFilter(checked as boolean)}
+                      />
+                      <Label htmlFor="verified" className="text-sm">
+                        Verified professionals only
+                      </Label>
+                    </div>
+
+                    {/* Clear Filters */}
+                    <div className="flex justify-between pt-4 border-t">
+                      <Button variant="outline" onClick={clearAllFilters}>
+                        Clear All Filters
+                      </Button>
+                      <Button onClick={() => setShowAdvancedFilters(false)}>
+                        Apply Filters
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+              {activeFiltersCount > 0 && (
+                <Button variant="ghost" size="sm" onClick={clearAllFilters} className="px-3">
+                  <X className="w-4 h-4" />
+                </Button>
+              )}
+            </div>
           </div>
+          
+          {/* Active Filters Display */}
+          {activeFiltersCount > 0 && (
+            <div className="flex flex-wrap gap-2 pt-4 border-t">
+              <span className="text-sm text-muted-foreground">Active filters:</span>
+              {searchTerm && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Search: "{searchTerm}"
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setSearchTerm("")} />
+                </Badge>
+              )}
+              {locationFilter && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Location: {locationFilter}
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setLocationFilter("")} />
+                </Badge>
+              )}
+              {ratingFilter && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Rating: {ratingFilter}
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setRatingFilter("")} />
+                </Badge>
+              )}
+              {skillFilter && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Skill: {skillFilter}
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setSkillFilter("")} />
+                </Badge>
+              )}
+              {(priceRange[0] !== 0 || priceRange[1] !== 100) && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Price: ${priceRange[0]}-${priceRange[1]}
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setPriceRange([0, 100])} />
+                </Badge>
+              )}
+              {verifiedFilter && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Verified Only
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setVerifiedFilter(false)} />
+                </Badge>
+              )}
+              {availabilityFilter && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  {availabilityFilter === "available" ? "Available Now" : "Currently Busy"}
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setAvailabilityFilter("")} />
+                </Badge>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Results Count */}
