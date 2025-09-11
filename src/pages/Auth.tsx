@@ -42,20 +42,34 @@ export default function Auth() {
     setMessage(null);
 
     try {
+      console.log('Attempting sign in with email:', signInData.email);
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email: signInData.email,
         password: signInData.password,
       });
 
+      console.log('Auth response:', { data, error });
+
       if (error) {
-        setMessage({ type: 'error', text: error.message });
+        console.error('Auth error:', error);
+        if (error.message === 'Invalid login credentials') {
+          setMessage({ type: 'error', text: 'Invalid email or password. Please check your credentials and try again.' });
+        } else {
+          setMessage({ type: 'error', text: error.message });
+        }
       } else {
         setMessage({ type: 'success', text: 'Successfully signed in!' });
         // Redirect to home page after successful sign in
         setTimeout(() => navigate('/'), 1000);
       }
     } catch (error) {
-      setMessage({ type: 'error', text: 'An unexpected error occurred' });
+      console.error('Network error:', error);
+      if (error instanceof Error && error.message.includes('fetch')) {
+        setMessage({ type: 'error', text: 'Network connection failed. Please check your internet connection and try again.' });
+      } else {
+        setMessage({ type: 'error', text: 'An unexpected error occurred. Please try again.' });
+      }
     } finally {
       setIsLoading(false);
     }

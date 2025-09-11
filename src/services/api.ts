@@ -12,6 +12,9 @@ export interface Professional {
   hourlyRate?: number;
   location?: string;
   country?: string;
+  state?: string;
+  city?: string;
+  town?: string;
   verified: boolean;
   created_at: string;
 }
