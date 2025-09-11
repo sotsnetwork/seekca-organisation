@@ -49,7 +49,49 @@ export default function Professionals() {
   const [verifiedFilter, setVerifiedFilter] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 100]);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  
+  const [userLocation, setUserLocation] = useState<{country: string, state: string, city: string} | null>(null);
+  const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
+  const [nearbyFilter, setNearbyFilter] = useState(false);
+  const [sortBy, setSortBy] = useState<'rating' | 'price' | 'distance' | 'name'>('rating');
+
+  // Location detection
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          // In a real app, you would reverse geocode the coordinates to get location details
+          // For now, we'll use a mock location detection
+          setUserLocation({
+            country: "Nigeria", // This would be determined from coordinates
+            state: "Lagos",
+            city: "Lagos"
+          });
+          setLocationPermission('granted');
+        },
+        (error) => {
+          console.log('Location access denied:', error);
+          setLocationPermission('denied');
+        }
+      );
+    } else {
+      setLocationPermission('denied');
+    }
+  }, []);
+
+  // Calculate distance between two locations (simplified)
+  const calculateDistance = (prof: Professional) => {
+    if (!userLocation) return 0;
+    
+    // Simple distance calculation based on location matching
+    let distance = 0;
+    if (prof.country !== userLocation.country) distance += 1000; // Different country
+    else if (prof.state !== userLocation.state) distance += 100; // Different state
+    else if (prof.city !== userLocation.city) distance += 50; // Different city
+    else distance = Math.floor(Math.random() * 20); // Same city, random distance
+    
+    return distance;
+  };
+
   // Use API hook for data fetching
   const { data: apiProfessionals = [], isLoading, error } = useProfessionals({
     skills: skillFilter && skillFilter !== "all-skills" ? [skillFilter] : undefined,
@@ -341,6 +383,12 @@ export default function Professionals() {
     const matchesCity = cityFilter === "" || cityFilter === "all-cities" || professional.city === cityFilter;
     const matchesTown = townFilter === "" || townFilter === "all-towns" || professional.town === townFilter;
     
+    // Nearby filter
+    const matchesNearby = !nearbyFilter || (userLocation && 
+      (professional.country === userLocation.country && 
+       professional.state === userLocation.state && 
+       professional.city === userLocation.city));
+    
     // Rating filter
     const matchesRating = ratingFilter === "" || ratingFilter === "any-rating" || 
       (ratingFilter === "4+" && professional.rating >= 4) ||
@@ -358,7 +406,23 @@ export default function Professionals() {
       (availabilityFilter === "available" && Math.random() > 0.3) || // Mock availability
       (availabilityFilter === "busy" && Math.random() < 0.3);
     
-    return matchesSearch && matchesCountry && matchesState && matchesCity && matchesTown && matchesRating && matchesPriceRange && matchesVerified && matchesAvailability;
+    return matchesSearch && matchesCountry && matchesState && matchesCity && matchesTown && matchesNearby && matchesRating && matchesPriceRange && matchesVerified && matchesAvailability;
+  });
+
+  // Sort professionals
+  const sortedProfessionals = [...filteredProfessionals].sort((a, b) => {
+    switch (sortBy) {
+      case 'rating':
+        return b.rating - a.rating;
+      case 'price':
+        return a.hourlyRate - b.hourlyRate;
+      case 'distance':
+        return calculateDistance(a) - calculateDistance(b);
+      case 'name':
+        return a.name.localeCompare(b.name);
+      default:
+        return 0;
+    }
   });
 
   // Clear all filters
@@ -374,6 +438,8 @@ export default function Professionals() {
     setAvailabilityFilter("");
     setVerifiedFilter(false);
     setPriceRange([0, 100]);
+    setNearbyFilter(false);
+    setSortBy('rating');
   };
 
   // Count active filters
@@ -388,7 +454,9 @@ export default function Professionals() {
     ratingFilter && ratingFilter !== "any-rating" ? ratingFilter : "",
     availabilityFilter && availabilityFilter !== "any-availability" ? availabilityFilter : "",
     verifiedFilter,
-    priceRange[0] !== 0 || priceRange[1] !== 100
+    nearbyFilter,
+    priceRange[0] !== 0 || priceRange[1] !== 100,
+    sortBy !== 'rating'
   ].filter(Boolean).length;
 
   // No longer need useEffect for filtering as we filter directly in the render
@@ -526,6 +594,46 @@ export default function Professionals() {
               </SelectContent>
             </Select>
             <div className="flex gap-2">
+              {/* Location Detection Button */}
+              {locationPermission === 'prompt' && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    if (navigator.geolocation) {
+                      navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                          setUserLocation({
+                            country: "Nigeria",
+                            state: "Lagos", 
+                            city: "Lagos"
+                          });
+                          setLocationPermission('granted');
+                        },
+                        (error) => {
+                          setLocationPermission('denied');
+                        }
+                      );
+                    }
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <MapPin className="w-4 h-4" />
+                  Detect Location
+                </Button>
+              )}
+              
+              {/* Nearby Filter */}
+              {userLocation && (
+                <Button 
+                  variant={nearbyFilter ? "default" : "outline"}
+                  onClick={() => setNearbyFilter(!nearbyFilter)}
+                  className="flex items-center gap-2"
+                >
+                  <MapPin className="w-4 h-4" />
+                  Nearby Only
+                </Button>
+              )}
+              
               <Dialog open={showAdvancedFilters} onOpenChange={setShowAdvancedFilters}>
                 <DialogTrigger asChild>
                   <Button variant="outline" className="flex items-center gap-2 flex-1">
@@ -656,6 +764,36 @@ export default function Professionals() {
                       </Label>
                     </div>
 
+                    {/* Nearby Filter */}
+                    {userLocation && (
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="nearby"
+                          checked={nearbyFilter}
+                          onCheckedChange={(checked) => setNearbyFilter(checked as boolean)}
+                        />
+                        <Label htmlFor="nearby" className="text-sm">
+                          Show only professionals in {userLocation.city}, {userLocation.state}
+                        </Label>
+                      </div>
+                    )}
+
+                    {/* Sort Options */}
+                    <div>
+                      <Label className="text-sm font-medium mb-3 block">Sort By</Label>
+                      <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sort professionals by" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="rating">Highest Rating</SelectItem>
+                          <SelectItem value="price">Lowest Price</SelectItem>
+                          <SelectItem value="distance">Nearest First</SelectItem>
+                          <SelectItem value="name">Name A-Z</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
                     {/* Clear Filters */}
                     <div className="flex justify-between pt-4 border-t">
                       <Button variant="outline" onClick={clearAllFilters}>
@@ -752,6 +890,18 @@ export default function Professionals() {
                   <X className="w-3 h-3 cursor-pointer" onClick={() => setAvailabilityFilter("")} />
                 </Badge>
               )}
+              {nearbyFilter && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Nearby Only
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setNearbyFilter(false)} />
+                </Badge>
+              )}
+              {sortBy !== 'rating' && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Sort: {sortBy === 'price' ? 'Price' : sortBy === 'distance' ? 'Distance' : sortBy === 'name' ? 'Name' : 'Rating'}
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setSortBy('rating')} />
+                </Badge>
+              )}
             </div>
           )}
         </div>
@@ -759,7 +909,12 @@ export default function Professionals() {
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-muted-foreground">
-            Showing {filteredProfessionals.length} of {professionals.length} service providers
+            Showing {sortedProfessionals.length} of {professionals.length} service providers
+            {userLocation && (
+              <span className="ml-2 text-sm">
+                • Your location: {userLocation.city}, {userLocation.state}, {userLocation.country}
+              </span>
+            )}
           </p>
         </div>
 
@@ -786,7 +941,9 @@ export default function Professionals() {
         {/* Professionals Grid */}
         {!error && (          <>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProfessionals.map((professional) => (
+              {sortedProfessionals.map((professional) => {
+                const distance = calculateDistance(professional);
+                return (
                 <Card key={professional.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between">
@@ -804,17 +961,32 @@ export default function Professionals() {
                           </CardDescription>
                         </div>
                       </div>
-                      {professional.verified && (
-                        <Badge variant="secondary" className="bg-green-100 text-green-800">
-                          Verified
-                        </Badge>
-                      )}
+                      <div className="flex flex-col gap-1">
+                        {professional.verified && (
+                          <Badge variant="secondary" className="bg-green-100 text-green-800">
+                            Verified
+                          </Badge>
+                        )}
+                        {userLocation && (
+                          <Badge 
+                            variant={distance < 50 ? "default" : distance < 100 ? "secondary" : "outline"}
+                            className={distance < 50 ? "bg-blue-100 text-blue-800" : distance < 100 ? "bg-yellow-100 text-yellow-800" : ""}
+                          >
+                            {distance < 50 ? "Same City" : distance < 100 ? "Same State" : distance < 1000 ? "Same Country" : "International"}
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <MapPin className="w-4 h-4" />
-                      {professional.location}
+                      <span>{professional.location}</span>
+                      {userLocation && distance < 1000 && (
+                        <span className="text-xs bg-muted px-2 py-1 rounded">
+                          {distance < 50 ? "Same City" : distance < 100 ? "Same State" : "Same Country"}
+                        </span>
+                      )}
                     </div>
                     
                     <div className="flex items-center gap-4 text-sm">
@@ -861,10 +1033,11 @@ export default function Professionals() {
                     </div>
                   </CardContent>
                 </Card>
-              ))}
+                );
+              })}
             </div>
 
-            {filteredProfessionals.length === 0 && (
+            {sortedProfessionals.length === 0 && (
               <div className="text-center py-12">
                 <div className="text-muted-foreground mb-4">
                   <Search className="w-16 h-16 mx-auto mb-4 opacity-50" />
