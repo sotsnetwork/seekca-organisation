@@ -52,7 +52,7 @@ export default function Professionals() {
   
   // Use API hook for data fetching
   const { data: apiProfessionals = [], isLoading, error } = useProfessionals({
-    skills: skillFilter ? [skillFilter] : undefined,
+    skills: skillFilter && skillFilter !== "all-skills" ? [skillFilter] : undefined,
     minRate: rateFilter === "low" ? 0 : rateFilter === "medium" ? 30 : rateFilter === "high" ? 50 : undefined,
     maxRate: rateFilter === "low" ? 30 : rateFilter === "medium" ? 50 : undefined,
   });
@@ -336,13 +336,13 @@ export default function Professionals() {
       professional.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
     
     // Hierarchical location filters
-    const matchesCountry = countryFilter === "" || professional.country === countryFilter;
-    const matchesState = stateFilter === "" || professional.state === stateFilter;
-    const matchesCity = cityFilter === "" || professional.city === cityFilter;
-    const matchesTown = townFilter === "" || professional.town === townFilter;
+    const matchesCountry = countryFilter === "" || countryFilter === "all-countries" || professional.country === countryFilter;
+    const matchesState = stateFilter === "" || stateFilter === "all-states" || professional.state === stateFilter;
+    const matchesCity = cityFilter === "" || cityFilter === "all-cities" || professional.city === cityFilter;
+    const matchesTown = townFilter === "" || townFilter === "all-towns" || professional.town === townFilter;
     
     // Rating filter
-    const matchesRating = ratingFilter === "" || 
+    const matchesRating = ratingFilter === "" || ratingFilter === "any-rating" || 
       (ratingFilter === "4+" && professional.rating >= 4) ||
       (ratingFilter === "4.5+" && professional.rating >= 4.5) ||
       (ratingFilter === "5" && professional.rating === 5);
@@ -354,7 +354,7 @@ export default function Professionals() {
     const matchesVerified = !verifiedFilter || professional.verified;
     
     // Availability filter (mock - in real app this would come from API)
-    const matchesAvailability = availabilityFilter === "" || 
+    const matchesAvailability = availabilityFilter === "" || availabilityFilter === "any-availability" || 
       (availabilityFilter === "available" && Math.random() > 0.3) || // Mock availability
       (availabilityFilter === "busy" && Math.random() < 0.3);
     
@@ -379,14 +379,14 @@ export default function Professionals() {
   // Count active filters
   const activeFiltersCount = [
     searchTerm,
-    skillFilter,
+    skillFilter && skillFilter !== "all-skills" ? skillFilter : "",
     rateFilter,
-    countryFilter,
-    stateFilter,
-    cityFilter,
-    townFilter,
-    ratingFilter,
-    availabilityFilter,
+    countryFilter && countryFilter !== "all-countries" ? countryFilter : "",
+    stateFilter && stateFilter !== "all-states" ? stateFilter : "",
+    cityFilter && cityFilter !== "all-cities" ? cityFilter : "",
+    townFilter && townFilter !== "all-towns" ? townFilter : "",
+    ratingFilter && ratingFilter !== "any-rating" ? ratingFilter : "",
+    availabilityFilter && availabilityFilter !== "any-availability" ? availabilityFilter : "",
     verifiedFilter,
     priceRange[0] !== 0 || priceRange[1] !== 100
   ].filter(Boolean).length;
@@ -506,7 +506,7 @@ export default function Professionals() {
                 <SelectValue placeholder="Country" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Countries</SelectItem>
+                <SelectItem value="all-countries">All Countries</SelectItem>
                 {uniqueCountries.map((country) => (
                   <SelectItem key={country} value={country}>
                     {country}
@@ -519,7 +519,7 @@ export default function Professionals() {
                 <SelectValue placeholder="Minimum Rating" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Any Rating</SelectItem>
+                <SelectItem value="any-rating">Any Rating</SelectItem>
                 <SelectItem value="4+">4+ Stars</SelectItem>
                 <SelectItem value="4.5+">4.5+ Stars</SelectItem>
                 <SelectItem value="5">5 Stars Only</SelectItem>
@@ -556,7 +556,7 @@ export default function Professionals() {
                             <SelectValue placeholder="State/Province" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="">All States</SelectItem>
+                            <SelectItem value="all-states">All States</SelectItem>
                             {filteredStates.map((state) => (
                               <SelectItem key={state} value={state}>
                                 {state}
@@ -572,7 +572,7 @@ export default function Professionals() {
                             <SelectValue placeholder="City" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="">All Cities</SelectItem>
+                            <SelectItem value="all-cities">All Cities</SelectItem>
                             {filteredCities.map((city) => (
                               <SelectItem key={city} value={city}>
                                 {city}
@@ -585,7 +585,7 @@ export default function Professionals() {
                             <SelectValue placeholder="Town/Area" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="">All Towns</SelectItem>
+                            <SelectItem value="all-towns">All Towns</SelectItem>
                             {filteredTowns.map((town) => (
                               <SelectItem key={town} value={town}>
                                 {town}
@@ -604,7 +604,7 @@ export default function Professionals() {
                           <SelectValue placeholder="Select a skill or service" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">All Skills</SelectItem>
+                          <SelectItem value="all-skills">All Skills</SelectItem>
                           {uniqueSkills.map((skill) => (
                             <SelectItem key={skill} value={skill}>
                               {skill}
@@ -637,7 +637,7 @@ export default function Professionals() {
                           <SelectValue placeholder="Availability status" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">Any Availability</SelectItem>
+                          <SelectItem value="any-availability">Any Availability</SelectItem>
                           <SelectItem value="available">Available Now</SelectItem>
                           <SelectItem value="busy">Currently Busy</SelectItem>
                         </SelectContent>
@@ -686,7 +686,7 @@ export default function Professionals() {
                   <X className="w-3 h-3 cursor-pointer" onClick={() => setSearchTerm("")} />
                 </Badge>
               )}
-              {countryFilter && (
+              {countryFilter && countryFilter !== "all-countries" && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   Country: {countryFilter}
                   <X className="w-3 h-3 cursor-pointer" onClick={() => {
@@ -697,7 +697,7 @@ export default function Professionals() {
                   }} />
                 </Badge>
               )}
-              {stateFilter && (
+              {stateFilter && stateFilter !== "all-states" && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   State: {stateFilter}
                   <X className="w-3 h-3 cursor-pointer" onClick={() => {
@@ -707,7 +707,7 @@ export default function Professionals() {
                   }} />
                 </Badge>
               )}
-              {cityFilter && (
+              {cityFilter && cityFilter !== "all-cities" && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   City: {cityFilter}
                   <X className="w-3 h-3 cursor-pointer" onClick={() => {
@@ -716,19 +716,19 @@ export default function Professionals() {
                   }} />
                 </Badge>
               )}
-              {townFilter && (
+              {townFilter && townFilter !== "all-towns" && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   Town: {townFilter}
                   <X className="w-3 h-3 cursor-pointer" onClick={() => setTownFilter("")} />
                 </Badge>
               )}
-              {ratingFilter && (
+              {ratingFilter && ratingFilter !== "any-rating" && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   Rating: {ratingFilter}
                   <X className="w-3 h-3 cursor-pointer" onClick={() => setRatingFilter("")} />
                 </Badge>
               )}
-              {skillFilter && (
+              {skillFilter && skillFilter !== "all-skills" && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   Skill: {skillFilter}
                   <X className="w-3 h-3 cursor-pointer" onClick={() => setSkillFilter("")} />
