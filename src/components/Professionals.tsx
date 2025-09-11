@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, MapPin, Star, Briefcase, MessageSquare, Filter, User } from "lucide-react";
+import { Search, MapPin, Star, Briefcase, MessageSquare, Filter, User, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { useProfessionals } from "@/hooks/use-api";
 import { Link } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
 import UserProfileDropdown from "./UserProfileDropdown";
@@ -29,12 +30,32 @@ interface Professional {
 
 export default function Professionals() {
   const { user } = useAuth();
-  const [professionals, setProfessionals] = useState<Professional[]>([]);
-  const [filteredProfessionals, setFilteredProfessionals] = useState<Professional[]>([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [skillFilter, setSkillFilter] = useState("");
   const [rateFilter, setRateFilter] = useState("");
+  
+  // Use API hook for data fetching
+  const { data: apiProfessionals = [], isLoading, error } = useProfessionals({
+    skills: skillFilter ? [skillFilter] : undefined,
+    minRate: rateFilter === "low" ? 0 : rateFilter === "medium" ? 30 : rateFilter === "high" ? 50 : undefined,
+    maxRate: rateFilter === "low" ? 30 : rateFilter === "medium" ? 50 : undefined,
+  });
+
+  // Convert API data to component format
+  const professionals = apiProfessionals.map(prof => ({
+    id: prof.id,
+    name: prof.nickname || prof.full_name,
+    title: prof.bio || "Professional Service Provider",
+    location: prof.location || "Location not specified",
+    country: prof.country || "Unknown",
+    skills: prof.skills || [],
+    rating: 4.5, // Default rating
+    hourlyRate: prof.hourlyRate || 0,
+    completedProjects: Math.floor(Math.random() * 100), // Mock completed projects
+    avatar: prof.avatar_url,
+    description: prof.bio || "Professional service provider",
+    verified: prof.verified || false,
+  }));
 
   // Mock data - in a real app, this would come from your Supabase database
   const mockProfessionals: Professional[] = [
@@ -227,24 +248,16 @@ export default function Professionals() {
      },
   ];
 
-  useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      // Filter professionals by user's country
-      const userCountry = user?.user_metadata?.country;
-      let countryProfessionals = mockProfessionals;
-      
-      if (userCountry) {
-        countryProfessionals = mockProfessionals.filter(
-          prof => prof.country.toLowerCase() === userCountry.toLowerCase()
-        );
-      }
-      
-      setProfessionals(countryProfessionals);
-      setFilteredProfessionals(countryProfessionals);
-      setLoading(false);
-    }, 1000);
-  }, [user]);
+  // Filter professionals based on search term
+  const filteredProfessionals = professionals.filter(professional => {
+    const matchesSearch = searchTerm === "" || 
+      professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      professional.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      professional.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      professional.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    return matchesSearch;
+  });
 
   useEffect(() => {
     // Filter professionals based on search and filters
@@ -454,8 +467,29 @@ export default function Professionals() {
           </p>
         </div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" />
+              <p className="text-muted-foreground">Loading professionals...</p>
+            </div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <p className="text-destructive mb-4">Failed to load professionals</p>
+              <Button onClick={() => window.location.reload()}>Try Again</Button>
+            </div>
+          </div>
+        )}
+
         {/* Professionals Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {!isLoading && !error && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProfessionals.map((professional) => (
             <Card key={professional.id} className="hover:shadow-lg transition-shadow">
               <CardHeader className="pb-4">
@@ -534,13 +568,15 @@ export default function Professionals() {
           ))}
         </div>
 
-        {filteredProfessionals.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-muted-foreground mb-4">
-              <Search className="w-16 h-16 mx-auto mb-4 opacity-50" />
-              <h3 className="text-lg font-medium mb-2">No professionals found</h3>
-              <p>Try adjusting your search criteria or filters.</p>
+          {filteredProfessionals.length === 0 && (
+            <div className="text-center py-12">
+              <div className="text-muted-foreground mb-4">
+                <Search className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                <h3 className="text-lg font-medium mb-2">No professionals found</h3>
+                <p>Try adjusting your search criteria or filters.</p>
+              </div>
             </div>
+          )}
           </div>
         )}
       </div>
