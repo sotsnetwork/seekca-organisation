@@ -323,7 +323,7 @@ export default function Professionals() {
       .slice(0, 2);
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -489,95 +489,96 @@ export default function Professionals() {
 
         {/* Professionals Grid */}
         {!isLoading && !error && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProfessionals.map((professional) => (
-            <Card key={professional.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader className="pb-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="w-12 h-12">
-                      <AvatarImage src={professional.avatar} />
-                      <AvatarFallback className="bg-primary text-primary-foreground">
-                        {getInitials(professional.name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <CardTitle className="text-lg">{professional.name}</CardTitle>
-                      <CardDescription className="text-sm">
-                        {professional.title}
-                      </CardDescription>
+          <>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProfessionals.map((professional) => (
+                <Card key={professional.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="w-12 h-12">
+                          <AvatarImage src={professional.avatar} />
+                          <AvatarFallback className="bg-primary text-primary-foreground">
+                            {getInitials(professional.name)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <CardTitle className="text-lg">{professional.name}</CardTitle>
+                          <CardDescription className="text-sm">
+                            {professional.title}
+                          </CardDescription>
+                        </div>
+                      </div>
+                      {professional.verified && (
+                        <Badge variant="secondary" className="bg-green-100 text-green-800">
+                          Verified
+                        </Badge>
+                      )}
                     </div>
-                  </div>
-                  {professional.verified && (
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      Verified
-                    </Badge>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="w-4 h-4" />
-                  {professional.location}
-                </div>
-                
-                <div className="flex items-center gap-4 text-sm">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                    <span className="font-medium">{professional.rating}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Briefcase className="w-4 h-4" />
-                    <span>{professional.completedProjects} projects</span>
-                  </div>
-                </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <MapPin className="w-4 h-4" />
+                      {professional.location}
+                    </div>
+                    
+                    <div className="flex items-center gap-4 text-sm">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                        <span className="font-medium">{professional.rating}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Briefcase className="w-4 h-4" />
+                        <span>{professional.completedProjects} projects</span>
+                      </div>
+                    </div>
 
-                <p className="text-sm text-muted-foreground line-clamp-2">
-                  {professional.description}
-                </p>
+                    <p className="text-sm text-muted-foreground line-clamp-2">
+                      {professional.description}
+                    </p>
 
-                <div className="flex flex-wrap gap-2">
-                  {professional.skills.slice(0, 3).map((skill) => (
-                    <Badge key={skill} variant="outline" className="text-xs">
-                      {skill}
-                    </Badge>
-                  ))}
-                  {professional.skills.length > 3 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{professional.skills.length - 3} more
-                    </Badge>
-                  )}
-                </div>
+                    <div className="flex flex-wrap gap-2">
+                      {professional.skills.slice(0, 3).map((skill) => (
+                        <Badge key={skill} variant="outline" className="text-xs">
+                          {skill}
+                        </Badge>
+                      ))}
+                      {professional.skills.length > 3 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{professional.skills.length - 3} more
+                        </Badge>
+                      )}
+                    </div>
 
-                <div className="flex items-center justify-between pt-2">
-                  <div className="text-lg font-semibold text-primary">
-                    ${professional.hourlyRate}/hr
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
-                      <MessageSquare className="w-4 h-4 mr-2" />
-                      Message
-                    </Button>
-                    <Button size="sm">
-                      Hire Now
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-          {filteredProfessionals.length === 0 && (
-            <div className="text-center py-12">
-              <div className="text-muted-foreground mb-4">
-                <Search className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <h3 className="text-lg font-medium mb-2">No professionals found</h3>
-                <p>Try adjusting your search criteria or filters.</p>
-              </div>
+                    <div className="flex items-center justify-between pt-2">
+                      <div className="text-lg font-semibold text-primary">
+                        ${professional.hourlyRate}/hr
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <MessageSquare className="w-4 h-4 mr-2" />
+                          Message
+                        </Button>
+                        <Button size="sm">
+                          Hire Now
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-          )}
-          </div>
+
+            {filteredProfessionals.length === 0 && (
+              <div className="text-center py-12">
+                <div className="text-muted-foreground mb-4">
+                  <Search className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                  <h3 className="text-lg font-medium mb-2">No professionals found</h3>
+                  <p>Try adjusting your search criteria or filters.</p>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
