@@ -15,6 +15,10 @@ import Messages from "./pages/Messages";
 import Portfolio from "./pages/Portfolio";
 import Settings from "./pages/Settings";
 import PostJob from "./pages/PostJob";
+import HelpCenter from "./pages/HelpCenter";
+import APIDocs from "./pages/APIDocs";
+import Community from "./pages/Community";
+import Status from "./pages/Status";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +42,10 @@ const App = () => (
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/post-job" element={<PostJob />} />
+            <Route path="/help" element={<HelpCenter />} />
+            <Route path="/api-docs" element={<APIDocs />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/status" element={<Status />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
