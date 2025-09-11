@@ -488,8 +488,7 @@ export default function Professionals() {
         )}
 
         {/* Professionals Grid */}
-        {!isLoading && !error && (
-          <>
+        {!error && (          <>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProfessionals.map((professional) => (
                 <Card key={professional.id} className="hover:shadow-lg transition-shadow">
