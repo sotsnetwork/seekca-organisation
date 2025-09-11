@@ -23,6 +23,9 @@ interface Professional {
   title: string;
   location: string;
   country: string;
+  state?: string;
+  city?: string;
+  town?: string;
   skills: string[];
   rating: number;
   hourlyRate: number;
@@ -37,7 +40,10 @@ export default function Professionals() {
   const [searchTerm, setSearchTerm] = useState("");
   const [skillFilter, setSkillFilter] = useState("");
   const [rateFilter, setRateFilter] = useState("");
-  const [locationFilter, setLocationFilter] = useState("");
+  const [countryFilter, setCountryFilter] = useState("");
+  const [stateFilter, setStateFilter] = useState("");
+  const [cityFilter, setCityFilter] = useState("");
+  const [townFilter, setTownFilter] = useState("");
   const [ratingFilter, setRatingFilter] = useState("");
   const [availabilityFilter, setAvailabilityFilter] = useState("");
   const [verifiedFilter, setVerifiedFilter] = useState(false);
@@ -58,6 +64,9 @@ export default function Professionals() {
     title: prof.bio || "Professional Service Provider",
     location: prof.location || "Location not specified",
     country: prof.country || "Unknown",
+    state: prof.state || "",
+    city: prof.city || "",
+    town: prof.town || "",
     skills: prof.skills || [],
     rating: 4.5, // Default rating
     hourlyRate: prof.hourlyRate || 0,
@@ -74,8 +83,11 @@ export default function Professionals() {
       id: "1",
       name: "Sarah Johnson",
       title: "Kitchen & Bathroom Remodeling Specialist",
-      location: "Lagos, Nigeria",
+      location: "Victoria Island, Lagos, Nigeria",
       country: "Nigeria",
+      state: "Lagos",
+      city: "Lagos",
+      town: "Victoria Island",
       skills: ["Kitchen Remodeling", "Bathroom Remodeling", "Interior Painting", "Tile Installation", "Flooring Installation", "Cabinet Installation", "Countertop Installation"],
       rating: 4.9,
       hourlyRate: 25,
@@ -87,8 +99,11 @@ export default function Professionals() {
       id: "2",
       name: "Michael Chen",
       title: "Plumbing & Electrical Expert",
-      location: "Abuja, Nigeria",
+      location: "Asokoro, Abuja, Nigeria",
       country: "Nigeria",
+      state: "FCT",
+      city: "Abuja",
+      town: "Asokoro",
       skills: ["Plumbing", "Electrical Work", "HVAC Services", "Appliance Repairs", "Garage Door Repairs", "Furnace Repairs"],
       rating: 4.8,
       hourlyRate: 30,
@@ -100,8 +115,11 @@ export default function Professionals() {
       id: "3",
       name: "David Okafor",
       title: "Landscaping & Garden Design",
-      location: "Port Harcourt, Nigeria",
+      location: "GRA Phase 2, Port Harcourt, Nigeria",
       country: "Nigeria",
+      state: "Rivers",
+      city: "Port Harcourt",
+      town: "GRA Phase 2",
       skills: ["Garden Design", "Irrigation Systems", "Tree Trimming", "Outdoor Lighting"],
       rating: 4.7,
       hourlyRate: 35,
@@ -113,8 +131,11 @@ export default function Professionals() {
       id: "4",
       name: "Lisa Adebayo",
       title: "Cleaning & Maintenance Pro",
-      location: "Ibadan, Nigeria",
+      location: "Bodija, Ibadan, Nigeria",
       country: "Nigeria",
+      state: "Oyo",
+      city: "Ibadan",
+      town: "Bodija",
       skills: ["Deep Cleaning", "Carpet Cleaning", "Window Washing", "Office Maintenance"],
       rating: 4.9,
       hourlyRate: 40,
@@ -126,8 +147,11 @@ export default function Professionals() {
       id: "5",
       name: "James Okonkwo",
       title: "Auto Repair & Maintenance",
-      location: "Enugu, Nigeria",
+      location: "New Haven, Enugu, Nigeria",
       country: "Nigeria",
+      state: "Enugu",
+      city: "Enugu",
+      town: "New Haven",
       skills: ["Engine Repair", "Brake Service", "Oil Change", "Diagnostic Testing"],
       rating: 4.6,
       hourlyRate: 28,
@@ -140,8 +164,11 @@ export default function Professionals() {
       id: "6",
       name: "Alex Thompson",
       title: "House Cleaning Specialist",
-      location: "San Francisco, USA",
+      location: "Mission District, San Francisco, CA, USA",
       country: "USA",
+      state: "California",
+      city: "San Francisco",
+      town: "Mission District",
       skills: ["Move-in Cleaning", "Deep Cleaning", "Eco-friendly", "Pet-friendly"],
       rating: 4.8,
       hourlyRate: 45,
@@ -153,8 +180,11 @@ export default function Professionals() {
       id: "7",
       name: "Emma Wilson",
       title: "Handyman Services",
-      location: "New York, USA",
+      location: "Brooklyn, New York, NY, USA",
       country: "USA",
+      state: "New York",
+      city: "New York",
+      town: "Brooklyn",
       skills: ["Furniture Assembly", "Minor Repairs", "Installation", "General Maintenance"],
       rating: 4.7,
       hourlyRate: 50,
@@ -258,12 +288,43 @@ export default function Professionals() {
      },
   ];
 
-  // Get unique locations for location filter
-  const uniqueLocations = Array.from(new Set(professionals.map(p => p.location))).sort();
+  // Get unique location data for hierarchical filtering
+  const uniqueCountries = Array.from(new Set(professionals.map(p => p.country))).sort();
+  const uniqueStates = Array.from(new Set(professionals.map(p => p.state).filter(Boolean))).sort();
+  const uniqueCities = Array.from(new Set(professionals.map(p => p.city).filter(Boolean))).sort();
+  const uniqueTowns = Array.from(new Set(professionals.map(p => p.town).filter(Boolean))).sort();
   
   // Get unique skills for skill filter
   const allSkills = professionals.flatMap(p => p.skills);
   const uniqueSkills = Array.from(new Set(allSkills)).sort();
+
+  // Filter states, cities, and towns based on selected country
+  const filteredStates = countryFilter 
+    ? uniqueStates.filter(state => 
+        professionals.some(p => p.country === countryFilter && p.state === state)
+      )
+    : uniqueStates;
+
+  const filteredCities = (countryFilter || stateFilter)
+    ? uniqueCities.filter(city => 
+        professionals.some(p => 
+          (!countryFilter || p.country === countryFilter) &&
+          (!stateFilter || p.state === stateFilter) &&
+          p.city === city
+        )
+      )
+    : uniqueCities;
+
+  const filteredTowns = (countryFilter || stateFilter || cityFilter)
+    ? uniqueTowns.filter(town => 
+        professionals.some(p => 
+          (!countryFilter || p.country === countryFilter) &&
+          (!stateFilter || p.state === stateFilter) &&
+          (!cityFilter || p.city === cityFilter) &&
+          p.town === town
+        )
+      )
+    : uniqueTowns;
 
   // Filter professionals based on all criteria
   const filteredProfessionals = professionals.filter(professional => {
@@ -274,9 +335,11 @@ export default function Professionals() {
       professional.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       professional.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    // Location filter
-    const matchesLocation = locationFilter === "" || 
-      professional.location.toLowerCase().includes(locationFilter.toLowerCase());
+    // Hierarchical location filters
+    const matchesCountry = countryFilter === "" || professional.country === countryFilter;
+    const matchesState = stateFilter === "" || professional.state === stateFilter;
+    const matchesCity = cityFilter === "" || professional.city === cityFilter;
+    const matchesTown = townFilter === "" || professional.town === townFilter;
     
     // Rating filter
     const matchesRating = ratingFilter === "" || 
@@ -295,7 +358,7 @@ export default function Professionals() {
       (availabilityFilter === "available" && Math.random() > 0.3) || // Mock availability
       (availabilityFilter === "busy" && Math.random() < 0.3);
     
-    return matchesSearch && matchesLocation && matchesRating && matchesPriceRange && matchesVerified && matchesAvailability;
+    return matchesSearch && matchesCountry && matchesState && matchesCity && matchesTown && matchesRating && matchesPriceRange && matchesVerified && matchesAvailability;
   });
 
   // Clear all filters
@@ -303,7 +366,10 @@ export default function Professionals() {
     setSearchTerm("");
     setSkillFilter("");
     setRateFilter("");
-    setLocationFilter("");
+    setCountryFilter("");
+    setStateFilter("");
+    setCityFilter("");
+    setTownFilter("");
     setRatingFilter("");
     setAvailabilityFilter("");
     setVerifiedFilter(false);
@@ -315,7 +381,10 @@ export default function Professionals() {
     searchTerm,
     skillFilter,
     rateFilter,
-    locationFilter,
+    countryFilter,
+    stateFilter,
+    cityFilter,
+    townFilter,
     ratingFilter,
     availabilityFilter,
     verifiedFilter,
@@ -427,15 +496,20 @@ export default function Professionals() {
                 className="pl-10"
               />
             </div>
-            <Select value={locationFilter} onValueChange={setLocationFilter}>
+            <Select value={countryFilter} onValueChange={(value) => {
+              setCountryFilter(value);
+              setStateFilter("");
+              setCityFilter("");
+              setTownFilter("");
+            }}>
               <SelectTrigger>
-                <SelectValue placeholder="Location" />
+                <SelectValue placeholder="Country" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Locations</SelectItem>
-                {uniqueLocations.map((location) => (
-                  <SelectItem key={location} value={location}>
-                    {location}
+                <SelectItem value="">All Countries</SelectItem>
+                {uniqueCountries.map((country) => (
+                  <SelectItem key={country} value={country}>
+                    {country}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -469,6 +543,59 @@ export default function Professionals() {
                     <DialogTitle>Advanced Filters</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-6">
+                    {/* Location Filters */}
+                    <div>
+                      <Label className="text-sm font-medium mb-3 block">Location</Label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <Select value={stateFilter} onValueChange={(value) => {
+                          setStateFilter(value);
+                          setCityFilter("");
+                          setTownFilter("");
+                        }}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="State/Province" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="">All States</SelectItem>
+                            {filteredStates.map((state) => (
+                              <SelectItem key={state} value={state}>
+                                {state}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Select value={cityFilter} onValueChange={(value) => {
+                          setCityFilter(value);
+                          setTownFilter("");
+                        }}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="City" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="">All Cities</SelectItem>
+                            {filteredCities.map((city) => (
+                              <SelectItem key={city} value={city}>
+                                {city}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Select value={townFilter} onValueChange={setTownFilter}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Town/Area" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="">All Towns</SelectItem>
+                            {filteredTowns.map((town) => (
+                              <SelectItem key={town} value={town}>
+                                {town}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
                     {/* Skills Filter */}
                     <div>
                       <Label className="text-sm font-medium mb-3 block">Skills & Services</Label>
@@ -559,10 +686,40 @@ export default function Professionals() {
                   <X className="w-3 h-3 cursor-pointer" onClick={() => setSearchTerm("")} />
                 </Badge>
               )}
-              {locationFilter && (
+              {countryFilter && (
                 <Badge variant="secondary" className="flex items-center gap-1">
-                  Location: {locationFilter}
-                  <X className="w-3 h-3 cursor-pointer" onClick={() => setLocationFilter("")} />
+                  Country: {countryFilter}
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => {
+                    setCountryFilter("");
+                    setStateFilter("");
+                    setCityFilter("");
+                    setTownFilter("");
+                  }} />
+                </Badge>
+              )}
+              {stateFilter && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  State: {stateFilter}
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => {
+                    setStateFilter("");
+                    setCityFilter("");
+                    setTownFilter("");
+                  }} />
+                </Badge>
+              )}
+              {cityFilter && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  City: {cityFilter}
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => {
+                    setCityFilter("");
+                    setTownFilter("");
+                  }} />
+                </Badge>
+              )}
+              {townFilter && (
+                <Badge variant="secondary" className="flex items-center gap-1">
+                  Town: {townFilter}
+                  <X className="w-3 h-3 cursor-pointer" onClick={() => setTownFilter("")} />
                 </Badge>
               )}
               {ratingFilter && (
