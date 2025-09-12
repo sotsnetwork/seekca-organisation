@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, Briefcase, MapPin, DollarSign, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import AppHeader from "@/components/AppHeader";
 
 export default function PostJob() {
   const { user } = useAuth();
@@ -81,6 +82,7 @@ export default function PostJob() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AppHeader />
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-8">
