@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import ProfileNavigation from "@/components/ProfileNavigation";
 import PortfolioProjectForm from "@/components/PortfolioProjectForm";
 import { useToast } from "@/hooks/use-toast";
+import AppHeader from "@/components/AppHeader";
 
 interface PortfolioProject {
   id: string;
@@ -65,6 +66,7 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AppHeader />
       <ProfileNavigation />
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Header */}
