@@ -695,92 +695,105 @@ export default function Professionals() {
 
       {/* Filters and Search */}
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="bg-card rounded-lg border border-border p-6 mb-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        <div className="bg-card rounded-lg border border-border p-4 md:p-6 mb-8">
+          <div className="space-y-4">
+            {/* Search Bar - Full Width */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
                 placeholder="Search for skills, services, or professionals..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-10 w-full"
               />
             </div>
-            <Select value={countryFilter} onValueChange={(value) => {
-              setCountryFilter(value);
-              setStateFilter("");
-              setCityFilter("");
-              setTownFilter("");
-            }}>
-              <SelectTrigger>
-                <SelectValue placeholder="Country" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all-countries">All Countries</SelectItem>
-                {uniqueCountries.map((country) => (
-                  <SelectItem key={country} value={country}>
-                    {country}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={ratingFilter} onValueChange={setRatingFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Minimum Rating" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any-rating">Any Rating</SelectItem>
-                <SelectItem value="4+">4+ Stars</SelectItem>
-                <SelectItem value="4.5+">4.5+ Stars</SelectItem>
-                <SelectItem value="5">5 Stars Only</SelectItem>
-              </SelectContent>
-            </Select>
-            <div className="flex gap-2">
-              {/* Location Detection Button */}
-              {locationPermission === 'prompt' && (
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    if (navigator.geolocation) {
-                      navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                          setUserLocation({
-                            country: "Nigeria",
-                            state: "Lagos", 
-                            city: "Lagos"
-                          });
-                          setLocationPermission('granted');
-                        },
-                        (error) => {
-                          setLocationPermission('denied');
-                        }
-                      );
-                    }
-                  }}
-                  className="flex items-center gap-2"
-                >
-                  <MapPin className="w-4 h-4" />
-                  Detect Location
-                </Button>
-              )}
+            
+            {/* Filter Row 1 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <Select value={countryFilter} onValueChange={(value) => {
+                setCountryFilter(value);
+                setStateFilter("");
+                setCityFilter("");
+                setTownFilter("");
+              }}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Country" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all-countries">All Countries</SelectItem>
+                  {uniqueCountries.map((country) => (
+                    <SelectItem key={country} value={country}>
+                      {country}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               
-              {/* Nearby Filter */}
-              {userLocation && (
-                <Button 
-                  variant={nearbyFilter ? "default" : "outline"}
-                  onClick={() => setNearbyFilter(!nearbyFilter)}
-                  className="flex items-center gap-2"
-                >
-                  <MapPin className="w-4 h-4" />
-                  Nearby Only
-                </Button>
-              )}
+              <Select value={ratingFilter} onValueChange={setRatingFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Minimum Rating" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any-rating">Any Rating</SelectItem>
+                  <SelectItem value="4+">4+ Stars</SelectItem>
+                  <SelectItem value="4.5+">4.5+ Stars</SelectItem>
+                  <SelectItem value="5">5 Stars Only</SelectItem>
+                </SelectContent>
+              </Select>
               
+              <div className="flex gap-2">
+                {/* Location Detection Button */}
+                {locationPermission === 'prompt' && (
+                  <Button 
+                    variant="outline" 
+                    onClick={() => {
+                      if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                          (position) => {
+                            setUserLocation({
+                              country: "Nigeria",
+                              state: "Lagos", 
+                              city: "Lagos"
+                            });
+                            setLocationPermission('granted');
+                          },
+                          (error) => {
+                            setLocationPermission('denied');
+                          }
+                        );
+                      }
+                    }}
+                    className="flex items-center gap-2 flex-1"
+                  >
+                    <MapPin className="w-4 h-4" />
+                    <span className="hidden sm:inline">Detect Location</span>
+                    <span className="sm:hidden">Detect</span>
+                  </Button>
+                )}
+                
+                {/* Nearby Filter */}
+                {userLocation && (
+                  <Button 
+                    variant={nearbyFilter ? "default" : "outline"}
+                    onClick={() => setNearbyFilter(!nearbyFilter)}
+                    className="flex items-center gap-2 flex-1"
+                  >
+                    <MapPin className="w-4 h-4" />
+                    <span className="hidden sm:inline">Nearby Only</span>
+                    <span className="sm:hidden">Nearby</span>
+                  </Button>
+                )}
+              </div>
+            </div>
+            
+            {/* Filter Row 2 */}
+            <div className="flex flex-wrap gap-2">
               <Dialog open={showAdvancedFilters} onOpenChange={setShowAdvancedFilters}>
                 <DialogTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2 flex-1">
+                  <Button variant="outline" className="flex items-center gap-2">
                     <Filter className="w-4 h-4" />
-                    Advanced Filters
+                    <span className="hidden sm:inline">Advanced Filters</span>
+                    <span className="sm:hidden">Filters</span>
                     {activeFiltersCount > 0 && (
                       <Badge variant="secondary" className="ml-1">
                         {activeFiltersCount}
@@ -951,6 +964,7 @@ export default function Professionals() {
               {activeFiltersCount > 0 && (
                 <Button variant="ghost" size="sm" onClick={clearAllFilters} className="px-3">
                   <X className="w-4 h-4" />
+                  <span className="hidden sm:inline ml-1">Clear All</span>
                 </Button>
               )}
             </div>
