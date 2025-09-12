@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      jobs: {
+        Row: {
+          budget_max: number | null
+          budget_min: number | null
+          created_at: string
+          currency: string | null
+          description: string
+          experience_level: string | null
+          id: string
+          location: string | null
+          project_duration: string | null
+          remote_allowed: boolean | null
+          skills: string[] | null
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget_max?: number | null
+          budget_min?: number | null
+          created_at?: string
+          currency?: string | null
+          description: string
+          experience_level?: string | null
+          id?: string
+          location?: string | null
+          project_duration?: string | null
+          remote_allowed?: boolean | null
+          skills?: string[] | null
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget_max?: number | null
+          budget_min?: number | null
+          created_at?: string
+          currency?: string | null
+          description?: string
+          experience_level?: string | null
+          id?: string
+          location?: string | null
+          project_duration?: string | null
+          remote_allowed?: boolean | null
+          skills?: string[] | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -59,15 +113,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["user_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_role: {
+        Args: { user_id: string }
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
     }
     Enums: {
-      [_ in never]: never
+      user_role: "professional" | "hirer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -194,6 +272,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["professional", "hirer"],
+    },
   },
 } as const

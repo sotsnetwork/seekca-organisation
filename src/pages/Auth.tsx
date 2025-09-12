@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import logoIcon from "@/assets/logo-icon.png";
@@ -31,7 +32,8 @@ export default function Auth() {
     email: '', 
     password: '',
     confirmPassword: '',
-    country: ''
+    country: '',
+    role: ''
   });
   const [forgotPasswordData, setForgotPasswordData] = useState({ email: '' });
 
@@ -102,6 +104,7 @@ export default function Auth() {
           data: {
             full_name: signUpData.fullName,
             country: signUpData.country,
+            role: signUpData.role,
           }
         }
       });
@@ -111,7 +114,7 @@ export default function Auth() {
       } else {
         setMessage({ type: 'success', text: 'Account created successfully! Please check your email to verify your account.' });
         // Clear form
-        setSignUpData({ fullName: '', email: '', password: '', confirmPassword: '', country: '' });
+        setSignUpData({ fullName: '', email: '', password: '', confirmPassword: '', country: '', role: '' });
         // Switch to sign in tab
         setTimeout(() => setActiveTab('signin'), 2000);
       }
@@ -311,6 +314,22 @@ export default function Auth() {
                       onChange={(e) => handleInputChange('signup', 'country', e.target.value)}
                       required
                     />
+                  </div>
+                  <div>
+                    <Label htmlFor="role">I am a</Label>
+                    <Select 
+                      value={signUpData.role} 
+                      onValueChange={(value) => handleInputChange('signup', 'role', value)}
+                      required
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="professional">Professional (looking for work)</SelectItem>
+                        <SelectItem value="hirer">Hirer (looking to hire)</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? "Creating account..." : "Create Account"}
