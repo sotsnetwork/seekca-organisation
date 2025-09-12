@@ -14,19 +14,30 @@ export function useUserRole() {
 
       console.log('Fetching role for user:', user.id);
       
-      const { data, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user.id)
-        .maybeSingle();
+      try {
+        const { data, error } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .maybeSingle();
 
-      if (error) {
-        console.error('Error fetching user role:', error);
-        return null;
+        if (error) {
+          console.error('Error fetching user role:', error);
+          // If table doesn't exist or other error, try to get role from user metadata
+          const roleFromMetadata = user.user_metadata?.role;
+          console.log('Role from metadata:', roleFromMetadata);
+          return roleFromMetadata as UserRole || null;
+        }
+
+        console.log('User role data:', data);
+        return data?.role as UserRole;
+      } catch (err) {
+        console.error('Exception fetching user role:', err);
+        // Fallback to user metadata
+        const roleFromMetadata = user.user_metadata?.role;
+        console.log('Role from metadata (fallback):', roleFromMetadata);
+        return roleFromMetadata as UserRole || null;
       }
-
-      console.log('User role data:', data);
-      return data?.role as UserRole;
     },
     enabled: !!user?.id,
     retry: 1,
