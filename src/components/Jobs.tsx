@@ -4,11 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Calendar, DollarSign, Search, Filter, Clock } from "lucide-react";
+import { MapPin, Calendar, DollarSign, Search, Filter, Clock, Briefcase } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 interface Job {
   id: string;
@@ -219,26 +220,28 @@ export default function Jobs() {
               </Card>
             ))
           ) : (
-            <div className="text-center py-12">
+            <div className="text-center py-16">
               <div className="max-w-md mx-auto">
-                <div className="bg-muted rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                  <Search className="h-8 w-8 text-muted-foreground" />
+                <div className="bg-muted rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                  <Briefcase className="w-10 h-10 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">No jobs found</h3>
-                <p className="text-muted-foreground mb-4">
-                  Try adjusting your search criteria or check back later for new opportunities.
+                <h3 className="text-2xl font-semibold mb-4">No job opportunities yet</h3>
+                <p className="text-muted-foreground mb-6 text-lg">
+                  We're working on bringing you the best job opportunities. Check back soon or complete your profile to get notified when jobs are posted!
                 </p>
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    setSearchTerm("");
-                    setLocationFilter("");
-                    setSkillFilter("");
-                    
-                  }}
-                >
-                  Clear Filters
-                </Button>
+                <div className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    💡 <strong>Tip:</strong> Complete your professional profile to be the first to know about new opportunities
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <Button asChild>
+                      <Link to="/profile">Complete Profile</Link>
+                    </Button>
+                    <Button variant="outline" asChild>
+                      <Link to="/settings">Notification Settings</Link>
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           )}
