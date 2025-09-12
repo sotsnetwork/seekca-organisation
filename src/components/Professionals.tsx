@@ -359,12 +359,12 @@ export default function Professionals() {
             {/* Search Bar - Full Width */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-              <Input
-                placeholder="Search for skills, services, or professionals..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                             <Input
+                 placeholder="Search for skills, services, or professionals..."
+                 value={searchTerm}
+                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 w-full"
-              />
+               />
             </div>
             
             {/* Filter Row 1 */}
@@ -375,30 +375,30 @@ export default function Professionals() {
                 setCityFilter("");
                 setTownFilter("");
               }}>
-                <SelectTrigger>
+              <SelectTrigger>
                   <SelectValue placeholder="Select Country" />
-                </SelectTrigger>
-                <SelectContent>
+              </SelectTrigger>
+                             <SelectContent>
                   <SelectItem value="all-countries">All Countries</SelectItem>
                   {allCountries.map((country) => (
                     <SelectItem key={country} value={country}>
                       {country}
                     </SelectItem>
                   ))}
-                </SelectContent>
-              </Select>
+               </SelectContent>
+            </Select>
               
               <Select value={ratingFilter} onValueChange={setRatingFilter}>
-                <SelectTrigger>
+              <SelectTrigger>
                   <SelectValue placeholder="Minimum Rating" />
-                </SelectTrigger>
-                <SelectContent>
+              </SelectTrigger>
+              <SelectContent>
                   <SelectItem value="any-rating">Any Rating</SelectItem>
                   <SelectItem value="4+">4+ Stars</SelectItem>
                   <SelectItem value="4.5+">4.5+ Stars</SelectItem>
                   <SelectItem value="5">5 Stars Only</SelectItem>
-                </SelectContent>
-              </Select>
+              </SelectContent>
+            </Select>
               
               <div className="flex gap-2">
                 {/* Location Detection Button */}
@@ -449,8 +449,8 @@ export default function Professionals() {
             <div className="flex flex-wrap gap-2">
               <Dialog open={showAdvancedFilters} onOpenChange={setShowAdvancedFilters}>
                 <DialogTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <Filter className="w-4 h-4" />
+            <Button variant="outline" className="flex items-center gap-2">
+              <Filter className="w-4 h-4" />
                     <span className="hidden sm:inline">Advanced Filters</span>
                     <span className="sm:hidden">Filters</span>
                     {activeFiltersCount > 0 && (
@@ -615,8 +615,8 @@ export default function Professionals() {
                       </Button>
                       <Button onClick={() => setShowAdvancedFilters(false)}>
                         Apply Filters
-                      </Button>
-                    </div>
+            </Button>
+          </div>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -759,7 +759,7 @@ export default function Professionals() {
               {sortedProfessionals.map((professional) => {
                 const distance = calculateDistance(professional);
                 return (
-                  <Card key={professional.id} className="hover:shadow-lg transition-shadow">
+                <Card key={professional.id} className="hover:shadow-lg transition-shadow">
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
@@ -777,11 +777,11 @@ export default function Professionals() {
                         </div>
                       </div>
                       <div className="flex flex-col gap-1">
-                        {professional.verified && (
-                          <Badge variant="secondary" className="bg-green-100 text-green-800">
-                            Verified
-                          </Badge>
-                        )}
+                      {professional.verified && (
+                        <Badge variant="secondary" className="bg-green-100 text-green-800">
+                          Verified
+                        </Badge>
+                      )}
                         {userLocation && (
                           <Badge 
                             variant={distance < 50 ? "default" : distance < 100 ? "secondary" : "outline"}
@@ -847,7 +847,7 @@ export default function Professionals() {
                       </div>
                     </div>
                   </CardContent>
-                  </Card>
+                </Card>
                 );
               })}
             </div>
