@@ -24,6 +24,8 @@ import {
 import { Link } from "react-router-dom";
 import ProfileNavigation from "@/components/ProfileNavigation";
 import { useAuth } from "@/hooks/use-auth";
+import AppHeader from "@/components/AppHeader";
+import Footer from "@/components/Footer";
 
 const communityStats = [
   { label: "Active Members", value: "12,847", icon: Users },
@@ -190,6 +192,7 @@ export default function Community() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AppHeader />
       {user && <ProfileNavigation />}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
@@ -397,6 +400,8 @@ export default function Community() {
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 }
