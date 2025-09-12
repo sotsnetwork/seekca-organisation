@@ -12,6 +12,8 @@ export function useUserRole() {
     queryFn: async () => {
       if (!user?.id) return null;
 
+      console.log('Fetching role for user:', user.id);
+      
       const { data, error } = await supabase
         .from('user_roles')
         .select('role')
@@ -23,8 +25,10 @@ export function useUserRole() {
         return null;
       }
 
+      console.log('User role data:', data);
       return data?.role as UserRole;
     },
     enabled: !!user?.id,
+    retry: 1,
   });
 }
