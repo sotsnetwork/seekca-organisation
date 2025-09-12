@@ -34,31 +34,33 @@ export default function Jobs() {
   const [skillFilter, setSkillFilter] = useState("");
   
 
-  // Mock job data - in a real app, this would come from your Supabase database
-  const mockJobs: Job[] = [];
-
-  // Filter mock jobs based on search criteria
-  const filteredJobs = mockJobs.filter(job => {
-    const matchesSearch = !searchTerm || 
-      job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      job.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const matchesLocation = !locationFilter || 
-      job.location?.toLowerCase().includes(locationFilter.toLowerCase());
-    
-    const matchesSkill = !skillFilter || 
-      job.skills.some(skill => skill.toLowerCase().includes(skillFilter.toLowerCase()));
-    
-    return matchesSearch && matchesLocation && matchesSkill;
-  });
+  // Jobs will be fetched from Supabase database
 
   const { data: jobs, isLoading, error } = useQuery({
     queryKey: ['jobs', searchTerm, locationFilter, skillFilter],
     queryFn: async () => {
-      // In a real app, you would query Supabase here
-      // For now, we'll use mock data
-      return filteredJobs;
+      let query = supabase
+        .from('jobs')
+        .select('*')
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
+
+      if (searchTerm) {
+        query = query.or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
+      }
+
+      if (locationFilter) {
+        query = query.ilike('location', `%${locationFilter}%`);
+      }
+
+      if (skillFilter) {
+        query = query.contains('skills', [skillFilter]);
+      }
+
+      const { data, error } = await query;
+      
+      if (error) throw error;
+      return data as Job[];
     },
     enabled: !!user,
   });
