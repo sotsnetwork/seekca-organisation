@@ -7,8 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import logoIcon from "@/assets/logo-icon.png";
 import { supabase } from "@/integrations/supabase/client";
+import logoIcon from "@/assets/logo-icon.png";
 
 export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
@@ -112,6 +112,20 @@ export default function Auth() {
       if (error) {
         setMessage({ type: 'error', text: error.message });
       } else {
+        // Assign user role after successful signup
+        if (data.user && signUpData.role) {
+          const { error: roleError } = await supabase
+            .from('user_roles')
+            .insert({
+              user_id: data.user.id,
+              role: signUpData.role
+            });
+
+          if (roleError) {
+            console.error('Error assigning user role:', roleError);
+          }
+        }
+
         setMessage({ type: 'success', text: 'Account created successfully! Please check your email to verify your account.' });
         // Clear form
         setSignUpData({ fullName: '', email: '', password: '', confirmPassword: '', country: '', role: '' });
