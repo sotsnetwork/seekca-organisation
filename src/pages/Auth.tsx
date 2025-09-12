@@ -96,6 +96,13 @@ export default function Auth() {
       return;
     }
 
+    // Validate role selection
+    if (!signUpData.role) {
+      setMessage({ type: 'error', text: 'Please select your role (Professional or Hirer)' });
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const { data, error } = await supabase.auth.signUp({
         email: signUpData.email,
