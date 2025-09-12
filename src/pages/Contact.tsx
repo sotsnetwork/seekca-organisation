@@ -11,10 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Mail, Phone, MapPin, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import logoIcon from "@/assets/logo-icon.png";
-import UserProfileDropdown from "@/components/UserProfileDropdown";
-import NotificationBell from "@/components/NotificationBell";
-import { useAuth } from "@/hooks/use-auth";
+import AppHeader from "@/components/AppHeader";
+import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
 import { useSubmitContactForm } from "@/hooks/use-api";
 
@@ -74,36 +72,7 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
-      <nav className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-3">
-              <img src={logoIcon} alt="SeekCa" className="w-8 h-8" />
-              <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
-            </Link>
-            
-            {/* User Profile Section */}
-            <div className="flex items-center gap-3">
-              {user ? (
-                <>
-                  <NotificationBell />
-                  <UserProfileDropdown />
-                </>
-              ) : (
-                <>
-                  <Button variant="outline" size="sm" asChild>
-                    <Link to="/auth">Sign In</Link>
-                  </Button>
-                  <Button variant="hero" size="sm" asChild>
-                    <Link to="/auth?tab=signup">Get Started</Link>
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
+      <AppHeader />
 
       {/* Hero Section */}
       <section className="py-24 bg-gradient-hero">
@@ -361,6 +330,8 @@ export default function Contact() {
           </div>
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 }
