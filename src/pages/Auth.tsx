@@ -118,7 +118,7 @@ export default function Auth() {
             .from('user_roles')
             .insert({
               user_id: data.user.id,
-              role: signUpData.role
+              role: signUpData.role as 'professional' | 'hirer'
             });
 
           if (roleError) {
