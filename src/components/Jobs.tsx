@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Calendar, DollarSign, Search, Filter, Users, Clock } from "lucide-react";
+import { MapPin, Calendar, DollarSign, Search, Filter, Clock } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -20,7 +20,7 @@ interface Job {
   skills: string[];
   location: string | null;
   remote_allowed: boolean;
-  experience_level: string | null;
+  
   project_duration: string | null;
   status: string;
   created_at: string;
@@ -32,7 +32,7 @@ export default function Jobs() {
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [skillFilter, setSkillFilter] = useState("");
-  const [experienceFilter, setExperienceFilter] = useState("");
+  
 
   // Mock job data - in a real app, this would come from your Supabase database
   const mockJobs: Job[] = [
@@ -46,7 +46,6 @@ export default function Jobs() {
       skills: ["React", "Node.js", "PostgreSQL", "TypeScript", "Stripe API", "AWS"],
       location: "Remote",
       remote_allowed: true,
-      experience_level: "intermediate",
       project_duration: "3-6 months",
       status: "active",
       created_at: "2024-01-15T10:30:00Z",
@@ -62,7 +61,6 @@ export default function Jobs() {
       skills: ["React Native", "JavaScript", "Firebase", "Redux", "iOS", "Android"],
       location: "San Francisco, CA",
       remote_allowed: true,
-      experience_level: "intermediate",
       project_duration: "4-8 months",
       status: "active",
       created_at: "2024-01-14T14:20:00Z",
@@ -78,7 +76,6 @@ export default function Jobs() {
       skills: ["UI Design", "UX Research", "Figma", "Prototyping", "Design Systems", "User Testing"],
       location: "New York, NY",
       remote_allowed: true,
-      experience_level: "intermediate",
       project_duration: "2-4 months",
       status: "active",
       created_at: "2024-01-13T09:15:00Z",
@@ -94,7 +91,6 @@ export default function Jobs() {
       skills: ["AWS", "Docker", "Kubernetes", "Terraform", "CI/CD", "Monitoring"],
       location: "Austin, TX",
       remote_allowed: true,
-      experience_level: "expert",
       project_duration: "2-3 months",
       status: "active",
       created_at: "2024-01-12T16:45:00Z",
@@ -110,7 +106,7 @@ export default function Jobs() {
       skills: ["Content Writing", "SEO", "Social Media", "Email Marketing", "Analytics", "WordPress"],
       location: "Remote",
       remote_allowed: true,
-      experience_level: "entry",
+      
       project_duration: "3-6 months",
       status: "active",
       created_at: "2024-01-11T11:30:00Z",
@@ -126,7 +122,6 @@ export default function Jobs() {
       skills: ["Python", "Machine Learning", "TensorFlow", "Pandas", "SQL", "AWS"],
       location: "Seattle, WA",
       remote_allowed: true,
-      experience_level: "expert",
       project_duration: "6-12 months",
       status: "active",
       created_at: "2024-01-10T13:20:00Z",
@@ -142,7 +137,6 @@ export default function Jobs() {
       skills: ["WordPress", "PHP", "CSS", "JavaScript", "SEO", "Responsive Design"],
       location: "Chicago, IL",
       remote_allowed: true,
-      experience_level: "intermediate",
       project_duration: "1-2 months",
       status: "active",
       created_at: "2024-01-09T08:45:00Z",
@@ -158,7 +152,6 @@ export default function Jobs() {
       skills: ["Solidity", "Web3.js", "Ethereum", "DeFi", "Smart Contracts", "Truffle"],
       location: "Remote",
       remote_allowed: true,
-      experience_level: "expert",
       project_duration: "4-8 months",
       status: "active",
       created_at: "2024-01-08T15:10:00Z",
@@ -174,7 +167,7 @@ export default function Jobs() {
       skills: ["Video Editing", "Adobe Premiere Pro", "After Effects", "Motion Graphics", "Color Grading"],
       location: "Los Angeles, CA",
       remote_allowed: true,
-      experience_level: "intermediate",
+      
       project_duration: "2-4 months",
       status: "active",
       created_at: "2024-01-07T12:25:00Z",
@@ -190,7 +183,7 @@ export default function Jobs() {
       skills: ["Cybersecurity", "Penetration Testing", "OWASP", "Security Auditing", "Risk Assessment"],
       location: "Remote",
       remote_allowed: true,
-      experience_level: "expert",
+      
       project_duration: "1-2 months",
       status: "active",
       created_at: "2024-01-06T10:15:00Z",
@@ -211,15 +204,11 @@ export default function Jobs() {
     const matchesSkill = !skillFilter || 
       job.skills.some(skill => skill.toLowerCase().includes(skillFilter.toLowerCase()));
     
-    const matchesExperience = !experienceFilter || 
-      experienceFilter === 'all' || 
-      job.experience_level === experienceFilter;
-    
-    return matchesSearch && matchesLocation && matchesSkill && matchesExperience;
+    return matchesSearch && matchesLocation && matchesSkill;
   });
 
   const { data: jobs, isLoading, error } = useQuery({
-    queryKey: ['jobs', searchTerm, locationFilter, skillFilter, experienceFilter],
+    queryKey: ['jobs', searchTerm, locationFilter, skillFilter],
     queryFn: async () => {
       // In a real app, you would query Supabase here
       // For now, we'll use mock data
@@ -309,17 +298,6 @@ export default function Jobs() {
               value={skillFilter}
               onChange={(e) => setSkillFilter(e.target.value)}
             />
-            <Select value={experienceFilter} onValueChange={setExperienceFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Experience Level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Levels</SelectItem>
-                <SelectItem value="entry">Entry Level</SelectItem>
-                <SelectItem value="intermediate">Intermediate</SelectItem>
-                <SelectItem value="expert">Expert</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </div>
 
@@ -342,12 +320,6 @@ export default function Jobs() {
                             <MapPin className="h-4 w-4" />
                             {job.location}
                             {job.remote_allowed && " (Remote OK)"}
-                          </div>
-                        )}
-                        {job.experience_level && (
-                          <div className="flex items-center gap-1">
-                            <Users className="h-4 w-4" />
-                            {job.experience_level}
                           </div>
                         )}
                         {job.project_duration && (
@@ -414,7 +386,7 @@ export default function Jobs() {
                     setSearchTerm("");
                     setLocationFilter("");
                     setSkillFilter("");
-                    setExperienceFilter("");
+                    
                   }}
                 >
                   Clear Filters
