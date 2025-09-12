@@ -89,441 +89,85 @@ export default function Professionals() {
     return distance;
   };
 
-  // Use API hook for data fetching
-  const { data: apiProfessionals = [], isLoading, error } = useProfessionals({
-    skills: skillFilter && skillFilter !== "all-skills" ? [skillFilter] : undefined,
-    minRate: rateFilter === "low" ? 0 : rateFilter === "medium" ? 30 : rateFilter === "high" ? 50 : undefined,
-    maxRate: rateFilter === "low" ? 30 : rateFilter === "medium" ? 50 : undefined,
+  // Fetch professionals from Supabase database
+  const { data: apiProfessionals = [], isLoading, error } = useQuery({
+    queryKey: ['professionals', searchTerm, countryFilter, stateFilter, cityFilter, townFilter, skillFilter, ratingFilter, verifiedFilter, nearbyFilter, priceRange, sortBy],
+    queryFn: async () => {
+      let query = supabase
+        .from('professionals')
+        .select('*')
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
+
+      if (searchTerm) {
+        query = query.or(`name.ilike.%${searchTerm}%,title.ilike.%${searchTerm}%,skills.cs.{${searchTerm}}`);
+      }
+
+      if (countryFilter && countryFilter !== "all-countries") {
+        query = query.eq('country', countryFilter);
+      }
+
+      if (stateFilter && stateFilter !== "all-states") {
+        query = query.eq('state', stateFilter);
+      }
+
+      if (cityFilter && cityFilter !== "all-cities") {
+        query = query.eq('city', cityFilter);
+      }
+
+      if (townFilter && townFilter !== "all-towns") {
+        query = query.eq('town', townFilter);
+      }
+
+      if (skillFilter && skillFilter !== "all-skills") {
+        query = query.contains('skills', [skillFilter]);
+      }
+
+      if (ratingFilter && ratingFilter !== "any-rating") {
+        const minRating = ratingFilter === "4+" ? 4 : ratingFilter === "4.5+" ? 4.5 : 5;
+        query = query.gte('rating', minRating);
+      }
+
+      if (verifiedFilter) {
+        query = query.eq('verified', true);
+      }
+
+      if (priceRange[0] > 0) {
+        query = query.gte('hourly_rate', priceRange[0]);
+      }
+
+      if (priceRange[1] < 100) {
+        query = query.lte('hourly_rate', priceRange[1]);
+      }
+
+      const { data, error } = await query;
+      
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user,
   });
 
   // Convert API data to component format
   const professionals = apiProfessionals.map(prof => ({
     id: prof.id,
-    name: prof.nickname || prof.full_name,
-    title: prof.bio || "Professional Service Provider",
+    name: prof.name || prof.full_name,
+    title: prof.title || prof.bio || "Professional Service Provider",
     location: prof.location || "Location not specified",
     country: prof.country || "Unknown",
     state: prof.state || "",
     city: prof.city || "",
     town: prof.town || "",
     skills: prof.skills || [],
-    rating: 4.5, // Default rating
-    hourlyRate: prof.hourlyRate || 0,
-    completedProjects: Math.floor(Math.random() * 100), // Mock completed projects
+    rating: prof.rating || 4.5,
+    hourlyRate: prof.hourly_rate || 0,
+    completedProjects: prof.completed_projects || 0,
     avatar: prof.avatar_url,
-    description: prof.bio || "Professional service provider",
+    description: prof.description || prof.bio || "Professional service provider",
     verified: prof.verified || false,
   }));
 
-  // Mock data - in a real app, this would come from your Supabase database
-  const mockProfessionals: Professional[] = [
-    // Nigeria professionals - Physical services like Thumbtack
-    {
-      id: "1",
-      name: "Sarah Johnson",
-      title: "Kitchen & Bathroom Remodeling Specialist",
-      location: "Victoria Island, Lagos, Nigeria",
-      country: "Nigeria",
-      state: "Lagos",
-      city: "Lagos",
-      town: "Victoria Island",
-      skills: ["Kitchen Remodeling", "Bathroom Remodeling", "Interior Painting", "Tile Installation", "Flooring Installation", "Cabinet Installation", "Countertop Installation"],
-      rating: 4.9,
-      hourlyRate: 25,
-      completedProjects: 47,
-      description: "Experienced contractor with 5+ years transforming homes. Licensed and insured for all renovation projects.",
-      verified: true,
-    },
-    {
-      id: "2",
-      name: "Michael Chen",
-      title: "Plumbing & Electrical Expert",
-      location: "Asokoro, Abuja, Nigeria",
-      country: "Nigeria",
-      state: "FCT",
-      city: "Abuja",
-      town: "Asokoro",
-      skills: ["Plumbing", "Electrical Work", "HVAC Services", "Appliance Repairs", "Garage Door Repairs", "Furnace Repairs"],
-      rating: 4.8,
-      hourlyRate: 30,
-      completedProjects: 32,
-      description: "Certified plumber and electrician. Emergency services available 24/7 for urgent repairs.",
-      verified: true,
-    },
-    {
-      id: "3",
-      name: "David Okafor",
-      title: "Landscaping & Garden Design",
-      location: "GRA Phase 2, Port Harcourt, Nigeria",
-      country: "Nigeria",
-      state: "Rivers",
-      city: "Port Harcourt",
-      town: "GRA Phase 2",
-      skills: ["Garden Design", "Irrigation Systems", "Tree Trimming", "Outdoor Lighting"],
-      rating: 4.7,
-      hourlyRate: 35,
-      completedProjects: 28,
-      description: "Creative landscaper specializing in sustainable garden designs and maintenance.",
-      verified: true,
-    },
-    {
-      id: "4",
-      name: "Lisa Adebayo",
-      title: "Cleaning & Maintenance Pro",
-      location: "Bodija, Ibadan, Nigeria",
-      country: "Nigeria",
-      state: "Oyo",
-      city: "Ibadan",
-      town: "Bodija",
-      skills: ["Deep Cleaning", "Carpet Cleaning", "Window Washing", "Office Maintenance"],
-      rating: 4.9,
-      hourlyRate: 40,
-      completedProjects: 23,
-      description: "Professional cleaning services for homes and offices. Eco-friendly products available.",
-      verified: true,
-    },
-    {
-      id: "5",
-      name: "James Okonkwo",
-      title: "Auto Repair & Maintenance",
-      location: "New Haven, Enugu, Nigeria",
-      country: "Nigeria",
-      state: "Enugu",
-      city: "Enugu",
-      town: "New Haven",
-      skills: ["Engine Repair", "Brake Service", "Oil Change", "Diagnostic Testing"],
-      rating: 4.6,
-      hourlyRate: 28,
-      completedProjects: 35,
-      description: "Certified mechanic with 10+ years experience. All major car brands serviced.",
-      verified: true,
-    },
-    // US professionals - Local physical services
-    {
-      id: "6",
-      name: "Alex Thompson",
-      title: "House Cleaning Specialist",
-      location: "Mission District, San Francisco, CA, USA",
-      country: "USA",
-      state: "California",
-      city: "San Francisco",
-      town: "Mission District",
-      skills: ["Move-in Cleaning", "Deep Cleaning", "Eco-friendly", "Pet-friendly"],
-      rating: 4.8,
-      hourlyRate: 45,
-      completedProjects: 52,
-      description: "Professional house cleaning with attention to detail. Bonded and insured.",
-      verified: true,
-    },
-    {
-      id: "7",
-      name: "Emma Wilson",
-      title: "Handyman Services",
-      location: "Brooklyn, New York, NY, USA",
-      country: "USA",
-      state: "New York",
-      city: "New York",
-      town: "Brooklyn",
-      skills: ["Furniture Assembly", "Minor Repairs", "Installation", "General Maintenance"],
-      rating: 4.7,
-      hourlyRate: 50,
-      completedProjects: 38,
-      description: "Reliable handyman for all your home repair and assembly needs.",
-      verified: true,
-    },
-    // UK professionals - Local physical services
-    {
-      id: "8",
-      name: "Oliver Brown",
-      title: "Garden & Landscaping",
-      location: "London, UK",
-      country: "UK",
-      state: "England",
-      city: "London",
-      town: "Central London",
-      skills: ["Garden Design", "Lawn Care", "Tree Surgery", "Patio Installation"],
-      rating: 4.9,
-      hourlyRate: 42,
-      completedProjects: 41,
-      description: "Professional gardener and landscaper. Creating beautiful outdoor spaces.",
-      verified: true,
-    },
-    // Canada professionals - Local physical services
-    {
-      id: "9",
-      name: "Sophie Martin",
-      title: "Home Organization Expert",
-      location: "Toronto, Canada",
-      country: "Canada",
-      state: "Ontario",
-      city: "Toronto",
-      town: "Downtown",
-      skills: ["Closet Organization", "Decluttering", "Storage Solutions", "Moving Prep"],
-      rating: 4.8,
-      hourlyRate: 38,
-      completedProjects: 29,
-      description: "Professional organizer helping create functional and beautiful living spaces.",
-      verified: true,
-    },
-    // New professionals with missing skill categories
-    {
-      id: "10",
-      name: "Robert Williams",
-      title: "Licensed Architect & Designer",
-      location: "Lagos, Nigeria",
-      country: "Nigeria",
-      state: "Lagos",
-      city: "Lagos",
-      town: "Ikoyi",
-      skills: ["Architectural Design", "Building Plans", "Structural Engineering", "3D Modeling", "Site Planning", "Sustainable Design"],
-      rating: 4.9,
-      hourlyRate: 45,
-      completedProjects: 23,
-      description: "Registered architect with 8+ years designing residential and commercial buildings. Specializes in sustainable and modern designs.",
-      verified: true,
-    },
-    {
-      id: "11",
-      name: "Ahmed Hassan",
-      title: "Land Surveyor & Civil Engineer",
-      location: "Abuja, Nigeria",
-      country: "Nigeria",
-      state: "FCT",
-      city: "Abuja",
-      town: "Maitama",
-      skills: ["Land Surveying", "Property Boundaries", "Topographic Surveys", "GPS Surveying", "Civil Engineering", "Construction Surveying"],
-      rating: 4.7,
-      hourlyRate: 40,
-      completedProjects: 31,
-      description: "Professional surveyor and civil engineer. Accurate property measurements and construction site surveying.",
-      verified: true,
-    },
-    {
-      id: "12",
-      name: "Maria Rodriguez",
-      title: "Certified Auto Mechanic",
-      location: "Port Harcourt, Nigeria",
-      country: "Nigeria",
-      state: "Rivers",
-      city: "Port Harcourt",
-      town: "GRA Phase 1",
-      skills: ["Auto Repair", "Engine Repair", "Brake Service", "Diagnostic Testing", "Transmission Repair", "Electrical Systems"],
-      rating: 4.8,
-      hourlyRate: 35,
-      completedProjects: 67,
-      description: "ASE certified mechanic with 12+ years experience. All major car brands and comprehensive auto services.",
-      verified: true,
-    },
-    {
-      id: "13",
-      name: "John O'Connor",
-      title: "Professional Welder & Metal Fabricator",
-      location: "Enugu, Nigeria",
-      country: "Nigeria",
-      state: "Enugu",
-      city: "Enugu",
-      town: "Independence Layout",
-      skills: ["Arc Welding", "MIG Welding", "TIG Welding", "Metal Fabrication", "Steel Work", "Pipe Welding", "Custom Metal Projects"],
-      rating: 4.6,
-      hourlyRate: 32,
-      completedProjects: 42,
-      description: "Skilled welder specializing in structural steel, custom metalwork, and industrial fabrication projects.",
-      verified: true,
-    },
-    {
-      id: "14",
-      name: "David Thompson",
-      title: "General Contractor & Builder",
-      location: "Kano, Nigeria",
-      country: "Nigeria",
-      state: "Kano",
-      city: "Kano",
-      town: "GRA",
-      skills: ["General Contracting", "Carpentry", "Masonry", "Concrete Work", "Framing", "Foundation Work", "Project Management"],
-      rating: 4.9,
-      hourlyRate: 38,
-      completedProjects: 28,
-      description: "Experienced contractor handling complete construction projects from foundation to finish.",
-      verified: true,
-    },
-    // Additional professionals for more variety
-    {
-      id: "15",
-      name: "Jennifer Martinez",
-      title: "Interior Designer & Home Stager",
-      location: "Miami, FL, USA",
-      country: "USA",
-      state: "Florida",
-      city: "Miami",
-      town: "South Beach",
-      skills: ["Interior Design", "Home Staging", "Color Consultation", "Space Planning", "Furniture Selection", "Lighting Design"],
-      rating: 4.8,
-      hourlyRate: 55,
-      completedProjects: 34,
-      description: "Creative interior designer with a passion for transforming spaces. Specializes in modern and contemporary designs.",
-      verified: true,
-    },
-    {
-      id: "16",
-      name: "Kevin O'Brien",
-      title: "HVAC Technician & Installer",
-      location: "Dallas, TX, USA",
-      country: "USA",
-      state: "Texas",
-      city: "Dallas",
-      town: "Uptown",
-      skills: ["HVAC Installation", "Air Conditioning Repair", "Heating Systems", "Ductwork", "Energy Efficiency", "Maintenance"],
-      rating: 4.7,
-      hourlyRate: 48,
-      completedProjects: 56,
-      description: "Licensed HVAC technician with 15+ years experience. Expert in residential and commercial systems.",
-      verified: true,
-    },
-    {
-      id: "17",
-      name: "Amanda Foster",
-      title: "Professional Photographer",
-      location: "Los Angeles, CA, USA",
-      country: "USA",
-      state: "California",
-      city: "Los Angeles",
-      town: "Hollywood",
-      skills: ["Portrait Photography", "Event Photography", "Real Estate Photography", "Photo Editing", "Lighting", "Studio Work"],
-      rating: 4.9,
-      hourlyRate: 75,
-      completedProjects: 89,
-      description: "Award-winning photographer specializing in portraits, events, and real estate. Professional equipment and editing services included.",
-      verified: true,
-    },
-    {
-      id: "18",
-      name: "Carlos Silva",
-      title: "Flooring Installation Expert",
-      location: "Houston, TX, USA",
-      country: "USA",
-      state: "Texas",
-      city: "Houston",
-      town: "Montrose",
-      skills: ["Hardwood Installation", "Tile Installation", "Carpet Installation", "Laminate Flooring", "Vinyl Flooring", "Subfloor Repair"],
-      rating: 4.6,
-      hourlyRate: 42,
-      completedProjects: 73,
-      description: "Expert flooring installer with 12+ years experience. All types of flooring materials and finishes.",
-      verified: true,
-    },
-    {
-      id: "19",
-      name: "Rachel Green",
-      title: "Professional Organizer & Decluttering Specialist",
-      location: "Seattle, WA, USA",
-      country: "USA",
-      state: "Washington",
-      city: "Seattle",
-      town: "Capitol Hill",
-      skills: ["Home Organization", "Decluttering", "Closet Organization", "Office Organization", "Moving Services", "Time Management"],
-      rating: 4.8,
-      hourlyRate: 65,
-      completedProjects: 41,
-      description: "Certified professional organizer helping clients create organized, functional, and beautiful living spaces.",
-      verified: true,
-    },
-    {
-      id: "20",
-      name: "Marcus Johnson",
-      title: "Pool Maintenance & Repair Specialist",
-      location: "Phoenix, AZ, USA",
-      country: "USA",
-      state: "Arizona",
-      city: "Phoenix",
-      town: "Scottsdale",
-      skills: ["Pool Cleaning", "Pool Repair", "Equipment Maintenance", "Water Chemistry", "Pool Opening/Closing", "Equipment Installation"],
-      rating: 4.7,
-      hourlyRate: 38,
-      completedProjects: 62,
-      description: "Licensed pool maintenance specialist. Weekly, bi-weekly, and monthly service plans available.",
-      verified: true,
-    },
-    {
-      id: "21",
-      name: "Priya Patel",
-      title: "Professional Housekeeper & Maid Service",
-      location: "Austin, TX, USA",
-      country: "USA",
-      state: "Texas",
-      city: "Austin",
-      town: "Downtown",
-      skills: ["House Cleaning", "Deep Cleaning", "Move-in/Move-out Cleaning", "Post-Construction Cleaning", "Eco-friendly Products", "Laundry Service"],
-      rating: 4.9,
-      hourlyRate: 35,
-      completedProjects: 127,
-      description: "Reliable and thorough housekeeping services. Bonded, insured, and background checked.",
-      verified: true,
-    },
-    {
-      id: "22",
-      name: "Thomas Anderson",
-      title: "Roofing Contractor & Repair Specialist",
-      location: "Denver, CO, USA",
-      country: "USA",
-      state: "Colorado",
-      city: "Denver",
-      town: "Highlands",
-      skills: ["Roof Installation", "Roof Repair", "Gutter Installation", "Siding", "Weatherproofing", "Emergency Repairs"],
-      rating: 4.8,
-      hourlyRate: 52,
-      completedProjects: 45,
-      description: "Licensed roofing contractor with 20+ years experience. All types of roofing materials and emergency repair services.",
-      verified: true,
-    },
-    {
-      id: "23",
-      name: "Grace Kim",
-      title: "Professional Pet Groomer",
-      location: "Portland, OR, USA",
-      country: "USA",
-      state: "Oregon",
-      city: "Portland",
-      town: "Pearl District",
-      skills: ["Dog Grooming", "Cat Grooming", "Nail Trimming", "Teeth Cleaning", "Flea Treatment", "Pet Styling"],
-      rating: 4.9,
-      hourlyRate: 45,
-      completedProjects: 156,
-      description: "Certified pet groomer with 8+ years experience. Gentle, patient, and experienced with all breeds and temperaments.",
-      verified: true,
-    },
-    {
-      id: "24",
-      name: "Michael Rodriguez",
-      title: "Fence Installation & Repair Specialist",
-      location: "San Antonio, TX, USA",
-      country: "USA",
-      state: "Texas",
-      city: "San Antonio",
-      town: "Alamo Heights",
-      skills: ["Fence Installation", "Fence Repair", "Gate Installation", "Privacy Fencing", "Decorative Fencing", "Fence Staining"],
-      rating: 4.6,
-      hourlyRate: 40,
-      completedProjects: 68,
-      description: "Expert fence installer specializing in wood, vinyl, chain-link, and decorative fencing. Free estimates provided.",
-      verified: true,
-    },
-    {
-      id: "25",
-      name: "Sarah Wilson",
-      title: "Window Cleaning & Pressure Washing",
-      location: "Atlanta, GA, USA",
-      country: "USA",
-      state: "Georgia",
-      city: "Atlanta",
-      town: "Buckhead",
-      skills: ["Window Cleaning", "Pressure Washing", "Gutter Cleaning", "Exterior Cleaning", "Commercial Cleaning", "Residential Cleaning"],
-      rating: 4.7,
-      hourlyRate: 32,
-      completedProjects: 94,
-      description: "Professional window cleaning and pressure washing services for residential and commercial properties.",
-      verified: true,
-    }
-  ];
+  // Professionals will be fetched from Supabase database
 
   // Get unique location data for hierarchical filtering
   const uniqueCountries = Array.from(new Set(professionals.map(p => p.country))).sort();
