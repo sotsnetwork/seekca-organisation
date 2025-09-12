@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { useMessages, useSendMessage } from "@/hooks/use-api";
 import ProfileNavigation from "@/components/ProfileNavigation";
+import AppHeader from "@/components/AppHeader";
 
 export default function Messages() {
   const { user } = useAuth();
@@ -66,6 +67,7 @@ export default function Messages() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AppHeader />
       <ProfileNavigation />
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
