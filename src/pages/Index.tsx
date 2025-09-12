@@ -7,6 +7,7 @@ import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import Professionals from "@/components/Professionals";
 import Jobs from "@/components/Jobs";
+import AppHeader from "@/components/AppHeader";
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -30,6 +31,7 @@ const Index = () => {
     if (userRole === 'professional') {
       return (
         <div className="min-h-screen">
+          <AppHeader />
           <Jobs />
           <Footer />
         </div>
@@ -40,6 +42,7 @@ const Index = () => {
     if (userRole === 'hirer') {
       return (
         <div className="min-h-screen">
+          <AppHeader />
           <Professionals />
           <Footer />
         </div>
