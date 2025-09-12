@@ -17,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ProfileNavigation from "@/components/ProfileNavigation";
 import { ProfilePictureCropper } from "@/components/ProfilePictureCropper";
+import AppHeader from "@/components/AppHeader";
 
 // Profile form validation schema
 const profileFormSchema = z.object({
@@ -231,6 +232,7 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AppHeader />
       <ProfileNavigation />
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Header */}
