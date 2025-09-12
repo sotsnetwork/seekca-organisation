@@ -530,6 +530,12 @@ export default function Professionals() {
   const uniqueStates = Array.from(new Set(professionals.map(p => p.state).filter(Boolean))).sort();
   const uniqueCities = Array.from(new Set(professionals.map(p => p.city).filter(Boolean))).sort();
   const uniqueTowns = Array.from(new Set(professionals.map(p => p.town).filter(Boolean))).sort();
+
+  // All available countries for the dropdown
+  const allCountries = [
+    "Nigeria", "USA", "UK", "Canada", "Germany", "France", "Australia", "Japan", 
+    "Brazil", "India", "South Africa", "Mexico", "Italy", "Spain", "Netherlands"
+  ];
   
   // Get unique skills for skill filter
   const allSkills = professionals.flatMap(p => p.skills);
@@ -717,11 +723,11 @@ export default function Professionals() {
                 setTownFilter("");
               }}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Country" />
+                  <SelectValue placeholder="Select Country" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all-countries">All Countries</SelectItem>
-                  {uniqueCountries.map((country) => (
+                  {allCountries.map((country) => (
                     <SelectItem key={country} value={country}>
                       {country}
                     </SelectItem>
