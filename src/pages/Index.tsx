@@ -46,6 +46,34 @@ const Index = () => {
       );
     }
     
+    // If role is null (user doesn't have a role assigned), show role selection
+    if (userRole === null && !roleLoading) {
+      return (
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <div className="text-center max-w-md mx-auto p-6">
+            <h2 className="text-2xl font-bold mb-4">Complete Your Profile</h2>
+            <p className="text-muted-foreground mb-6">
+              It looks like you don't have a role assigned yet. Please contact support or try signing up again.
+            </p>
+            <div className="space-y-4">
+              <button 
+                onClick={() => window.location.href = '/auth'}
+                className="w-full bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90"
+              >
+                Go to Sign Up
+              </button>
+              <button 
+                onClick={() => window.location.reload()}
+                className="w-full bg-secondary text-secondary-foreground px-4 py-2 rounded-md hover:bg-secondary/90"
+              >
+                Refresh Page
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
     // Fallback while role is being determined
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
