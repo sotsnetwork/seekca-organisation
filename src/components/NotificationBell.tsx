@@ -6,6 +6,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuIte
 import { Bell, MessageSquare, Users, CheckCircle, AlertCircle, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Notification {
   id: string;
@@ -22,49 +24,26 @@ export default function NotificationBell() {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Mock notifications - in a real app, these would come from the backend
-  const notifications: Notification[] = [
-    {
-      id: '1',
-      type: 'message',
-      title: 'New Message',
-      message: 'Sarah Johnson sent you a message about your kitchen remodeling project.',
-      timestamp: '2 minutes ago',
-      isRead: false,
-      sender: 'Sarah Johnson',
-      actionUrl: '/messages'
-    },
-    {
-      id: '2',
-      type: 'job_offer',
-      title: 'Job Opportunity',
-      message: 'You have a new job offer for bathroom renovation in Lagos.',
-      timestamp: '1 hour ago',
-      isRead: false,
-      actionUrl: '/messages'
-    },
-    {
-      id: '3',
-      type: 'system',
-      title: 'Profile Update',
-      message: 'Your profile verification is complete. You can now accept jobs.',
-      timestamp: '3 hours ago',
-      isRead: true,
-      actionUrl: '/profile'
-    },
-    {
-      id: '4',
-      type: 'message',
-      title: 'New Message',
-      message: 'Michael Chen is interested in your electrical services.',
-      timestamp: '1 day ago',
-      isRead: true,
-      sender: 'Michael Chen',
-      actionUrl: '/messages'
-    }
-  ];
+  // Fetch notifications from Supabase database
+  const { data: notifications = [], isLoading } = useQuery({
+    queryKey: ['notifications', user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(10);
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  const unreadCount = notifications.filter(n => !n.is_read).length;
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -82,7 +61,16 @@ export default function NotificationBell() {
   };
 
   const formatTimestamp = (timestamp: string) => {
-    return timestamp;
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
+    
+    if (diffInMinutes < 1) return 'Just now';
+    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+    if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h ago`;
+    if (diffInMinutes < 10080) return `${Math.floor(diffInMinutes / 1440)}d ago`;
+    
+    return date.toLocaleDateString();
   };
 
   if (!user) return null;
@@ -131,7 +119,7 @@ export default function NotificationBell() {
                       <p className="text-sm font-medium truncate">
                         {notification.title}
                       </p>
-                      {!notification.isRead && (
+                      {!notification.is_read && (
                         <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
                       )}
                     </div>
@@ -140,7 +128,7 @@ export default function NotificationBell() {
                     </p>
                     <div className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Clock className="w-3 h-3" />
-                      <span>{formatTimestamp(notification.timestamp)}</span>
+                      <span>{formatTimestamp(notification.created_at)}</span>
                     </div>
                   </div>
                 </Link>
