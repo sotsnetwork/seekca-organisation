@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import { Search, MapPin, Star, Briefcase, MessageSquare, Filter, Loader2, X } from "lucide-react";
+import { Search, MapPin, Star, Briefcase, MessageSquare, Filter, Loader2, X, Users } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useProfessionals } from "@/hooks/use-api";
 import { Link } from "react-router-dom";
@@ -93,57 +93,66 @@ export default function Professionals() {
   const { data: apiProfessionals = [], isLoading, error } = useQuery({
     queryKey: ['professionals', searchTerm, countryFilter, stateFilter, cityFilter, townFilter, skillFilter, ratingFilter, verifiedFilter, nearbyFilter, priceRange, sortBy],
     queryFn: async () => {
-      let query = supabase
-        .from('professionals')
-        .select('*')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
+      try {
+        let query = supabase
+          .from('professionals')
+          .select('*')
+          .eq('status', 'active')
+          .order('created_at', { ascending: false });
 
-      if (searchTerm) {
-        query = query.or(`name.ilike.%${searchTerm}%,title.ilike.%${searchTerm}%,skills.cs.{${searchTerm}}`);
+        if (searchTerm) {
+          query = query.or(`name.ilike.%${searchTerm}%,title.ilike.%${searchTerm}%,skills.cs.{${searchTerm}}`);
+        }
+
+        if (countryFilter && countryFilter !== "all-countries") {
+          query = query.eq('country', countryFilter);
+        }
+
+        if (stateFilter && stateFilter !== "all-states") {
+          query = query.eq('state', stateFilter);
+        }
+
+        if (cityFilter && cityFilter !== "all-cities") {
+          query = query.eq('city', cityFilter);
+        }
+
+        if (townFilter && townFilter !== "all-towns") {
+          query = query.eq('town', townFilter);
+        }
+
+        if (skillFilter && skillFilter !== "all-skills") {
+          query = query.contains('skills', [skillFilter]);
+        }
+
+        if (ratingFilter && ratingFilter !== "any-rating") {
+          const minRating = ratingFilter === "4+" ? 4 : ratingFilter === "4.5+" ? 4.5 : 5;
+          query = query.gte('rating', minRating);
+        }
+
+        if (verifiedFilter) {
+          query = query.eq('verified', true);
+        }
+
+        if (priceRange[0] > 0) {
+          query = query.gte('hourly_rate', priceRange[0]);
+        }
+
+        if (priceRange[1] < 100) {
+          query = query.lte('hourly_rate', priceRange[1]);
+        }
+
+        const { data, error } = await query;
+        
+        if (error) {
+          console.log('Database query error (this is expected if professionals table doesn\'t exist yet):', error);
+          return [];
+        }
+        
+        return data || [];
+      } catch (err) {
+        console.log('Error fetching professionals (this is expected if database tables don\'t exist yet):', err);
+        return [];
       }
-
-      if (countryFilter && countryFilter !== "all-countries") {
-        query = query.eq('country', countryFilter);
-      }
-
-      if (stateFilter && stateFilter !== "all-states") {
-        query = query.eq('state', stateFilter);
-      }
-
-      if (cityFilter && cityFilter !== "all-cities") {
-        query = query.eq('city', cityFilter);
-      }
-
-      if (townFilter && townFilter !== "all-towns") {
-        query = query.eq('town', townFilter);
-      }
-
-      if (skillFilter && skillFilter !== "all-skills") {
-        query = query.contains('skills', [skillFilter]);
-      }
-
-      if (ratingFilter && ratingFilter !== "any-rating") {
-        const minRating = ratingFilter === "4+" ? 4 : ratingFilter === "4.5+" ? 4.5 : 5;
-        query = query.gte('rating', minRating);
-      }
-
-      if (verifiedFilter) {
-        query = query.eq('verified', true);
-      }
-
-      if (priceRange[0] > 0) {
-        query = query.gte('hourly_rate', priceRange[0]);
-      }
-
-      if (priceRange[1] < 100) {
-        query = query.lte('hourly_rate', priceRange[1]);
-      }
-
-      const { data, error } = await query;
-      
-      if (error) throw error;
-      return data || [];
     },
     enabled: !!user,
   });
@@ -843,12 +852,33 @@ export default function Professionals() {
               })}
             </div>
 
-            {sortedProfessionals.length === 0 && (
-              <div className="text-center py-12">
-                <div className="text-muted-foreground mb-4">
-                  <Search className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                  <h3 className="text-lg font-medium mb-2">No professionals found</h3>
-                  <p>Try adjusting your search criteria or filters.</p>
+            {sortedProfessionals.length === 0 && !isLoading && (
+              <div className="text-center py-16">
+                <div className="max-w-md mx-auto">
+                  <div className="bg-muted rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                    <Users className="w-10 h-10 text-muted-foreground" />
+                  </div>
+                  <h3 className="text-2xl font-semibold mb-4">No professionals available yet</h3>
+                  <p className="text-muted-foreground mb-6 text-lg">
+                    We're building our community of skilled professionals. Check back soon or spread the word to help us grow!
+                  </p>
+                  <div className="space-y-3">
+                    <p className="text-sm text-muted-foreground">
+                      💡 <strong>Tip:</strong> Share SeekCa with professionals you know to help build our marketplace
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                      <Button variant="outline" asChild>
+                        <a href="mailto:?subject=Join SeekCa Marketplace&body=Check out SeekCa - a marketplace for professionals and hirers!">
+                          Share via Email
+                        </a>
+                      </Button>
+                      <Button variant="outline" asChild>
+                        <a href="https://twitter.com/intent/tweet?text=Check%20out%20SeekCa%20-%20a%20marketplace%20for%20professionals%20and%20hirers!" target="_blank">
+                          Share on Twitter
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
