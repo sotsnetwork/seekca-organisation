@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, Save, Bell, Shield, User, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import AppHeader from "@/components/AppHeader";
 
 export default function Settings() {
   const { user } = useAuth();
@@ -42,6 +43,7 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-background">
+      <AppHeader />
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
