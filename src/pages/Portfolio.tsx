@@ -68,7 +68,7 @@ export default function Portfolio() {
     <div className="min-h-screen bg-background">
       <AppHeader />
       <ProfileNavigation />
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <main className="max-w-6xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -199,7 +199,7 @@ export default function Portfolio() {
           isOpen={isFormOpen}
           onOpenChange={setIsFormOpen}
         />
-      </div>
+      </main>
     </div>
   );
 }
