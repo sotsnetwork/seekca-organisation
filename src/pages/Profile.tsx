@@ -19,6 +19,7 @@ import { useToast } from "@/hooks/use-toast";
 import ProfileNavigation from "@/components/ProfileNavigation";
 import { ProfilePictureCropper } from "@/components/ProfilePictureCropper";
 import AppHeader from "@/components/AppHeader";
+import { useQueryClient } from "@tanstack/react-query";
 
 // Profile form validation schema
 const profileFormSchema = z.object({
@@ -36,6 +37,7 @@ export default function Profile() {
   const AVATAR_BUCKET = 'avatars';
   const { user } = useAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
@@ -110,6 +112,25 @@ export default function Profile() {
         throw error;
       }
 
+      // Ensure user role is preserved in user_roles table
+      const currentRole = user.user_metadata?.role || 'professional';
+      console.log('Preserving user role:', currentRole);
+      
+      const { error: roleError } = await supabase
+        .from('user_roles')
+        .upsert({
+          user_id: user.id,
+          role: currentRole,
+        });
+
+      if (roleError) {
+        console.warn('Warning: Could not update user role:', roleError);
+        // Don't throw error here as profile update is more important
+      }
+
+      // Invalidate and refetch user role to ensure UI updates
+      await queryClient.invalidateQueries({ queryKey: ['user-role', user.id] });
+
       // Update local state
       setProfileData(prev => ({
         ...prev,
@@ -127,6 +148,11 @@ export default function Profile() {
         title: "Profile Updated",
         description: "Your profile has been successfully updated.",
       });
+
+      // Force a page refresh to ensure role-based routing works correctly
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error('Error updating profile:', error);
       toast({
