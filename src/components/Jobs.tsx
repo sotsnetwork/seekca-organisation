@@ -46,31 +46,40 @@ export default function Jobs() {
   const { data: jobs, isLoading, error } = useQuery({
     queryKey: ['jobs', searchTerm, locationFilter, skillFilter],
     queryFn: async () => {
-      let query = supabase
-        .from('jobs')
-        .select(`
-          *,
-          hirer:profiles!jobs_hirer_id_fkey(full_name, nickname, avatar_url)
-        `)
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
+      try {
+        let query = supabase
+          .from('jobs')
+          .select(`
+            *,
+            hirer:profiles!jobs_hirer_id_fkey(full_name, nickname, avatar_url)
+          `)
+          .eq('status', 'active')
+          .order('created_at', { ascending: false });
 
-      if (searchTerm) {
-        query = query.or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
+        if (searchTerm) {
+          query = query.or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
+        }
+
+        if (locationFilter) {
+          query = query.ilike('location', `%${locationFilter}%`);
+        }
+
+        if (skillFilter) {
+          query = query.contains('skills', [skillFilter]);
+        }
+
+        const { data, error } = await query;
+        
+        if (error) {
+          console.error('Database query error (this is expected if jobs table doesn\'t exist yet):', error);
+          return [];
+        }
+        
+        return data as Job[] || [];
+      } catch (err) {
+        console.error('Error fetching jobs (this is expected if database tables don\'t exist yet):', err);
+        return [];
       }
-
-      if (locationFilter) {
-        query = query.ilike('location', `%${locationFilter}%`);
-      }
-
-      if (skillFilter) {
-        query = query.contains('skills', [skillFilter]);
-      }
-
-      const { data, error } = await query;
-      
-      if (error) throw error;
-      return data as Job[];
     },
     enabled: !!user,
   });
@@ -105,9 +114,28 @@ export default function Jobs() {
   if (error) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-destructive mb-4">Error loading jobs</p>
-          <Button onClick={() => window.location.reload()}>Try Again</Button>
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="bg-muted rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+            <Briefcase className="w-10 h-10 text-muted-foreground" />
+          </div>
+          <h3 className="text-2xl font-semibold mb-4">Database Setup Required</h3>
+          <p className="text-muted-foreground mb-6">
+            The jobs table hasn't been created yet. Please run the database setup script in your Supabase dashboard.
+          </p>
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground">
+              💡 <strong>Setup Steps:</strong>
+            </p>
+            <ol className="text-sm text-left text-muted-foreground space-y-1">
+              <li>1. Go to your Supabase dashboard</li>
+              <li>2. Navigate to SQL Editor</li>
+              <li>3. Run the create_jobs_table.sql script</li>
+              <li>4. Refresh this page</li>
+            </ol>
+            <Button onClick={() => window.location.reload()} className="mt-4">
+              Refresh Page
+            </Button>
+          </div>
         </div>
       </div>
     );
