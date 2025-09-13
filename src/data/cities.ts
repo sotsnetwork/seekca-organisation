@@ -507,6 +507,146 @@ export const citiesData: Country[] = [
           { name: "Reutlingen", state: "Baden-Württemberg", country: "Germany", coordinates: { lat: 48.4914, lng: 9.2042 } },
           { name: "Esslingen", state: "Baden-Württemberg", country: "Germany", coordinates: { lat: 48.7406, lng: 9.3068 } }
         ]
+      },
+      {
+        name: "Lower Saxony",
+        country: "Germany",
+        cities: [
+          { name: "Hannover", state: "Lower Saxony", country: "Germany", coordinates: { lat: 52.3759, lng: 9.7320 } },
+          { name: "Braunschweig", state: "Lower Saxony", country: "Germany", coordinates: { lat: 52.2689, lng: 10.5268 } },
+          { name: "Osnabrück", state: "Lower Saxony", country: "Germany", coordinates: { lat: 52.2799, lng: 8.0472 } },
+          { name: "Oldenburg", state: "Lower Saxony", country: "Germany", coordinates: { lat: 53.1434, lng: 8.2146 } },
+          { name: "Göttingen", state: "Lower Saxony", country: "Germany", coordinates: { lat: 51.5413, lng: 9.9158 } }
+        ]
+      },
+      {
+        name: "Hesse",
+        country: "Germany",
+        cities: [
+          { name: "Frankfurt", state: "Hesse", country: "Germany", coordinates: { lat: 50.1109, lng: 8.6821 } },
+          { name: "Wiesbaden", state: "Hesse", country: "Germany", coordinates: { lat: 50.0826, lng: 8.2493 } },
+          { name: "Kassel", state: "Hesse", country: "Germany", coordinates: { lat: 51.3127, lng: 9.4797 } },
+          { name: "Darmstadt", state: "Hesse", country: "Germany", coordinates: { lat: 49.8728, lng: 8.6512 } },
+          { name: "Offenbach", state: "Hesse", country: "Germany", coordinates: { lat: 50.0956, lng: 8.7761 } }
+        ]
+      },
+      {
+        name: "Saxony",
+        country: "Germany",
+        cities: [
+          { name: "Dresden", state: "Saxony", country: "Germany", coordinates: { lat: 51.0504, lng: 13.7373 } },
+          { name: "Leipzig", state: "Saxony", country: "Germany", coordinates: { lat: 51.3397, lng: 12.3731 } },
+          { name: "Chemnitz", state: "Saxony", country: "Germany", coordinates: { lat: 50.8278, lng: 12.9214 } },
+          { name: "Zwickau", state: "Saxony", country: "Germany", coordinates: { lat: 50.7186, lng: 12.4961 } },
+          { name: "Plauen", state: "Saxony", country: "Germany", coordinates: { lat: 50.4964, lng: 12.1378 } }
+        ]
+      },
+      {
+        name: "Rhineland-Palatinate",
+        country: "Germany",
+        cities: [
+          { name: "Mainz", state: "Rhineland-Palatinate", country: "Germany", coordinates: { lat: 49.9929, lng: 8.2473 } },
+          { name: "Ludwigshafen", state: "Rhineland-Palatinate", country: "Germany", coordinates: { lat: 49.4812, lng: 8.4464 } },
+          { name: "Koblenz", state: "Rhineland-Palatinate", country: "Germany", coordinates: { lat: 50.3569, lng: 7.5890 } },
+          { name: "Trier", state: "Rhineland-Palatinate", country: "Germany", coordinates: { lat: 49.7596, lng: 6.6439 } },
+          { name: "Kaiserslautern", state: "Rhineland-Palatinate", country: "Germany", coordinates: { lat: 49.4432, lng: 7.7711 } }
+        ]
+      },
+      {
+        name: "Berlin",
+        country: "Germany",
+        cities: [
+          { name: "Berlin", state: "Berlin", country: "Germany", coordinates: { lat: 52.5200, lng: 13.4050 } },
+          { name: "Charlottenburg", state: "Berlin", country: "Germany", coordinates: { lat: 52.5048, lng: 13.3045 } },
+          { name: "Kreuzberg", state: "Berlin", country: "Germany", coordinates: { lat: 52.4990, lng: 13.4034 } },
+          { name: "Prenzlauer Berg", state: "Berlin", country: "Germany", coordinates: { lat: 52.5388, lng: 13.4244 } },
+          { name: "Friedrichshain", state: "Berlin", country: "Germany", coordinates: { lat: 52.5158, lng: 13.4543 } }
+        ]
+      },
+      {
+        name: "Hamburg",
+        country: "Germany",
+        cities: [
+          { name: "Hamburg", state: "Hamburg", country: "Germany", coordinates: { lat: 53.5511, lng: 9.9937 } },
+          { name: "Altona", state: "Hamburg", country: "Germany", coordinates: { lat: 53.5500, lng: 9.9333 } },
+          { name: "Harburg", state: "Hamburg", country: "Germany", coordinates: { lat: 53.4600, lng: 9.9800 } },
+          { name: "Wandsbek", state: "Hamburg", country: "Germany", coordinates: { lat: 53.5833, lng: 10.0833 } },
+          { name: "Bergedorf", state: "Hamburg", country: "Germany", coordinates: { lat: 53.4833, lng: 10.2167 } }
+        ]
+      },
+      {
+        name: "Bremen",
+        country: "Germany",
+        cities: [
+          { name: "Bremen", state: "Bremen", country: "Germany", coordinates: { lat: 53.0793, lng: 8.8017 } },
+          { name: "Bremerhaven", state: "Bremen", country: "Germany", coordinates: { lat: 53.5396, lng: 8.5809 } }
+        ]
+      },
+      {
+        name: "Schleswig-Holstein",
+        country: "Germany",
+        cities: [
+          { name: "Kiel", state: "Schleswig-Holstein", country: "Germany", coordinates: { lat: 54.3233, lng: 10.1228 } },
+          { name: "Lübeck", state: "Schleswig-Holstein", country: "Germany", coordinates: { lat: 53.8655, lng: 10.6866 } },
+          { name: "Flensburg", state: "Schleswig-Holstein", country: "Germany", coordinates: { lat: 54.7818, lng: 9.4368 } },
+          { name: "Neumünster", state: "Schleswig-Holstein", country: "Germany", coordinates: { lat: 54.0717, lng: 9.9817 } },
+          { name: "Norderstedt", state: "Schleswig-Holstein", country: "Germany", coordinates: { lat: 53.7000, lng: 9.9833 } }
+        ]
+      },
+      {
+        name: "Brandenburg",
+        country: "Germany",
+        cities: [
+          { name: "Potsdam", state: "Brandenburg", country: "Germany", coordinates: { lat: 52.4009, lng: 13.0592 } },
+          { name: "Cottbus", state: "Brandenburg", country: "Germany", coordinates: { lat: 51.7606, lng: 14.3342 } },
+          { name: "Brandenburg an der Havel", state: "Brandenburg", country: "Germany", coordinates: { lat: 52.4125, lng: 12.5316 } },
+          { name: "Frankfurt (Oder)", state: "Brandenburg", country: "Germany", coordinates: { lat: 52.3471, lng: 14.5506 } },
+          { name: "Eberswalde", state: "Brandenburg", country: "Germany", coordinates: { lat: 52.8333, lng: 13.8167 } }
+        ]
+      },
+      {
+        name: "Mecklenburg-Vorpommern",
+        country: "Germany",
+        cities: [
+          { name: "Rostock", state: "Mecklenburg-Vorpommern", country: "Germany", coordinates: { lat: 54.0924, lng: 12.0991 } },
+          { name: "Schwerin", state: "Mecklenburg-Vorpommern", country: "Germany", coordinates: { lat: 53.6355, lng: 11.4012 } },
+          { name: "Neubrandenburg", state: "Mecklenburg-Vorpommern", country: "Germany", coordinates: { lat: 53.5573, lng: 13.2610 } },
+          { name: "Stralsund", state: "Mecklenburg-Vorpommern", country: "Germany", coordinates: { lat: 54.3089, lng: 13.0819 } },
+          { name: "Greifswald", state: "Mecklenburg-Vorpommern", country: "Germany", coordinates: { lat: 54.0969, lng: 13.3876 } }
+        ]
+      },
+      {
+        name: "Saxony-Anhalt",
+        country: "Germany",
+        cities: [
+          { name: "Magdeburg", state: "Saxony-Anhalt", country: "Germany", coordinates: { lat: 52.1205, lng: 11.6276 } },
+          { name: "Halle", state: "Saxony-Anhalt", country: "Germany", coordinates: { lat: 51.4962, lng: 11.9688 } },
+          { name: "Dessau-Roßlau", state: "Saxony-Anhalt", country: "Germany", coordinates: { lat: 51.8400, lng: 12.2500 } },
+          { name: "Wittenberg", state: "Saxony-Anhalt", country: "Germany", coordinates: { lat: 51.8667, lng: 12.6333 } },
+          { name: "Stendal", state: "Saxony-Anhalt", country: "Germany", coordinates: { lat: 52.6000, lng: 11.8500 } }
+        ]
+      },
+      {
+        name: "Thuringia",
+        country: "Germany",
+        cities: [
+          { name: "Erfurt", state: "Thuringia", country: "Germany", coordinates: { lat: 50.9848, lng: 11.0299 } },
+          { name: "Jena", state: "Thuringia", country: "Germany", coordinates: { lat: 50.9279, lng: 11.5862 } },
+          { name: "Gera", state: "Thuringia", country: "Germany", coordinates: { lat: 50.8808, lng: 12.0819 } },
+          { name: "Weimar", state: "Thuringia", country: "Germany", coordinates: { lat: 50.9795, lng: 11.3235 } },
+          { name: "Gotha", state: "Thuringia", country: "Germany", coordinates: { lat: 50.9482, lng: 10.7019 } }
+        ]
+      },
+      {
+        name: "Saarland",
+        country: "Germany",
+        cities: [
+          { name: "Saarbrücken", state: "Saarland", country: "Germany", coordinates: { lat: 49.2402, lng: 6.9969 } },
+          { name: "Neunkirchen", state: "Saarland", country: "Germany", coordinates: { lat: 49.3444, lng: 7.1806 } },
+          { name: "Homburg", state: "Saarland", country: "Germany", coordinates: { lat: 49.3167, lng: 7.3333 } },
+          { name: "Völklingen", state: "Saarland", country: "Germany", coordinates: { lat: 49.2500, lng: 6.8500 } },
+          { name: "Sankt Ingbert", state: "Saarland", country: "Germany", coordinates: { lat: 49.3000, lng: 7.1167 } }
+        ]
       }
     ]
   },
@@ -535,6 +675,127 @@ export const citiesData: Country[] = [
           { name: "Aix-en-Provence", state: "Provence-Alpes-Côte d'Azur", country: "France", coordinates: { lat: 43.5263, lng: 5.4454 } },
           { name: "Avignon", state: "Provence-Alpes-Côte d'Azur", country: "France", coordinates: { lat: 43.9493, lng: 4.8055 } }
         ]
+      },
+      {
+        name: "Auvergne-Rhône-Alpes",
+        country: "France",
+        cities: [
+          { name: "Lyon", state: "Auvergne-Rhône-Alpes", country: "France", coordinates: { lat: 45.7640, lng: 4.8357 } },
+          { name: "Saint-Étienne", state: "Auvergne-Rhône-Alpes", country: "France", coordinates: { lat: 45.4397, lng: 4.3872 } },
+          { name: "Grenoble", state: "Auvergne-Rhône-Alpes", country: "France", coordinates: { lat: 45.1885, lng: 5.7245 } },
+          { name: "Villeurbanne", state: "Auvergne-Rhône-Alpes", country: "France", coordinates: { lat: 45.7667, lng: 4.8833 } },
+          { name: "Clermont-Ferrand", state: "Auvergne-Rhône-Alpes", country: "France", coordinates: { lat: 45.7772, lng: 3.0870 } }
+        ]
+      },
+      {
+        name: "Hauts-de-France",
+        country: "France",
+        cities: [
+          { name: "Lille", state: "Hauts-de-France", country: "France", coordinates: { lat: 50.6292, lng: 3.0573 } },
+          { name: "Amiens", state: "Hauts-de-France", country: "France", coordinates: { lat: 49.8943, lng: 2.2958 } },
+          { name: "Roubaix", state: "Hauts-de-France", country: "France", coordinates: { lat: 50.6927, lng: 3.1762 } },
+          { name: "Tourcoing", state: "Hauts-de-France", country: "France", coordinates: { lat: 50.7239, lng: 3.1612 } },
+          { name: "Dunkerque", state: "Hauts-de-France", country: "France", coordinates: { lat: 51.0344, lng: 2.3768 } }
+        ]
+      },
+      {
+        name: "Grand Est",
+        country: "France",
+        cities: [
+          { name: "Strasbourg", state: "Grand Est", country: "France", coordinates: { lat: 48.5734, lng: 7.7521 } },
+          { name: "Reims", state: "Grand Est", country: "France", coordinates: { lat: 49.2583, lng: 4.0317 } },
+          { name: "Metz", state: "Grand Est", country: "France", coordinates: { lat: 49.1193, lng: 6.1757 } },
+          { name: "Mulhouse", state: "Grand Est", country: "France", coordinates: { lat: 47.7508, lng: 7.3356 } },
+          { name: "Nancy", state: "Grand Est", country: "France", coordinates: { lat: 48.6921, lng: 6.1844 } }
+        ]
+      },
+      {
+        name: "Brittany",
+        country: "France",
+        cities: [
+          { name: "Rennes", state: "Brittany", country: "France", coordinates: { lat: 48.1173, lng: -1.6778 } },
+          { name: "Brest", state: "Brittany", country: "France", coordinates: { lat: 48.3905, lng: -4.4860 } },
+          { name: "Quimper", state: "Brittany", country: "France", coordinates: { lat: 47.9961, lng: -4.0969 } },
+          { name: "Lorient", state: "Brittany", country: "France", coordinates: { lat: 47.7500, lng: -3.3667 } },
+          { name: "Vannes", state: "Brittany", country: "France", coordinates: { lat: 47.6582, lng: -2.7608 } }
+        ]
+      },
+      {
+        name: "Normandy",
+        country: "France",
+        cities: [
+          { name: "Rouen", state: "Normandy", country: "France", coordinates: { lat: 49.4432, lng: 1.0993 } },
+          { name: "Le Havre", state: "Normandy", country: "France", coordinates: { lat: 49.4944, lng: 0.1079 } },
+          { name: "Caen", state: "Normandy", country: "France", coordinates: { lat: 49.1829, lng: -0.3707 } },
+          { name: "Cherbourg", state: "Normandy", country: "France", coordinates: { lat: 49.6333, lng: -1.6167 } },
+          { name: "Évreux", state: "Normandy", country: "France", coordinates: { lat: 49.0247, lng: 1.1508 } }
+        ]
+      },
+      {
+        name: "Nouvelle-Aquitaine",
+        country: "France",
+        cities: [
+          { name: "Bordeaux", state: "Nouvelle-Aquitaine", country: "France", coordinates: { lat: 44.8378, lng: -0.5792 } },
+          { name: "Limoges", state: "Nouvelle-Aquitaine", country: "France", coordinates: { lat: 45.8336, lng: 1.2611 } },
+          { name: "Poitiers", state: "Nouvelle-Aquitaine", country: "France", coordinates: { lat: 46.5802, lng: 0.3404 } },
+          { name: "La Rochelle", state: "Nouvelle-Aquitaine", country: "France", coordinates: { lat: 46.1603, lng: -1.1511 } },
+          { name: "Pau", state: "Nouvelle-Aquitaine", country: "France", coordinates: { lat: 43.2951, lng: -0.3707 } }
+        ]
+      },
+      {
+        name: "Occitanie",
+        country: "France",
+        cities: [
+          { name: "Toulouse", state: "Occitanie", country: "France", coordinates: { lat: 43.6047, lng: 1.4442 } },
+          { name: "Montpellier", state: "Occitanie", country: "France", coordinates: { lat: 43.6110, lng: 3.8767 } },
+          { name: "Nîmes", state: "Occitanie", country: "France", coordinates: { lat: 43.8367, lng: 4.3601 } },
+          { name: "Perpignan", state: "Occitanie", country: "France", coordinates: { lat: 42.6886, lng: 2.8948 } },
+          { name: "Béziers", state: "Occitanie", country: "France", coordinates: { lat: 43.3472, lng: 3.2150 } }
+        ]
+      },
+      {
+        name: "Centre-Val de Loire",
+        country: "France",
+        cities: [
+          { name: "Tours", state: "Centre-Val de Loire", country: "France", coordinates: { lat: 47.3941, lng: 0.6848 } },
+          { name: "Orléans", state: "Centre-Val de Loire", country: "France", coordinates: { lat: 47.9029, lng: 1.9093 } },
+          { name: "Blois", state: "Centre-Val de Loire", country: "France", coordinates: { lat: 47.5861, lng: 1.3359 } },
+          { name: "Bourges", state: "Centre-Val de Loire", country: "France", coordinates: { lat: 47.0810, lng: 2.3988 } },
+          { name: "Châteauroux", state: "Centre-Val de Loire", country: "France", coordinates: { lat: 46.8117, lng: 1.6906 } }
+        ]
+      },
+      {
+        name: "Bourgogne-Franche-Comté",
+        country: "France",
+        cities: [
+          { name: "Dijon", state: "Bourgogne-Franche-Comté", country: "France", coordinates: { lat: 47.3220, lng: 5.0415 } },
+          { name: "Besançon", state: "Bourgogne-Franche-Comté", country: "France", coordinates: { lat: 47.2380, lng: 6.0223 } },
+          { name: "Belfort", state: "Bourgogne-Franche-Comté", country: "France", coordinates: { lat: 47.6379, lng: 6.8629 } },
+          { name: "Chalon-sur-Saône", state: "Bourgogne-Franche-Comté", country: "France", coordinates: { lat: 46.7806, lng: 4.8531 } },
+          { name: "Auxerre", state: "Bourgogne-Franche-Comté", country: "France", coordinates: { lat: 47.7974, lng: 3.5700 } }
+        ]
+      },
+      {
+        name: "Pays de la Loire",
+        country: "France",
+        cities: [
+          { name: "Nantes", state: "Pays de la Loire", country: "France", coordinates: { lat: 47.2184, lng: -1.5536 } },
+          { name: "Angers", state: "Pays de la Loire", country: "France", coordinates: { lat: 47.4784, lng: -0.5632 } },
+          { name: "Le Mans", state: "Pays de la Loire", country: "France", coordinates: { lat: 48.0061, lng: 0.1996 } },
+          { name: "Saint-Nazaire", state: "Pays de la Loire", country: "France", coordinates: { lat: 47.2730, lng: -2.2139 } },
+          { name: "Cholet", state: "Pays de la Loire", country: "France", coordinates: { lat: 47.0594, lng: -0.8785 } }
+        ]
+      },
+      {
+        name: "Corsica",
+        country: "France",
+        cities: [
+          { name: "Ajaccio", state: "Corsica", country: "France", coordinates: { lat: 41.9267, lng: 8.7369 } },
+          { name: "Bastia", state: "Corsica", country: "France", coordinates: { lat: 42.7011, lng: 9.4500 } },
+          { name: "Porto-Vecchio", state: "Corsica", country: "France", coordinates: { lat: 41.5906, lng: 9.2792 } },
+          { name: "Corte", state: "Corsica", country: "France", coordinates: { lat: 42.3061, lng: 9.1500 } },
+          { name: "Calvi", state: "Corsica", country: "France", coordinates: { lat: 42.5667, lng: 8.7500 } }
+        ]
       }
     ]
   },
@@ -562,6 +823,72 @@ export const citiesData: Country[] = [
           { name: "Ballarat", state: "Victoria", country: "Australia", coordinates: { lat: -37.5622, lng: 143.8503 } },
           { name: "Bendigo", state: "Victoria", country: "Australia", coordinates: { lat: -36.7570, lng: 144.2792 } },
           { name: "Shepparton", state: "Victoria", country: "Australia", coordinates: { lat: -36.3773, lng: 145.3985 } }
+        ]
+      },
+      {
+        name: "Queensland",
+        country: "Australia",
+        cities: [
+          { name: "Brisbane", state: "Queensland", country: "Australia", coordinates: { lat: -27.4698, lng: 153.0251 } },
+          { name: "Gold Coast", state: "Queensland", country: "Australia", coordinates: { lat: -28.0167, lng: 153.4000 } },
+          { name: "Townsville", state: "Queensland", country: "Australia", coordinates: { lat: -19.2590, lng: 146.8169 } },
+          { name: "Cairns", state: "Queensland", country: "Australia", coordinates: { lat: -16.9186, lng: 145.7781 } },
+          { name: "Toowoomba", state: "Queensland", country: "Australia", coordinates: { lat: -27.5598, lng: 151.9507 } }
+        ]
+      },
+      {
+        name: "Western Australia",
+        country: "Australia",
+        cities: [
+          { name: "Perth", state: "Western Australia", country: "Australia", coordinates: { lat: -31.9505, lng: 115.8605 } },
+          { name: "Fremantle", state: "Western Australia", country: "Australia", coordinates: { lat: -32.0567, lng: 115.7478 } },
+          { name: "Rockingham", state: "Western Australia", country: "Australia", coordinates: { lat: -32.2833, lng: 115.7167 } },
+          { name: "Mandurah", state: "Western Australia", country: "Australia", coordinates: { lat: -32.5333, lng: 115.7333 } },
+          { name: "Bunbury", state: "Western Australia", country: "Australia", coordinates: { lat: -33.3333, lng: 115.6333 } }
+        ]
+      },
+      {
+        name: "South Australia",
+        country: "Australia",
+        cities: [
+          { name: "Adelaide", state: "South Australia", country: "Australia", coordinates: { lat: -34.9285, lng: 138.6007 } },
+          { name: "Mount Gambier", state: "South Australia", country: "Australia", coordinates: { lat: -37.8333, lng: 140.7667 } },
+          { name: "Whyalla", state: "South Australia", country: "Australia", coordinates: { lat: -33.0333, lng: 137.5833 } },
+          { name: "Murray Bridge", state: "South Australia", country: "Australia", coordinates: { lat: -35.1167, lng: 139.2667 } },
+          { name: "Port Augusta", state: "South Australia", country: "Australia", coordinates: { lat: -32.4833, lng: 137.7500 } }
+        ]
+      },
+      {
+        name: "Tasmania",
+        country: "Australia",
+        cities: [
+          { name: "Hobart", state: "Tasmania", country: "Australia", coordinates: { lat: -42.8821, lng: 147.3272 } },
+          { name: "Launceston", state: "Tasmania", country: "Australia", coordinates: { lat: -41.4333, lng: 147.1333 } },
+          { name: "Devonport", state: "Tasmania", country: "Australia", coordinates: { lat: -41.1833, lng: 146.3500 } },
+          { name: "Burnie", state: "Tasmania", country: "Australia", coordinates: { lat: -41.0667, lng: 145.9167 } },
+          { name: "Ulverstone", state: "Tasmania", country: "Australia", coordinates: { lat: -41.1500, lng: 146.1667 } }
+        ]
+      },
+      {
+        name: "Australian Capital Territory",
+        country: "Australia",
+        cities: [
+          { name: "Canberra", state: "Australian Capital Territory", country: "Australia", coordinates: { lat: -35.2809, lng: 149.1300 } },
+          { name: "Gungahlin", state: "Australian Capital Territory", country: "Australia", coordinates: { lat: -35.1833, lng: 149.1333 } },
+          { name: "Tuggeranong", state: "Australian Capital Territory", country: "Australia", coordinates: { lat: -35.4167, lng: 149.0833 } },
+          { name: "Belconnen", state: "Australian Capital Territory", country: "Australia", coordinates: { lat: -35.2333, lng: 149.0833 } },
+          { name: "Weston Creek", state: "Australian Capital Territory", country: "Australia", coordinates: { lat: -35.3167, lng: 149.0500 } }
+        ]
+      },
+      {
+        name: "Northern Territory",
+        country: "Australia",
+        cities: [
+          { name: "Darwin", state: "Northern Territory", country: "Australia", coordinates: { lat: -12.4634, lng: 130.8456 } },
+          { name: "Alice Springs", state: "Northern Territory", country: "Australia", coordinates: { lat: -23.7000, lng: 133.8667 } },
+          { name: "Katherine", state: "Northern Territory", country: "Australia", coordinates: { lat: -14.4667, lng: 132.2667 } },
+          { name: "Palmerston", state: "Northern Territory", country: "Australia", coordinates: { lat: -12.4833, lng: 130.9833 } },
+          { name: "Nhulunbuy", state: "Northern Territory", country: "Australia", coordinates: { lat: -12.1833, lng: 136.7833 } }
         ]
       }
     ]
