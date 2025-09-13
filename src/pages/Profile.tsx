@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import SkillSelector from "@/components/SkillSelector";
 import CountrySelector from "@/components/CountrySelector";
+import CitySelector from "@/components/CitySelector";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ProfileNavigation from "@/components/ProfileNavigation";
@@ -26,7 +27,7 @@ const profileFormSchema = z.object({
   country: z.string().min(1, "Please select a country"),
   bio: z.string().max(500, "Bio must be less than 500 characters"),
   hourlyRate: z.string().optional().or(z.literal("")),
-  location: z.string().min(2, "Location must be at least 2 characters"),
+  location: z.string().optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileFormSchema>;
@@ -45,6 +46,8 @@ export default function Profile() {
       ? user.user_metadata.skills 
       : user?.user_metadata?.skills?.split(',').filter(Boolean) || []
   );
+
+  const [selectedCity, setSelectedCity] = useState<any>(null);
 
   const [profileData, setProfileData] = useState({
     fullName: user?.user_metadata?.full_name || '',
@@ -83,6 +86,11 @@ export default function Profile() {
     
     setIsSaving(true);
     try {
+      // Prepare location data
+      const locationData = selectedCity 
+        ? `${selectedCity.name}, ${selectedCity.state}, ${selectedCity.country}`
+        : data.location || '';
+
       // Upsert profile data to the profiles table
       const { error } = await supabase
         .from('profiles')
@@ -94,7 +102,7 @@ export default function Profile() {
           bio: data.bio,
           skills: selectedSkills,
           hourly_rate: parseFloat(data.hourlyRate) || null,
-          location: data.location,
+          location: locationData,
           avatar_url: profileData.avatarUrl,
         });
 
@@ -110,7 +118,7 @@ export default function Profile() {
         country: data.country,
         bio: data.bio,
         hourlyRate: data.hourlyRate,
-        location: data.location,
+        location: locationData,
         skills: selectedSkills
       }));
       setIsEditing(false);
@@ -366,14 +374,22 @@ export default function Profile() {
                       disabled={!isEditing}
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="location">Location</Label>
-                    <Input
-                      id="location"
-                      {...register("location")}
-                      disabled={!isEditing}
-                      placeholder="City, Country"
-                    />
+                  <div className="md:col-span-2">
+                    <Label>Location</Label>
+                    {isEditing ? (
+                      <CitySelector
+                        value={profileData.location}
+                        onChange={setSelectedCity}
+                        placeholder="Select your city..."
+                        disabled={!isEditing}
+                      />
+                    ) : (
+                      <div className="mt-2 p-3 bg-muted rounded-md">
+                        <p className="text-sm">
+                          {profileData.location || "No location set"}
+                        </p>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <Label htmlFor="hourlyRate">Hourly Rate ($)</Label>
