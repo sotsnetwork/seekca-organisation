@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
-import { User, Briefcase, MessageSquare, Settings } from "lucide-react";
+import { User, Briefcase, MessageSquare, Settings, Target } from "lucide-react";
 
 export default function ProfileNavigation() {
   const location = useLocation();
@@ -8,6 +8,7 @@ export default function ProfileNavigation() {
   const navItems = [
     { path: "/profile", label: "Profile", icon: User },
     { path: "/portfolio", label: "Portfolio", icon: Briefcase },
+    { path: "/projects", label: "Projects", icon: Target },
     { path: "/messages", label: "Messages", icon: MessageSquare },
     { path: "/settings", label: "Settings", icon: Settings },
   ];
