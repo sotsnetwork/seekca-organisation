@@ -14,6 +14,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
+import { getCountries, getStatesByCountry, getAllCitiesByCountry, searchCities, type City } from "@/data/cities";
+import CitySelector from "@/components/CitySelector";
 
 interface Professional {
   id: string;
@@ -41,6 +43,7 @@ export default function Professionals() {
   const [countryFilter, setCountryFilter] = useState("");
   const [stateFilter, setStateFilter] = useState("");
   const [cityFilter, setCityFilter] = useState("");
+  const [selectedCity, setSelectedCity] = useState<City | null>(null);
   const [townFilter, setTownFilter] = useState("");
   const [ratingFilter, setRatingFilter] = useState("");
   const [availabilityFilter, setAvailabilityFilter] = useState("");
@@ -210,11 +213,14 @@ export default function Professionals() {
       professional.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       professional.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
     
-    // Hierarchical location filters
+    // Country filter
     const matchesCountry = countryFilter === "" || countryFilter === "all-countries" || professional.country === countryFilter;
-    const matchesState = stateFilter === "" || stateFilter === "all-states" || professional.state === stateFilter;
-    const matchesCity = cityFilter === "" || cityFilter === "all-cities" || professional.city === cityFilter;
-    const matchesTown = townFilter === "" || townFilter === "all-towns" || professional.town === townFilter;
+    
+    // City filter using selectedCity
+    const matchesCity = !selectedCity || 
+      professional.location.toLowerCase().includes(selectedCity.name.toLowerCase()) ||
+      professional.location.toLowerCase().includes(selectedCity.state.toLowerCase()) ||
+      professional.location.toLowerCase().includes(selectedCity.country.toLowerCase());
     
     // Nearby filter
     const matchesNearby = !nearbyFilter || (userLocation && 
@@ -239,7 +245,7 @@ export default function Professionals() {
       (availabilityFilter === "available" && Math.random() > 0.3) || // Mock availability
       (availabilityFilter === "busy" && Math.random() < 0.3);
     
-    return matchesSearch && matchesCountry && matchesState && matchesCity && matchesTown && matchesNearby && matchesRating && matchesPriceRange && matchesVerified && matchesAvailability;
+    return matchesSearch && matchesCountry && matchesCity && matchesNearby && matchesRating && matchesPriceRange && matchesVerified && matchesAvailability;
   });
 
   // Sort professionals
@@ -266,6 +272,7 @@ export default function Professionals() {
     setCountryFilter("");
     setStateFilter("");
     setCityFilter("");
+    setSelectedCity(null);
     setTownFilter("");
     setRatingFilter("");
     setAvailabilityFilter("");
@@ -281,9 +288,7 @@ export default function Professionals() {
     skillFilter && skillFilter !== "all-skills" ? skillFilter : "",
     rateFilter,
     countryFilter && countryFilter !== "all-countries" ? countryFilter : "",
-    stateFilter && stateFilter !== "all-states" ? stateFilter : "",
-    cityFilter && cityFilter !== "all-cities" ? cityFilter : "",
-    townFilter && townFilter !== "all-towns" ? townFilter : "",
+    selectedCity ? `${selectedCity.name}, ${selectedCity.state}` : "",
     ratingFilter && ratingFilter !== "any-rating" ? ratingFilter : "",
     availabilityFilter && availabilityFilter !== "any-availability" ? availabilityFilter : "",
     verifiedFilter,
@@ -447,54 +452,11 @@ export default function Professionals() {
                     {/* Location Filters */}
                     <div>
                       <Label className="text-sm font-medium mb-3 block">Location</Label>
-                      <div className="grid grid-cols-2 gap-3">
-                        <Select value={stateFilter} onValueChange={(value) => {
-                          setStateFilter(value);
-                          setCityFilter("");
-                          setTownFilter("");
-                        }}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="State/Province" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all-states">All States</SelectItem>
-                          {filteredStates.map((state) => (
-                            <SelectItem key={String(state)} value={String(state)}>
-                              {String(state)}
-                            </SelectItem>
-                          ))}
-                          </SelectContent>
-                        </Select>
-                        <Select value={cityFilter} onValueChange={(value) => {
-                          setCityFilter(value);
-                          setTownFilter("");
-                        }}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="City" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all-cities">All Cities</SelectItem>
-                          {filteredCities.map((city) => (
-                            <SelectItem key={String(city)} value={String(city)}>
-                              {String(city)}
-                            </SelectItem>
-                          ))}
-                          </SelectContent>
-                        </Select>
-                        <Select value={townFilter} onValueChange={setTownFilter}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Town/Area" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all-towns">All Towns</SelectItem>
-                          {filteredTowns.map((town) => (
-                            <SelectItem key={String(town)} value={String(town)}>
-                              {String(town)}
-                            </SelectItem>
-                          ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                      <CitySelector
+                        value={selectedCity ? `${selectedCity.name}, ${selectedCity.state}` : ""}
+                        onChange={setSelectedCity}
+                        placeholder="Select a city to filter by location..."
+                      />
                     </div>
 
                     {/* Skills Filter */}
