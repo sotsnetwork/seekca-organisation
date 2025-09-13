@@ -44,7 +44,8 @@ export default function Settings() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      <div className="max-w-4xl mx-auto px-6 py-8">
+      <ProfileNavigation />
+      <main className="max-w-4xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <Button variant="outline" size="sm" asChild>
@@ -234,7 +235,7 @@ export default function Settings() {
             </Button>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
