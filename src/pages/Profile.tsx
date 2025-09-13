@@ -93,23 +93,48 @@ export default function Profile() {
         ? `${selectedCity.name}, ${selectedCity.state}, ${selectedCity.country}`
         : data.location || '';
 
-      // Upsert profile data to the profiles table
-      const { error } = await supabase
-        .from('profiles')
-        .upsert({
-          user_id: user.id,
-          full_name: data.fullName,
-          nickname: data.nickname,
-          country: data.country,
-          bio: data.bio,
-          skills: selectedSkills,
-          hourly_rate: parseFloat(data.hourlyRate) || null,
-          location: locationData,
-          avatar_url: profileData.avatarUrl,
+      // Try to upsert profile data to the profiles table first
+      let profileError = null;
+      try {
+        const { error } = await supabase
+          .from('profiles')
+          .upsert({
+            user_id: user.id,
+            full_name: data.fullName,
+            nickname: data.nickname,
+            country: data.country,
+            bio: data.bio,
+            skills: selectedSkills,
+            hourly_rate: parseFloat(data.hourlyRate) || null,
+            location: locationData,
+            avatar_url: profileData.avatarUrl,
+          });
+        profileError = error;
+      } catch (err) {
+        console.warn('Profiles table might not exist, falling back to user metadata:', err);
+        profileError = err;
+      }
+
+      // If profiles table doesn't exist or has issues, fall back to user metadata
+      if (profileError) {
+        console.log('Falling back to user metadata update');
+        const { error: metadataError } = await supabase.auth.updateUser({
+          data: {
+            full_name: data.fullName,
+            nickname: data.nickname,
+            country: data.country,
+            bio: data.bio,
+            skills: selectedSkills,
+            hourly_rate: parseFloat(data.hourlyRate) || null,
+            location: locationData,
+            avatar_url: profileData.avatarUrl,
+          }
         });
 
-      if (error) {
-        throw error;
+        if (metadataError) {
+          console.error('Profile update error (metadata fallback):', metadataError);
+          throw new Error(`Failed to update profile: ${metadataError.message}`);
+        }
       }
 
       // Ensure user role is preserved in user_roles table
@@ -126,6 +151,17 @@ export default function Profile() {
       if (roleError) {
         console.warn('Warning: Could not update user role:', roleError);
         // Don't throw error here as profile update is more important
+        // But we should still try to update user metadata as fallback
+        try {
+          const { error: metadataError } = await supabase.auth.updateUser({
+            data: { role: currentRole }
+          });
+          if (metadataError) {
+            console.warn('Could not update user metadata either:', metadataError);
+          }
+        } catch (metadataErr) {
+          console.warn('Exception updating user metadata:', metadataErr);
+        }
       }
 
       // Invalidate and refetch user role to ensure UI updates
