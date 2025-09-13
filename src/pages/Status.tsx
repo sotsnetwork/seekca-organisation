@@ -17,8 +17,9 @@ import {
   Activity
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import ProfileNavigation from "@/components/ProfileNavigation";
 import { useAuth } from "@/hooks/use-auth";
+import AppHeader from "@/components/AppHeader";
+import Footer from "@/components/Footer";
 
 interface ServiceStatus {
   name: string;
@@ -207,7 +208,7 @@ export default function Status() {
 
   return (
     <div className="min-h-screen bg-background">
-      {user && <ProfileNavigation />}
+      <AppHeader />
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -398,6 +399,8 @@ export default function Status() {
           </p>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 }
