@@ -22,7 +22,6 @@ import {
   Clock
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import ProfileNavigation from "@/components/ProfileNavigation";
 import { useAuth } from "@/hooks/use-auth";
 import AppHeader from "@/components/AppHeader";
 import Footer from "@/components/Footer";
@@ -193,7 +192,6 @@ export default function Community() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      {user && <ProfileNavigation />}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="text-center mb-12">
