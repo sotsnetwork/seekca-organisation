@@ -21,135 +21,14 @@ export interface Country {
   states: State[];
 }
 
+import { nigeriaStates } from './nigeria-states';
+
 // Comprehensive cities data for global coverage
 export const citiesData: Country[] = [
   {
     name: "Nigeria",
     code: "NG",
-    states: [
-      {
-        name: "Lagos",
-        country: "Nigeria",
-        cities: [
-          { name: "Lagos", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.5244, lng: 3.3792 } },
-          { name: "Ikeja", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.6059, lng: 3.3491 } },
-          { name: "Victoria Island", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4281, lng: 3.4219 } },
-          { name: "Surulere", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4994, lng: 3.3556 } },
-          { name: "Yaba", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4531, lng: 3.3958 } },
-          { name: "Ikoyi", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4528, lng: 3.4358 } },
-          { name: "Lekki", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4698, lng: 3.5852 } },
-          { name: "Ajah", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4531, lng: 3.6156 } },
-          { name: "Badagry", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4158, lng: 2.8853 } },
-          { name: "Epe", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.5833, lng: 3.9833 } },
-          { name: "Alaba", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4500, lng: 3.3000 } },
-          { name: "Apapa", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4500, lng: 3.3500 } },
-          { name: "Mushin", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.5167, lng: 3.3500 } },
-          { name: "Oshodi", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.5500, lng: 3.3167 } },
-          { name: "Agege", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.6167, lng: 3.3167 } }
-        ]
-      },
-      {
-        name: "Abuja",
-        country: "Nigeria",
-        cities: [
-          { name: "Abuja", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.0765, lng: 7.3986 } },
-          { name: "Garki", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.0500, lng: 7.4833 } },
-          { name: "Wuse", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.0667, lng: 7.4833 } },
-          { name: "Asokoro", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.0833, lng: 7.5167 } },
-          { name: "Maitama", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.1000, lng: 7.5000 } },
-          { name: "Gwarinpa", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.0833, lng: 7.4500 } },
-          { name: "Kubwa", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.1167, lng: 7.4000 } },
-          { name: "Lugbe", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.0500, lng: 7.4000 } }
-        ]
-      },
-      {
-        name: "Rivers",
-        country: "Nigeria",
-        cities: [
-          { name: "Port Harcourt", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.8156, lng: 7.0498 } },
-          { name: "Obio-Akpor", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.8333, lng: 7.0167 } },
-          { name: "Eleme", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.7000, lng: 7.2000 } },
-          { name: "Okrika", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.7333, lng: 7.0833 } },
-          { name: "Bonny", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.4500, lng: 7.1667 } },
-          { name: "Degema", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.7500, lng: 6.7667 } }
-        ]
-      },
-      {
-        name: "Kano",
-        country: "Nigeria",
-        cities: [
-          { name: "Kano", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0022, lng: 8.5920 } },
-          { name: "Fagge", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0167, lng: 8.5500 } },
-          { name: "Nassarawa", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0000, lng: 8.6000 } },
-          { name: "Dala", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0000, lng: 8.5500 } },
-          { name: "Gwale", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0000, lng: 8.6000 } },
-          { name: "Tarauni", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0000, lng: 8.6000 } }
-        ]
-      },
-      {
-        name: "Ogun",
-        country: "Nigeria",
-        cities: [
-          { name: "Abeokuta", state: "Ogun", country: "Nigeria", coordinates: { lat: 7.1557, lng: 3.3451 } },
-          { name: "Sagamu", state: "Ogun", country: "Nigeria", coordinates: { lat: 6.8333, lng: 3.6500 } },
-          { name: "Ijebu Ode", state: "Ogun", country: "Nigeria", coordinates: { lat: 6.8167, lng: 3.9167 } },
-          { name: "Ota", state: "Ogun", country: "Nigeria", coordinates: { lat: 6.6833, lng: 3.1833 } },
-          { name: "Ifo", state: "Ogun", country: "Nigeria", coordinates: { lat: 6.8167, lng: 3.2000 } },
-          { name: "Ilaro", state: "Ogun", country: "Nigeria", coordinates: { lat: 6.8833, lng: 3.0000 } }
-        ]
-      },
-      {
-        name: "Kaduna",
-        country: "Nigeria",
-        cities: [
-          { name: "Kaduna", state: "Kaduna", country: "Nigeria", coordinates: { lat: 10.5200, lng: 7.4383 } },
-          { name: "Zaria", state: "Kaduna", country: "Nigeria", coordinates: { lat: 11.0833, lng: 7.7167 } },
-          { name: "Kafanchan", state: "Kaduna", country: "Nigeria", coordinates: { lat: 9.5833, lng: 8.3000 } },
-          { name: "Kagoro", state: "Kaduna", country: "Nigeria", coordinates: { lat: 9.6167, lng: 8.3833 } }
-        ]
-      },
-      {
-        name: "Oyo",
-        country: "Nigeria",
-        cities: [
-          { name: "Ibadan", state: "Oyo", country: "Nigeria", coordinates: { lat: 7.3776, lng: 3.9470 } },
-          { name: "Ogbomoso", state: "Oyo", country: "Nigeria", coordinates: { lat: 8.1333, lng: 4.2500 } },
-          { name: "Oyo", state: "Oyo", country: "Nigeria", coordinates: { lat: 7.8500, lng: 3.9333 } },
-          { name: "Iseyin", state: "Oyo", country: "Nigeria", coordinates: { lat: 7.9667, lng: 3.6000 } },
-          { name: "Kishi", state: "Oyo", country: "Nigeria", coordinates: { lat: 9.0833, lng: 3.8500 } }
-        ]
-      },
-      {
-        name: "Edo",
-        country: "Nigeria",
-        cities: [
-          { name: "Benin City", state: "Edo", country: "Nigeria", coordinates: { lat: 6.3350, lng: 5.6037 } },
-          { name: "Auchi", state: "Edo", country: "Nigeria", coordinates: { lat: 7.0667, lng: 6.2667 } },
-          { name: "Ekpoma", state: "Edo", country: "Nigeria", coordinates: { lat: 6.7500, lng: 6.1333 } },
-          { name: "Uromi", state: "Edo", country: "Nigeria", coordinates: { lat: 6.7000, lng: 6.3333 } }
-        ]
-      },
-      {
-        name: "Delta",
-        country: "Nigeria",
-        cities: [
-          { name: "Asaba", state: "Delta", country: "Nigeria", coordinates: { lat: 6.1833, lng: 6.7500 } },
-          { name: "Warri", state: "Delta", country: "Nigeria", coordinates: { lat: 5.5167, lng: 5.7500 } },
-          { name: "Sapele", state: "Delta", country: "Nigeria", coordinates: { lat: 5.9000, lng: 5.6833 } },
-          { name: "Ughelli", state: "Delta", country: "Nigeria", coordinates: { lat: 5.5000, lng: 6.0000 } }
-        ]
-      },
-      {
-        name: "Enugu",
-        country: "Nigeria",
-        cities: [
-          { name: "Enugu", state: "Enugu", country: "Nigeria", coordinates: { lat: 6.4500, lng: 7.5000 } },
-          { name: "Nsukka", state: "Enugu", country: "Nigeria", coordinates: { lat: 6.8500, lng: 7.4000 } },
-          { name: "Awgu", state: "Enugu", country: "Nigeria", coordinates: { lat: 6.0833, lng: 7.4667 } },
-          { name: "Oji River", state: "Enugu", country: "Nigeria", coordinates: { lat: 6.2500, lng: 7.3500 } }
-        ]
-      }
-    ]
+    states: nigeriaStates
   },
   {
     name: "United States",
