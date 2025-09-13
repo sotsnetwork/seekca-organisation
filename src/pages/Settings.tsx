@@ -10,6 +10,7 @@ import { ArrowLeft, Save, Bell, Shield, User, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import AppHeader from "@/components/AppHeader";
+import ProfileNavigation from "@/components/ProfileNavigation";
 
 export default function Settings() {
   const { user } = useAuth();
