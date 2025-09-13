@@ -21,7 +21,7 @@ export interface Country {
   states: State[];
 }
 
-// Major cities data for popular countries
+// Comprehensive cities data for global coverage
 export const citiesData: Country[] = [
   {
     name: "Nigeria",
@@ -40,7 +40,12 @@ export const citiesData: Country[] = [
           { name: "Lekki", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4698, lng: 3.5852 } },
           { name: "Ajah", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4531, lng: 3.6156 } },
           { name: "Badagry", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4158, lng: 2.8853 } },
-          { name: "Epe", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.5833, lng: 3.9833 } }
+          { name: "Epe", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.5833, lng: 3.9833 } },
+          { name: "Alaba", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4500, lng: 3.3000 } },
+          { name: "Apapa", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.4500, lng: 3.3500 } },
+          { name: "Mushin", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.5167, lng: 3.3500 } },
+          { name: "Oshodi", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.5500, lng: 3.3167 } },
+          { name: "Agege", state: "Lagos", country: "Nigeria", coordinates: { lat: 6.6167, lng: 3.3167 } }
         ]
       },
       {
@@ -51,7 +56,10 @@ export const citiesData: Country[] = [
           { name: "Garki", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.0500, lng: 7.4833 } },
           { name: "Wuse", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.0667, lng: 7.4833 } },
           { name: "Asokoro", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.0833, lng: 7.5167 } },
-          { name: "Maitama", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.1000, lng: 7.5000 } }
+          { name: "Maitama", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.1000, lng: 7.5000 } },
+          { name: "Gwarinpa", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.0833, lng: 7.4500 } },
+          { name: "Kubwa", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.1167, lng: 7.4000 } },
+          { name: "Lugbe", state: "Abuja", country: "Nigeria", coordinates: { lat: 9.0500, lng: 7.4000 } }
         ]
       },
       {
@@ -60,7 +68,10 @@ export const citiesData: Country[] = [
         cities: [
           { name: "Port Harcourt", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.8156, lng: 7.0498 } },
           { name: "Obio-Akpor", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.8333, lng: 7.0167 } },
-          { name: "Eleme", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.7000, lng: 7.2000 } }
+          { name: "Eleme", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.7000, lng: 7.2000 } },
+          { name: "Okrika", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.7333, lng: 7.0833 } },
+          { name: "Bonny", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.4500, lng: 7.1667 } },
+          { name: "Degema", state: "Rivers", country: "Nigeria", coordinates: { lat: 4.7500, lng: 6.7667 } }
         ]
       },
       {
@@ -69,7 +80,10 @@ export const citiesData: Country[] = [
         cities: [
           { name: "Kano", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0022, lng: 8.5920 } },
           { name: "Fagge", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0167, lng: 8.5500 } },
-          { name: "Nassarawa", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0000, lng: 8.6000 } }
+          { name: "Nassarawa", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0000, lng: 8.6000 } },
+          { name: "Dala", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0000, lng: 8.5500 } },
+          { name: "Gwale", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0000, lng: 8.6000 } },
+          { name: "Tarauni", state: "Kano", country: "Nigeria", coordinates: { lat: 12.0000, lng: 8.6000 } }
         ]
       },
       {
@@ -78,7 +92,61 @@ export const citiesData: Country[] = [
         cities: [
           { name: "Abeokuta", state: "Ogun", country: "Nigeria", coordinates: { lat: 7.1557, lng: 3.3451 } },
           { name: "Sagamu", state: "Ogun", country: "Nigeria", coordinates: { lat: 6.8333, lng: 3.6500 } },
-          { name: "Ijebu Ode", state: "Ogun", country: "Nigeria", coordinates: { lat: 6.8167, lng: 3.9167 } }
+          { name: "Ijebu Ode", state: "Ogun", country: "Nigeria", coordinates: { lat: 6.8167, lng: 3.9167 } },
+          { name: "Ota", state: "Ogun", country: "Nigeria", coordinates: { lat: 6.6833, lng: 3.1833 } },
+          { name: "Ifo", state: "Ogun", country: "Nigeria", coordinates: { lat: 6.8167, lng: 3.2000 } },
+          { name: "Ilaro", state: "Ogun", country: "Nigeria", coordinates: { lat: 6.8833, lng: 3.0000 } }
+        ]
+      },
+      {
+        name: "Kaduna",
+        country: "Nigeria",
+        cities: [
+          { name: "Kaduna", state: "Kaduna", country: "Nigeria", coordinates: { lat: 10.5200, lng: 7.4383 } },
+          { name: "Zaria", state: "Kaduna", country: "Nigeria", coordinates: { lat: 11.0833, lng: 7.7167 } },
+          { name: "Kafanchan", state: "Kaduna", country: "Nigeria", coordinates: { lat: 9.5833, lng: 8.3000 } },
+          { name: "Kagoro", state: "Kaduna", country: "Nigeria", coordinates: { lat: 9.6167, lng: 8.3833 } }
+        ]
+      },
+      {
+        name: "Oyo",
+        country: "Nigeria",
+        cities: [
+          { name: "Ibadan", state: "Oyo", country: "Nigeria", coordinates: { lat: 7.3776, lng: 3.9470 } },
+          { name: "Ogbomoso", state: "Oyo", country: "Nigeria", coordinates: { lat: 8.1333, lng: 4.2500 } },
+          { name: "Oyo", state: "Oyo", country: "Nigeria", coordinates: { lat: 7.8500, lng: 3.9333 } },
+          { name: "Iseyin", state: "Oyo", country: "Nigeria", coordinates: { lat: 7.9667, lng: 3.6000 } },
+          { name: "Kishi", state: "Oyo", country: "Nigeria", coordinates: { lat: 9.0833, lng: 3.8500 } }
+        ]
+      },
+      {
+        name: "Edo",
+        country: "Nigeria",
+        cities: [
+          { name: "Benin City", state: "Edo", country: "Nigeria", coordinates: { lat: 6.3350, lng: 5.6037 } },
+          { name: "Auchi", state: "Edo", country: "Nigeria", coordinates: { lat: 7.0667, lng: 6.2667 } },
+          { name: "Ekpoma", state: "Edo", country: "Nigeria", coordinates: { lat: 6.7500, lng: 6.1333 } },
+          { name: "Uromi", state: "Edo", country: "Nigeria", coordinates: { lat: 6.7000, lng: 6.3333 } }
+        ]
+      },
+      {
+        name: "Delta",
+        country: "Nigeria",
+        cities: [
+          { name: "Asaba", state: "Delta", country: "Nigeria", coordinates: { lat: 6.1833, lng: 6.7500 } },
+          { name: "Warri", state: "Delta", country: "Nigeria", coordinates: { lat: 5.5167, lng: 5.7500 } },
+          { name: "Sapele", state: "Delta", country: "Nigeria", coordinates: { lat: 5.9000, lng: 5.6833 } },
+          { name: "Ughelli", state: "Delta", country: "Nigeria", coordinates: { lat: 5.5000, lng: 6.0000 } }
+        ]
+      },
+      {
+        name: "Enugu",
+        country: "Nigeria",
+        cities: [
+          { name: "Enugu", state: "Enugu", country: "Nigeria", coordinates: { lat: 6.4500, lng: 7.5000 } },
+          { name: "Nsukka", state: "Enugu", country: "Nigeria", coordinates: { lat: 6.8500, lng: 7.4000 } },
+          { name: "Awgu", state: "Enugu", country: "Nigeria", coordinates: { lat: 6.0833, lng: 7.4667 } },
+          { name: "Oji River", state: "Enugu", country: "Nigeria", coordinates: { lat: 6.2500, lng: 7.3500 } }
         ]
       }
     ]
@@ -100,7 +168,12 @@ export const citiesData: Country[] = [
           { name: "Oakland", state: "California", country: "United States", coordinates: { lat: 37.8044, lng: -122.2712 } },
           { name: "Bakersfield", state: "California", country: "United States", coordinates: { lat: 35.3733, lng: -119.0187 } },
           { name: "Anaheim", state: "California", country: "United States", coordinates: { lat: 33.8366, lng: -117.9143 } },
-          { name: "Santa Ana", state: "California", country: "United States", coordinates: { lat: 33.7455, lng: -117.8677 } }
+          { name: "Santa Ana", state: "California", country: "United States", coordinates: { lat: 33.7455, lng: -117.8677 } },
+          { name: "Riverside", state: "California", country: "United States", coordinates: { lat: 33.9533, lng: -117.3962 } },
+          { name: "Stockton", state: "California", country: "United States", coordinates: { lat: 37.9577, lng: -121.2908 } },
+          { name: "Irvine", state: "California", country: "United States", coordinates: { lat: 33.6846, lng: -117.8265 } },
+          { name: "Chula Vista", state: "California", country: "United States", coordinates: { lat: 32.6401, lng: -117.0842 } },
+          { name: "Fremont", state: "California", country: "United States", coordinates: { lat: 37.5483, lng: -121.9886 } }
         ]
       },
       {
@@ -149,6 +222,28 @@ export const citiesData: Country[] = [
           { name: "Fort Lauderdale", state: "Florida", country: "United States", coordinates: { lat: 26.1224, lng: -80.1373 } },
           { name: "Port St. Lucie", state: "Florida", country: "United States", coordinates: { lat: 27.2730, lng: -80.3582 } },
           { name: "Cape Coral", state: "Florida", country: "United States", coordinates: { lat: 26.5629, lng: -81.9495 } }
+        ]
+      },
+      {
+        name: "Illinois",
+        country: "United States",
+        cities: [
+          { name: "Chicago", state: "Illinois", country: "United States", coordinates: { lat: 41.8781, lng: -87.6298 } },
+          { name: "Aurora", state: "Illinois", country: "United States", coordinates: { lat: 41.7606, lng: -88.3201 } },
+          { name: "Rockford", state: "Illinois", country: "United States", coordinates: { lat: 42.2711, lng: -89.0940 } },
+          { name: "Joliet", state: "Illinois", country: "United States", coordinates: { lat: 41.5250, lng: -88.0817 } },
+          { name: "Naperville", state: "Illinois", country: "United States", coordinates: { lat: 41.7508, lng: -88.1535 } }
+        ]
+      },
+      {
+        name: "Pennsylvania",
+        country: "United States",
+        cities: [
+          { name: "Philadelphia", state: "Pennsylvania", country: "United States", coordinates: { lat: 39.9526, lng: -75.1652 } },
+          { name: "Pittsburgh", state: "Pennsylvania", country: "United States", coordinates: { lat: 40.4406, lng: -79.9959 } },
+          { name: "Allentown", state: "Pennsylvania", country: "United States", coordinates: { lat: 40.6084, lng: -75.4901 } },
+          { name: "Erie", state: "Pennsylvania", country: "United States", coordinates: { lat: 42.1292, lng: -80.0851 } },
+          { name: "Reading", state: "Pennsylvania", country: "United States", coordinates: { lat: 40.3357, lng: -75.9269 } }
         ]
       }
     ]
@@ -301,6 +396,286 @@ export const citiesData: Country[] = [
           { name: "Pforzheim", state: "Baden-Württemberg", country: "Germany", coordinates: { lat: 48.8944, lng: 8.7090 } },
           { name: "Reutlingen", state: "Baden-Württemberg", country: "Germany", coordinates: { lat: 48.4914, lng: 9.2042 } },
           { name: "Esslingen", state: "Baden-Württemberg", country: "Germany", coordinates: { lat: 48.7406, lng: 9.3068 } }
+        ]
+      }
+    ]
+  },
+  {
+    name: "France",
+    code: "FR",
+    states: [
+      {
+        name: "Île-de-France",
+        country: "France",
+        cities: [
+          { name: "Paris", state: "Île-de-France", country: "France", coordinates: { lat: 48.8566, lng: 2.3522 } },
+          { name: "Boulogne-Billancourt", state: "Île-de-France", country: "France", coordinates: { lat: 48.8333, lng: 2.2500 } },
+          { name: "Saint-Denis", state: "Île-de-France", country: "France", coordinates: { lat: 48.9364, lng: 2.3574 } },
+          { name: "Argenteuil", state: "Île-de-France", country: "France", coordinates: { lat: 48.9500, lng: 2.2500 } },
+          { name: "Montreuil", state: "Île-de-France", country: "France", coordinates: { lat: 48.8667, lng: 2.4500 } }
+        ]
+      },
+      {
+        name: "Provence-Alpes-Côte d'Azur",
+        country: "France",
+        cities: [
+          { name: "Marseille", state: "Provence-Alpes-Côte d'Azur", country: "France", coordinates: { lat: 43.2965, lng: 5.3698 } },
+          { name: "Nice", state: "Provence-Alpes-Côte d'Azur", country: "France", coordinates: { lat: 43.7102, lng: 7.2620 } },
+          { name: "Toulon", state: "Provence-Alpes-Côte d'Azur", country: "France", coordinates: { lat: 43.1242, lng: 5.9280 } },
+          { name: "Aix-en-Provence", state: "Provence-Alpes-Côte d'Azur", country: "France", coordinates: { lat: 43.5263, lng: 5.4454 } },
+          { name: "Avignon", state: "Provence-Alpes-Côte d'Azur", country: "France", coordinates: { lat: 43.9493, lng: 4.8055 } }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Australia",
+    code: "AU",
+    states: [
+      {
+        name: "New South Wales",
+        country: "Australia",
+        cities: [
+          { name: "Sydney", state: "New South Wales", country: "Australia", coordinates: { lat: -33.8688, lng: 151.2093 } },
+          { name: "Newcastle", state: "New South Wales", country: "Australia", coordinates: { lat: -32.9267, lng: 151.7789 } },
+          { name: "Wollongong", state: "New South Wales", country: "Australia", coordinates: { lat: -34.4278, lng: 150.8931 } },
+          { name: "Wagga Wagga", state: "New South Wales", country: "Australia", coordinates: { lat: -35.1082, lng: 147.3598 } },
+          { name: "Albury", state: "New South Wales", country: "Australia", coordinates: { lat: -36.0737, lng: 146.9135 } }
+        ]
+      },
+      {
+        name: "Victoria",
+        country: "Australia",
+        cities: [
+          { name: "Melbourne", state: "Victoria", country: "Australia", coordinates: { lat: -37.8136, lng: 144.9631 } },
+          { name: "Geelong", state: "Victoria", country: "Australia", coordinates: { lat: -38.1499, lng: 144.3617 } },
+          { name: "Ballarat", state: "Victoria", country: "Australia", coordinates: { lat: -37.5622, lng: 143.8503 } },
+          { name: "Bendigo", state: "Victoria", country: "Australia", coordinates: { lat: -36.7570, lng: 144.2792 } },
+          { name: "Shepparton", state: "Victoria", country: "Australia", coordinates: { lat: -36.3773, lng: 145.3985 } }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Japan",
+    code: "JP",
+    states: [
+      {
+        name: "Tokyo",
+        country: "Japan",
+        cities: [
+          { name: "Tokyo", state: "Tokyo", country: "Japan", coordinates: { lat: 35.6762, lng: 139.6503 } },
+          { name: "Shibuya", state: "Tokyo", country: "Japan", coordinates: { lat: 35.6580, lng: 139.7016 } },
+          { name: "Shinjuku", state: "Tokyo", country: "Japan", coordinates: { lat: 35.6896, lng: 139.6917 } },
+          { name: "Ginza", state: "Tokyo", country: "Japan", coordinates: { lat: 35.6719, lng: 139.7653 } },
+          { name: "Harajuku", state: "Tokyo", country: "Japan", coordinates: { lat: 35.6702, lng: 139.7026 } }
+        ]
+      },
+      {
+        name: "Osaka",
+        country: "Japan",
+        cities: [
+          { name: "Osaka", state: "Osaka", country: "Japan", coordinates: { lat: 34.6937, lng: 135.5023 } },
+          { name: "Sakai", state: "Osaka", country: "Japan", coordinates: { lat: 34.5734, lng: 135.4830 } },
+          { name: "Higashiosaka", state: "Osaka", country: "Japan", coordinates: { lat: 34.6293, lng: 135.6006 } },
+          { name: "Toyonaka", state: "Osaka", country: "Japan", coordinates: { lat: 34.7814, lng: 135.4692 } },
+          { name: "Suita", state: "Osaka", country: "Japan", coordinates: { lat: 34.7614, lng: 135.5156 } }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Brazil",
+    code: "BR",
+    states: [
+      {
+        name: "São Paulo",
+        country: "Brazil",
+        cities: [
+          { name: "São Paulo", state: "São Paulo", country: "Brazil", coordinates: { lat: -23.5505, lng: -46.6333 } },
+          { name: "Guarulhos", state: "São Paulo", country: "Brazil", coordinates: { lat: -23.4538, lng: -46.5331 } },
+          { name: "Campinas", state: "São Paulo", country: "Brazil", coordinates: { lat: -22.9056, lng: -47.0608 } },
+          { name: "São Bernardo do Campo", state: "São Paulo", country: "Brazil", coordinates: { lat: -23.6939, lng: -46.5650 } },
+          { name: "Santo André", state: "São Paulo", country: "Brazil", coordinates: { lat: -23.6639, lng: -46.5383 } }
+        ]
+      },
+      {
+        name: "Rio de Janeiro",
+        country: "Brazil",
+        cities: [
+          { name: "Rio de Janeiro", state: "Rio de Janeiro", country: "Brazil", coordinates: { lat: -22.9068, lng: -43.1729 } },
+          { name: "Nova Iguaçu", state: "Rio de Janeiro", country: "Brazil", coordinates: { lat: -22.7592, lng: -43.4511 } },
+          { name: "Niterói", state: "Rio de Janeiro", country: "Brazil", coordinates: { lat: -22.8833, lng: -43.1036 } },
+          { name: "Campos dos Goytacazes", state: "Rio de Janeiro", country: "Brazil", coordinates: { lat: -21.7522, lng: -41.3308 } },
+          { name: "Duque de Caxias", state: "Rio de Janeiro", country: "Brazil", coordinates: { lat: -22.7856, lng: -43.3047 } }
+        ]
+      }
+    ]
+  },
+  {
+    name: "India",
+    code: "IN",
+    states: [
+      {
+        name: "Maharashtra",
+        country: "India",
+        cities: [
+          { name: "Mumbai", state: "Maharashtra", country: "India", coordinates: { lat: 19.0760, lng: 72.8777 } },
+          { name: "Pune", state: "Maharashtra", country: "India", coordinates: { lat: 18.5204, lng: 73.8567 } },
+          { name: "Nagpur", state: "Maharashtra", country: "India", coordinates: { lat: 21.1458, lng: 79.0882 } },
+          { name: "Thane", state: "Maharashtra", country: "India", coordinates: { lat: 19.2183, lng: 72.9781 } },
+          { name: "Nashik", state: "Maharashtra", country: "India", coordinates: { lat: 19.9975, lng: 73.7898 } }
+        ]
+      },
+      {
+        name: "Delhi",
+        country: "India",
+        cities: [
+          { name: "New Delhi", state: "Delhi", country: "India", coordinates: { lat: 28.6139, lng: 77.2090 } },
+          { name: "Delhi", state: "Delhi", country: "India", coordinates: { lat: 28.7041, lng: 77.1025 } },
+          { name: "Gurgaon", state: "Delhi", country: "India", coordinates: { lat: 28.4595, lng: 77.0266 } },
+          { name: "Noida", state: "Delhi", country: "India", coordinates: { lat: 28.5355, lng: 77.3910 } },
+          { name: "Faridabad", state: "Delhi", country: "India", coordinates: { lat: 28.4089, lng: 77.3178 } }
+        ]
+      }
+    ]
+  },
+  {
+    name: "South Africa",
+    code: "ZA",
+    states: [
+      {
+        name: "Gauteng",
+        country: "South Africa",
+        cities: [
+          { name: "Johannesburg", state: "Gauteng", country: "South Africa", coordinates: { lat: -26.2041, lng: 28.0473 } },
+          { name: "Pretoria", state: "Gauteng", country: "South Africa", coordinates: { lat: -25.7479, lng: 28.2293 } },
+          { name: "Soweto", state: "Gauteng", country: "South Africa", coordinates: { lat: -26.2485, lng: 27.9110 } },
+          { name: "Tshwane", state: "Gauteng", country: "South Africa", coordinates: { lat: -25.7479, lng: 28.2293 } },
+          { name: "Vereeniging", state: "Gauteng", country: "South Africa", coordinates: { lat: -26.6731, lng: 27.9261 } }
+        ]
+      },
+      {
+        name: "Western Cape",
+        country: "South Africa",
+        cities: [
+          { name: "Cape Town", state: "Western Cape", country: "South Africa", coordinates: { lat: -33.9249, lng: 18.4241 } },
+          { name: "Stellenbosch", state: "Western Cape", country: "South Africa", coordinates: { lat: -33.9326, lng: 18.8604 } },
+          { name: "Paarl", state: "Western Cape", country: "South Africa", coordinates: { lat: -33.7342, lng: 18.9751 } },
+          { name: "Worcester", state: "Western Cape", country: "South Africa", coordinates: { lat: -33.6458, lng: 19.4488 } },
+          { name: "George", state: "Western Cape", country: "South Africa", coordinates: { lat: -33.9630, lng: 22.4617 } }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Mexico",
+    code: "MX",
+    states: [
+      {
+        name: "Mexico City",
+        country: "Mexico",
+        cities: [
+          { name: "Mexico City", state: "Mexico City", country: "Mexico", coordinates: { lat: 19.4326, lng: -99.1332 } },
+          { name: "Iztapalapa", state: "Mexico City", country: "Mexico", coordinates: { lat: 19.3574, lng: -99.0591 } },
+          { name: "Gustavo A. Madero", state: "Mexico City", country: "Mexico", coordinates: { lat: 19.4848, lng: -99.1103 } },
+          { name: "Álvaro Obregón", state: "Mexico City", country: "Mexico", coordinates: { lat: 19.3574, lng: -99.2018 } },
+          { name: "Coyoacán", state: "Mexico City", country: "Mexico", coordinates: { lat: 19.3500, lng: -99.1614 } }
+        ]
+      },
+      {
+        name: "Jalisco",
+        country: "Mexico",
+        cities: [
+          { name: "Guadalajara", state: "Jalisco", country: "Mexico", coordinates: { lat: 20.6597, lng: -103.3496 } },
+          { name: "Zapopan", state: "Jalisco", country: "Mexico", coordinates: { lat: 20.7236, lng: -103.3848 } },
+          { name: "Tlaquepaque", state: "Jalisco", country: "Mexico", coordinates: { lat: 20.6409, lng: -103.2933 } },
+          { name: "Tonalá", state: "Jalisco", country: "Mexico", coordinates: { lat: 20.6244, lng: -103.2342 } },
+          { name: "Tlajomulco de Zúñiga", state: "Jalisco", country: "Mexico", coordinates: { lat: 20.4736, lng: -103.4470 } }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Italy",
+    code: "IT",
+    states: [
+      {
+        name: "Lazio",
+        country: "Italy",
+        cities: [
+          { name: "Rome", state: "Lazio", country: "Italy", coordinates: { lat: 41.9028, lng: 12.4964 } },
+          { name: "Latina", state: "Lazio", country: "Italy", coordinates: { lat: 41.4679, lng: 12.9036 } },
+          { name: "Guidonia Montecelio", state: "Lazio", country: "Italy", coordinates: { lat: 41.9994, lng: 12.7264 } },
+          { name: "Fiumicino", state: "Lazio", country: "Italy", coordinates: { lat: 41.7704, lng: 12.2362 } },
+          { name: "Viterbo", state: "Lazio", country: "Italy", coordinates: { lat: 42.4178, lng: 12.1088 } }
+        ]
+      },
+      {
+        name: "Lombardy",
+        country: "Italy",
+        cities: [
+          { name: "Milan", state: "Lombardy", country: "Italy", coordinates: { lat: 45.4642, lng: 9.1900 } },
+          { name: "Brescia", state: "Lombardy", country: "Italy", coordinates: { lat: 45.5416, lng: 10.2118 } },
+          { name: "Bergamo", state: "Lombardy", country: "Italy", coordinates: { lat: 45.6949, lng: 9.6773 } },
+          { name: "Monza", state: "Lombardy", country: "Italy", coordinates: { lat: 45.5845, lng: 9.2744 } },
+          { name: "Como", state: "Lombardy", country: "Italy", coordinates: { lat: 45.8081, lng: 9.0852 } }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Spain",
+    code: "ES",
+    states: [
+      {
+        name: "Madrid",
+        country: "Spain",
+        cities: [
+          { name: "Madrid", state: "Madrid", country: "Spain", coordinates: { lat: 40.4168, lng: -3.7038 } },
+          { name: "Alcalá de Henares", state: "Madrid", country: "Spain", coordinates: { lat: 40.4817, lng: -3.3641 } },
+          { name: "Móstoles", state: "Madrid", country: "Spain", coordinates: { lat: 40.3226, lng: -3.8649 } },
+          { name: "Fuenlabrada", state: "Madrid", country: "Spain", coordinates: { lat: 40.2842, lng: -3.7941 } },
+          { name: "Leganés", state: "Madrid", country: "Spain", coordinates: { lat: 40.3272, lng: -3.7635 } }
+        ]
+      },
+      {
+        name: "Catalonia",
+        country: "Spain",
+        cities: [
+          { name: "Barcelona", state: "Catalonia", country: "Spain", coordinates: { lat: 41.3851, lng: 2.1734 } },
+          { name: "L'Hospitalet de Llobregat", state: "Catalonia", country: "Spain", coordinates: { lat: 41.3597, lng: 2.0997 } },
+          { name: "Badalona", state: "Catalonia", country: "Spain", coordinates: { lat: 41.4500, lng: 2.2474 } },
+          { name: "Sabadell", state: "Catalonia", country: "Spain", coordinates: { lat: 41.5489, lng: 2.1074 } },
+          { name: "Terrassa", state: "Catalonia", country: "Spain", coordinates: { lat: 41.5689, lng: 2.0086 } }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Netherlands",
+    code: "NL",
+    states: [
+      {
+        name: "North Holland",
+        country: "Netherlands",
+        cities: [
+          { name: "Amsterdam", state: "North Holland", country: "Netherlands", coordinates: { lat: 52.3676, lng: 4.9041 } },
+          { name: "Haarlem", state: "North Holland", country: "Netherlands", coordinates: { lat: 52.3792, lng: 4.6368 } },
+          { name: "Zaanstad", state: "North Holland", country: "Netherlands", coordinates: { lat: 52.4538, lng: 4.8136 } },
+          { name: "Hilversum", state: "North Holland", country: "Netherlands", coordinates: { lat: 52.2232, lng: 5.1764 } },
+          { name: "Almere", state: "North Holland", country: "Netherlands", coordinates: { lat: 52.3508, lng: 5.2647 } }
+        ]
+      },
+      {
+        name: "South Holland",
+        country: "Netherlands",
+        cities: [
+          { name: "Rotterdam", state: "South Holland", country: "Netherlands", coordinates: { lat: 51.9244, lng: 4.4777 } },
+          { name: "The Hague", state: "South Holland", country: "Netherlands", coordinates: { lat: 52.0705, lng: 4.3007 } },
+          { name: "Leiden", state: "South Holland", country: "Netherlands", coordinates: { lat: 52.1601, lng: 4.4970 } },
+          { name: "Dordrecht", state: "South Holland", country: "Netherlands", coordinates: { lat: 51.8133, lng: 4.6901 } },
+          { name: "Delft", state: "South Holland", country: "Netherlands", coordinates: { lat: 52.0116, lng: 4.3571 } }
         ]
       }
     ]
