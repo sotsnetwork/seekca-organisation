@@ -69,7 +69,7 @@ export default function Messages() {
     <div className="min-h-screen bg-background">
       <AppHeader />
       <ProfileNavigation />
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-heading font-bold text-foreground">Messages</h1>
@@ -198,7 +198,7 @@ export default function Messages() {
             </Card>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
