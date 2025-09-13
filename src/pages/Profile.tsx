@@ -234,7 +234,7 @@ export default function Profile() {
     <div className="min-h-screen bg-background">
       <AppHeader />
       <ProfileNavigation />
-      <div className="max-w-4xl mx-auto px-6 py-8">
+      <main className="max-w-4xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-heading font-bold text-foreground">Profile</h1>
@@ -444,7 +444,7 @@ export default function Profile() {
           onCropComplete={handleCroppedImageUpload}
           isUploading={isUploadingAvatar}
         />
-      </div>
+      </main>
     </div>
   );
 }
