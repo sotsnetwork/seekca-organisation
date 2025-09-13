@@ -9,8 +9,8 @@ export default function About() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-
-      {/* Hero Section */}
+      <main>
+        {/* Hero Section */}
       <section className="py-24 bg-gradient-hero">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-6xl font-heading font-bold text-primary-foreground mb-6">
@@ -112,6 +112,7 @@ export default function About() {
           </div>
         </div>
       </section>
+      </main>
 
       {/* Footer */}
       <Footer />
