@@ -143,7 +143,7 @@ export default function Professionals() {
   const professionals = apiProfessionals.map(prof => ({
     id: prof.id,
     name: prof.nickname || prof.full_name || "Professional",
-    title: prof.bio || "Professional Service Provider",
+    title: prof.bio || "Professional",
     location: prof.location || "Location not specified",
     country: prof.country || "Unknown",
     state: "",
@@ -154,7 +154,7 @@ export default function Professionals() {
     hourlyRate: prof.hourly_rate || 0,
     completedProjects: Math.floor(Math.random() * 50), // Mock data
     avatar: prof.avatar_url,
-    description: prof.bio || "Professional service provider",
+    description: prof.bio || "Professional",
     verified: Math.random() > 0.3, // Mock verification
   }));
 
@@ -665,7 +665,7 @@ export default function Professionals() {
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-muted-foreground">
-            Showing {sortedProfessionals.length} of {professionals.length} service providers
+            Showing {sortedProfessionals.length} of {professionals.length} professionals
             {userLocation && (
               <span className="ml-2 text-sm">
                 • Your location: {userLocation.city}, {userLocation.state}, {userLocation.country}
