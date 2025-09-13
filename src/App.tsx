@@ -15,6 +15,7 @@ import Messages from "./pages/Messages";
 import Portfolio from "./pages/Portfolio";
 import Settings from "./pages/Settings";
 import PostJob from "./pages/PostJob";
+import Projects from "./pages/Projects";
 import HelpCenter from "./pages/HelpCenter";
 import APIDocs from "./pages/APIDocs";
 import Community from "./pages/Community";
@@ -42,6 +43,7 @@ const App = () => (
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/post-job" element={<PostJob />} />
+            <Route path="/projects" element={<Projects />} />
             <Route path="/help" element={<HelpCenter />} />
             <Route path="/api-docs" element={<APIDocs />} />
             <Route path="/community" element={<Community />} />
