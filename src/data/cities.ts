@@ -124,6 +124,105 @@ export const citiesData: Country[] = [
           { name: "Erie", state: "Pennsylvania", country: "United States", coordinates: { lat: 42.1292, lng: -80.0851 } },
           { name: "Reading", state: "Pennsylvania", country: "United States", coordinates: { lat: 40.3357, lng: -75.9269 } }
         ]
+      },
+      {
+        name: "Ohio",
+        country: "United States",
+        cities: [
+          { name: "Columbus", state: "Ohio", country: "United States", coordinates: { lat: 39.9612, lng: -82.9988 } },
+          { name: "Cleveland", state: "Ohio", country: "United States", coordinates: { lat: 41.4993, lng: -81.6944 } },
+          { name: "Cincinnati", state: "Ohio", country: "United States", coordinates: { lat: 39.1031, lng: -84.5120 } },
+          { name: "Toledo", state: "Ohio", country: "United States", coordinates: { lat: 41.6528, lng: -83.5379 } },
+          { name: "Akron", state: "Ohio", country: "United States", coordinates: { lat: 41.0814, lng: -81.5190 } }
+        ]
+      },
+      {
+        name: "Georgia",
+        country: "United States",
+        cities: [
+          { name: "Atlanta", state: "Georgia", country: "United States", coordinates: { lat: 33.7490, lng: -84.3880 } },
+          { name: "Augusta", state: "Georgia", country: "United States", coordinates: { lat: 33.4735, lng: -82.0105 } },
+          { name: "Columbus", state: "Georgia", country: "United States", coordinates: { lat: 32.4609, lng: -84.9877 } },
+          { name: "Savannah", state: "Georgia", country: "United States", coordinates: { lat: 32.0835, lng: -81.0998 } },
+          { name: "Athens", state: "Georgia", country: "United States", coordinates: { lat: 33.9519, lng: -83.3576 } }
+        ]
+      },
+      {
+        name: "North Carolina",
+        country: "United States",
+        cities: [
+          { name: "Charlotte", state: "North Carolina", country: "United States", coordinates: { lat: 35.2271, lng: -80.8431 } },
+          { name: "Raleigh", state: "North Carolina", country: "United States", coordinates: { lat: 35.7796, lng: -78.6382 } },
+          { name: "Greensboro", state: "North Carolina", country: "United States", coordinates: { lat: 36.0726, lng: -79.7920 } },
+          { name: "Durham", state: "North Carolina", country: "United States", coordinates: { lat: 35.9940, lng: -78.8986 } },
+          { name: "Winston-Salem", state: "North Carolina", country: "United States", coordinates: { lat: 36.0999, lng: -80.2442 } }
+        ]
+      },
+      {
+        name: "Michigan",
+        country: "United States",
+        cities: [
+          { name: "Detroit", state: "Michigan", country: "United States", coordinates: { lat: 42.3314, lng: -83.0458 } },
+          { name: "Grand Rapids", state: "Michigan", country: "United States", coordinates: { lat: 42.9634, lng: -85.6681 } },
+          { name: "Warren", state: "Michigan", country: "United States", coordinates: { lat: 42.5145, lng: -83.0147 } },
+          { name: "Sterling Heights", state: "Michigan", country: "United States", coordinates: { lat: 42.5803, lng: -83.0302 } },
+          { name: "Lansing", state: "Michigan", country: "United States", coordinates: { lat: 42.7325, lng: -84.5555 } }
+        ]
+      },
+      {
+        name: "New Jersey",
+        country: "United States",
+        cities: [
+          { name: "Newark", state: "New Jersey", country: "United States", coordinates: { lat: 40.7357, lng: -74.1724 } },
+          { name: "Jersey City", state: "New Jersey", country: "United States", coordinates: { lat: 40.7178, lng: -74.0431 } },
+          { name: "Paterson", state: "New Jersey", country: "United States", coordinates: { lat: 40.9168, lng: -74.1718 } },
+          { name: "Elizabeth", state: "New Jersey", country: "United States", coordinates: { lat: 40.6639, lng: -74.2107 } },
+          { name: "Trenton", state: "New Jersey", country: "United States", coordinates: { lat: 40.2206, lng: -74.7597 } }
+        ]
+      },
+      {
+        name: "Virginia",
+        country: "United States",
+        cities: [
+          { name: "Virginia Beach", state: "Virginia", country: "United States", coordinates: { lat: 36.8529, lng: -75.9780 } },
+          { name: "Norfolk", state: "Virginia", country: "United States", coordinates: { lat: 36.8468, lng: -76.2852 } },
+          { name: "Chesapeake", state: "Virginia", country: "United States", coordinates: { lat: 36.7682, lng: -76.2875 } },
+          { name: "Richmond", state: "Virginia", country: "United States", coordinates: { lat: 37.5407, lng: -77.4360 } },
+          { name: "Newport News", state: "Virginia", country: "United States", coordinates: { lat: 37.0871, lng: -76.4730 } }
+        ]
+      },
+      {
+        name: "Washington",
+        country: "United States",
+        cities: [
+          { name: "Seattle", state: "Washington", country: "United States", coordinates: { lat: 47.6062, lng: -122.3321 } },
+          { name: "Spokane", state: "Washington", country: "United States", coordinates: { lat: 47.6588, lng: -117.4260 } },
+          { name: "Tacoma", state: "Washington", country: "United States", coordinates: { lat: 47.2529, lng: -122.4443 } },
+          { name: "Vancouver", state: "Washington", country: "United States", coordinates: { lat: 45.6387, lng: -122.6615 } },
+          { name: "Bellevue", state: "Washington", country: "United States", coordinates: { lat: 47.6101, lng: -122.2015 } }
+        ]
+      },
+      {
+        name: "Arizona",
+        country: "United States",
+        cities: [
+          { name: "Phoenix", state: "Arizona", country: "United States", coordinates: { lat: 33.4484, lng: -112.0740 } },
+          { name: "Tucson", state: "Arizona", country: "United States", coordinates: { lat: 32.2226, lng: -110.9747 } },
+          { name: "Mesa", state: "Arizona", country: "United States", coordinates: { lat: 33.4152, lng: -111.8315 } },
+          { name: "Chandler", state: "Arizona", country: "United States", coordinates: { lat: 33.3062, lng: -111.8412 } },
+          { name: "Scottsdale", state: "Arizona", country: "United States", coordinates: { lat: 33.4942, lng: -111.9211 } }
+        ]
+      },
+      {
+        name: "Massachusetts",
+        country: "United States",
+        cities: [
+          { name: "Boston", state: "Massachusetts", country: "United States", coordinates: { lat: 42.3601, lng: -71.0589 } },
+          { name: "Worcester", state: "Massachusetts", country: "United States", coordinates: { lat: 42.2626, lng: -71.8023 } },
+          { name: "Springfield", state: "Massachusetts", country: "United States", coordinates: { lat: 42.1015, lng: -72.5898 } },
+          { name: "Cambridge", state: "Massachusetts", country: "United States", coordinates: { lat: 42.3736, lng: -71.1097 } },
+          { name: "Lowell", state: "Massachusetts", country: "United States", coordinates: { lat: 42.6334, lng: -71.3162 } }
+        ]
       }
     ]
   },
@@ -144,7 +243,12 @@ export const citiesData: Country[] = [
           { name: "Bristol", state: "England", country: "United Kingdom", coordinates: { lat: 51.4545, lng: -2.5879 } },
           { name: "Newcastle", state: "England", country: "United Kingdom", coordinates: { lat: 54.9783, lng: -1.6178 } },
           { name: "Nottingham", state: "England", country: "United Kingdom", coordinates: { lat: 52.9548, lng: -1.1581 } },
-          { name: "Leicester", state: "England", country: "United Kingdom", coordinates: { lat: 52.6369, lng: -1.1398 } }
+          { name: "Leicester", state: "England", country: "United Kingdom", coordinates: { lat: 52.6369, lng: -1.1398 } },
+          { name: "Coventry", state: "England", country: "United Kingdom", coordinates: { lat: 52.4068, lng: -1.5197 } },
+          { name: "Bradford", state: "England", country: "United Kingdom", coordinates: { lat: 53.7960, lng: -1.7594 } },
+          { name: "Hull", state: "England", country: "United Kingdom", coordinates: { lat: 53.7676, lng: -0.3274 } },
+          { name: "Plymouth", state: "England", country: "United Kingdom", coordinates: { lat: 50.3755, lng: -4.1427 } },
+          { name: "Stoke-on-Trent", state: "England", country: "United Kingdom", coordinates: { lat: 53.0027, lng: -2.1794 } }
         ]
       },
       {
@@ -155,7 +259,10 @@ export const citiesData: Country[] = [
           { name: "Glasgow", state: "Scotland", country: "United Kingdom", coordinates: { lat: 55.8642, lng: -4.2518 } },
           { name: "Aberdeen", state: "Scotland", country: "United Kingdom", coordinates: { lat: 57.1497, lng: -2.0943 } },
           { name: "Dundee", state: "Scotland", country: "United Kingdom", coordinates: { lat: 56.4620, lng: -2.9707 } },
-          { name: "Stirling", state: "Scotland", country: "United Kingdom", coordinates: { lat: 56.1165, lng: -3.9369 } }
+          { name: "Stirling", state: "Scotland", country: "United Kingdom", coordinates: { lat: 56.1165, lng: -3.9369 } },
+          { name: "Perth", state: "Scotland", country: "United Kingdom", coordinates: { lat: 56.3959, lng: -3.4308 } },
+          { name: "Inverness", state: "Scotland", country: "United Kingdom", coordinates: { lat: 57.4778, lng: -4.2247 } },
+          { name: "Dumfries", state: "Scotland", country: "United Kingdom", coordinates: { lat: 55.0709, lng: -3.6033 } }
         ]
       },
       {
@@ -166,7 +273,21 @@ export const citiesData: Country[] = [
           { name: "Swansea", state: "Wales", country: "United Kingdom", coordinates: { lat: 51.6214, lng: -3.9436 } },
           { name: "Newport", state: "Wales", country: "United Kingdom", coordinates: { lat: 51.5882, lng: -2.9977 } },
           { name: "Wrexham", state: "Wales", country: "United Kingdom", coordinates: { lat: 53.0466, lng: -2.9930 } },
-          { name: "Barry", state: "Wales", country: "United Kingdom", coordinates: { lat: 51.3994, lng: -3.2631 } }
+          { name: "Barry", state: "Wales", country: "United Kingdom", coordinates: { lat: 51.3994, lng: -3.2631 } },
+          { name: "Caerphilly", state: "Wales", country: "United Kingdom", coordinates: { lat: 51.5742, lng: -3.2180 } },
+          { name: "Rhondda", state: "Wales", country: "United Kingdom", coordinates: { lat: 51.6580, lng: -3.4480 } },
+          { name: "Merthyr Tydfil", state: "Wales", country: "United Kingdom", coordinates: { lat: 51.7486, lng: -3.3773 } }
+        ]
+      },
+      {
+        name: "Northern Ireland",
+        country: "United Kingdom",
+        cities: [
+          { name: "Belfast", state: "Northern Ireland", country: "United Kingdom", coordinates: { lat: 54.5973, lng: -5.9301 } },
+          { name: "Derry", state: "Northern Ireland", country: "United Kingdom", coordinates: { lat: 54.9966, lng: -7.3086 } },
+          { name: "Lisburn", state: "Northern Ireland", country: "United Kingdom", coordinates: { lat: 54.5139, lng: -6.0433 } },
+          { name: "Newry", state: "Northern Ireland", country: "United Kingdom", coordinates: { lat: 54.1804, lng: -6.3382 } },
+          { name: "Armagh", state: "Northern Ireland", country: "United Kingdom", coordinates: { lat: 54.3503, lng: -6.6528 } }
         ]
       }
     ]
@@ -221,6 +342,116 @@ export const citiesData: Country[] = [
           { name: "Saanich", state: "British Columbia", country: "Canada", coordinates: { lat: 48.4840, lng: -123.3810 } },
           { name: "Delta", state: "British Columbia", country: "Canada", coordinates: { lat: 49.0847, lng: -122.8210 } },
           { name: "Kelowna", state: "British Columbia", country: "Canada", coordinates: { lat: 49.8880, lng: -119.4960 } }
+        ]
+      },
+      {
+        name: "Alberta",
+        country: "Canada",
+        cities: [
+          { name: "Calgary", state: "Alberta", country: "Canada", coordinates: { lat: 51.0447, lng: -114.0719 } },
+          { name: "Edmonton", state: "Alberta", country: "Canada", coordinates: { lat: 53.5461, lng: -113.4938 } },
+          { name: "Red Deer", state: "Alberta", country: "Canada", coordinates: { lat: 52.2681, lng: -113.8112 } },
+          { name: "Lethbridge", state: "Alberta", country: "Canada", coordinates: { lat: 49.6939, lng: -112.8416 } },
+          { name: "St. Albert", state: "Alberta", country: "Canada", coordinates: { lat: 53.6333, lng: -113.6333 } }
+        ]
+      },
+      {
+        name: "Manitoba",
+        country: "Canada",
+        cities: [
+          { name: "Winnipeg", state: "Manitoba", country: "Canada", coordinates: { lat: 49.8951, lng: -97.1384 } },
+          { name: "Brandon", state: "Manitoba", country: "Canada", coordinates: { lat: 49.8483, lng: -99.9500 } },
+          { name: "Steinbach", state: "Manitoba", country: "Canada", coordinates: { lat: 49.5258, lng: -96.6845 } },
+          { name: "Thompson", state: "Manitoba", country: "Canada", coordinates: { lat: 55.7431, lng: -97.8558 } },
+          { name: "Portage la Prairie", state: "Manitoba", country: "Canada", coordinates: { lat: 49.9728, lng: -98.2919 } }
+        ]
+      },
+      {
+        name: "Saskatchewan",
+        country: "Canada",
+        cities: [
+          { name: "Saskatoon", state: "Saskatchewan", country: "Canada", coordinates: { lat: 52.1579, lng: -106.6702 } },
+          { name: "Regina", state: "Saskatchewan", country: "Canada", coordinates: { lat: 50.4452, lng: -104.6189 } },
+          { name: "Prince Albert", state: "Saskatchewan", country: "Canada", coordinates: { lat: 53.2033, lng: -105.7531 } },
+          { name: "Moose Jaw", state: "Saskatchewan", country: "Canada", coordinates: { lat: 50.3934, lng: -105.5509 } },
+          { name: "Swift Current", state: "Saskatchewan", country: "Canada", coordinates: { lat: 50.2881, lng: -107.8019 } }
+        ]
+      },
+      {
+        name: "Nova Scotia",
+        country: "Canada",
+        cities: [
+          { name: "Halifax", state: "Nova Scotia", country: "Canada", coordinates: { lat: 44.6488, lng: -63.5752 } },
+          { name: "Sydney", state: "Nova Scotia", country: "Canada", coordinates: { lat: 46.1368, lng: -60.1942 } },
+          { name: "Dartmouth", state: "Nova Scotia", country: "Canada", coordinates: { lat: 44.6709, lng: -63.5773 } },
+          { name: "Truro", state: "Nova Scotia", country: "Canada", coordinates: { lat: 45.3651, lng: -63.2794 } },
+          { name: "New Glasgow", state: "Nova Scotia", country: "Canada", coordinates: { lat: 45.5928, lng: -62.6486 } }
+        ]
+      },
+      {
+        name: "New Brunswick",
+        country: "Canada",
+        cities: [
+          { name: "Moncton", state: "New Brunswick", country: "Canada", coordinates: { lat: 46.0878, lng: -64.7782 } },
+          { name: "Saint John", state: "New Brunswick", country: "Canada", coordinates: { lat: 45.2733, lng: -66.0633 } },
+          { name: "Fredericton", state: "New Brunswick", country: "Canada", coordinates: { lat: 45.9636, lng: -66.6431 } },
+          { name: "Dieppe", state: "New Brunswick", country: "Canada", coordinates: { lat: 46.0789, lng: -64.6875 } },
+          { name: "Riverview", state: "New Brunswick", country: "Canada", coordinates: { lat: 46.0619, lng: -64.8056 } }
+        ]
+      },
+      {
+        name: "Newfoundland and Labrador",
+        country: "Canada",
+        cities: [
+          { name: "St. John's", state: "Newfoundland and Labrador", country: "Canada", coordinates: { lat: 47.5615, lng: -52.7126 } },
+          { name: "Mount Pearl", state: "Newfoundland and Labrador", country: "Canada", coordinates: { lat: 47.5167, lng: -52.8000 } },
+          { name: "Conception Bay South", state: "Newfoundland and Labrador", country: "Canada", coordinates: { lat: 47.5167, lng: -52.9833 } },
+          { name: "Corner Brook", state: "Newfoundland and Labrador", country: "Canada", coordinates: { lat: 48.9500, lng: -57.9500 } },
+          { name: "Grand Falls-Windsor", state: "Newfoundland and Labrador", country: "Canada", coordinates: { lat: 48.9500, lng: -55.6500 } }
+        ]
+      },
+      {
+        name: "Prince Edward Island",
+        country: "Canada",
+        cities: [
+          { name: "Charlottetown", state: "Prince Edward Island", country: "Canada", coordinates: { lat: 46.2382, lng: -63.1311 } },
+          { name: "Summerside", state: "Prince Edward Island", country: "Canada", coordinates: { lat: 46.3950, lng: -63.7878 } },
+          { name: "Stratford", state: "Prince Edward Island", country: "Canada", coordinates: { lat: 46.2167, lng: -63.0833 } },
+          { name: "Cornwall", state: "Prince Edward Island", country: "Canada", coordinates: { lat: 46.2333, lng: -63.2167 } },
+          { name: "Montague", state: "Prince Edward Island", country: "Canada", coordinates: { lat: 46.1667, lng: -62.6500 } }
+        ]
+      },
+      {
+        name: "Northwest Territories",
+        country: "Canada",
+        cities: [
+          { name: "Yellowknife", state: "Northwest Territories", country: "Canada", coordinates: { lat: 62.4540, lng: -114.3718 } },
+          { name: "Hay River", state: "Northwest Territories", country: "Canada", coordinates: { lat: 60.8156, lng: -115.7999 } },
+          { name: "Inuvik", state: "Northwest Territories", country: "Canada", coordinates: { lat: 68.3607, lng: -133.7230 } },
+          { name: "Fort Smith", state: "Northwest Territories", country: "Canada", coordinates: { lat: 60.0042, lng: -111.8936 } },
+          { name: "Behchokò", state: "Northwest Territories", country: "Canada", coordinates: { lat: 62.8000, lng: -116.0167 } }
+        ]
+      },
+      {
+        name: "Nunavut",
+        country: "Canada",
+        cities: [
+          { name: "Iqaluit", state: "Nunavut", country: "Canada", coordinates: { lat: 63.7467, lng: -68.5170 } },
+          { name: "Rankin Inlet", state: "Nunavut", country: "Canada", coordinates: { lat: 62.8081, lng: -92.0853 } },
+          { name: "Arviat", state: "Nunavut", country: "Canada", coordinates: { lat: 61.1086, lng: -94.0586 } },
+          { name: "Baker Lake", state: "Nunavut", country: "Canada", coordinates: { lat: 64.3189, lng: -96.0278 } },
+          { name: "Cambridge Bay", state: "Nunavut", country: "Canada", coordinates: { lat: 69.1169, lng: -105.0597 } }
+        ]
+      },
+      {
+        name: "Yukon",
+        country: "Canada",
+        cities: [
+          { name: "Whitehorse", state: "Yukon", country: "Canada", coordinates: { lat: 60.7212, lng: -135.0568 } },
+          { name: "Dawson City", state: "Yukon", country: "Canada", coordinates: { lat: 64.0601, lng: -139.4331 } },
+          { name: "Watson Lake", state: "Yukon", country: "Canada", coordinates: { lat: 60.0633, lng: -128.7089 } },
+          { name: "Haines Junction", state: "Yukon", country: "Canada", coordinates: { lat: 60.7522, lng: -137.5108 } },
+          { name: "Carmacks", state: "Yukon", country: "Canada", coordinates: { lat: 62.0889, lng: -136.3056 } }
         ]
       }
     ]
