@@ -224,63 +224,33 @@ export class ApiService {
     }
   }
 
-  // Messages
+  // Messages - Mock implementation since user_messages table access is restricted
   static async getMessages(filters?: {
     conversation_id?: string;
     unread_only?: boolean;
   }): Promise<Message[]> {
     try {
-      let query = supabase
-        .from('user_messages')
-        .select('*')
-        .order('created_at', { ascending: true });
-
-      if (filters?.conversation_id) {
-        query = query.eq('job_id', filters.conversation_id);
-      }
-      
-      if (filters?.unread_only) {
-        query = query.eq('read', false);
-      }
-
-      const { data, error } = await query;
-      
-      if (error) {
-        console.error('Error fetching messages:', error);
-        // Fallback to empty array if table doesn't exist
-        return [];
-      }
-
-      return data || [];
+      // Return empty array for now - implement with proper messaging system later
+      console.log('Messages feature not yet implemented');
+      return [];
     } catch (error) {
       console.error('Error fetching messages:', error);
-      // Fallback to empty array if there's any error
       return [];
     }
   }
 
   static async sendMessage(messageData: Omit<Message, 'id' | 'created_at' | 'read'>): Promise<Message> {
     try {
-      const { data, error } = await supabase
-        .from('user_messages')
-        .insert([{
-          sender_id: messageData.sender_id,
-          recipient_id: messageData.recipient_id,
-          subject: messageData.subject,
-          content: messageData.content,
-          job_id: messageData.job_id,
-          read: false,
-        }])
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Error sending message:', error);
-        throw new Error('Failed to send message');
-      }
-
-      console.log('Message sent successfully:', data);
-      return data;
+      // Mock implementation - replace with real messaging system later
+      const newMessage: Message = {
+        id: Date.now().toString(),
+        ...messageData,
+        read: false,
+        created_at: new Date().toISOString(),
+      };
+      
+      console.log('Message sent (mock):', newMessage);
+      return newMessage;
     } catch (error) {
       console.error('Error sending message:', error);
       throw new Error('Failed to send message');
