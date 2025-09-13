@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import AppHeader from "@/components/AppHeader";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
 import { useSubmitContactForm } from "@/hooks/use-api";
 
 // Form validation schema

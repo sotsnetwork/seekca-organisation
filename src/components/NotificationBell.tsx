@@ -24,26 +24,10 @@ export default function NotificationBell() {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Fetch notifications from Supabase database
-  const { data: notifications = [], isLoading } = useQuery({
-    queryKey: ['notifications', user?.id],
-    queryFn: async () => {
-      if (!user) return [];
-      
-      const { data, error } = await supabase
-        .from('notifications')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(10);
-
-      if (error) throw error;
-      return data || [];
-    },
-    enabled: !!user,
-  });
-
-  const unreadCount = notifications.filter(n => !n.is_read).length;
+  // Mock notifications data for now (notifications table doesn't exist yet)
+  const notifications: Notification[] = [];
+  const isLoading = false;
+  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -119,7 +103,7 @@ export default function NotificationBell() {
                       <p className="text-sm font-medium truncate">
                         {notification.title}
                       </p>
-                      {!notification.is_read && (
+                      {!notification.isRead && (
                         <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
                       )}
                     </div>
@@ -128,7 +112,7 @@ export default function NotificationBell() {
                     </p>
                     <div className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Clock className="w-3 h-3" />
-                      <span>{formatTimestamp(notification.created_at)}</span>
+                      <span>{formatTimestamp(notification.timestamp)}</span>
                     </div>
                   </div>
                 </Link>
