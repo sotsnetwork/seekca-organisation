@@ -230,59 +230,57 @@ export class ApiService {
     unread_only?: boolean;
   }): Promise<Message[]> {
     try {
-      // Mock data for now
-      const mockMessages: Message[] = [
-        {
-          id: "1",
-          sender_id: "user1",
-          recipient_id: "user2",
-          subject: "Kitchen Renovation Project",
-          content: "Hi! I'm interested in your kitchen renovation project. Can we discuss the details?",
-          job_id: "1",
-          read: false,
-          created_at: "2024-02-10T10:00:00Z"
-        },
-        {
-          id: "2",
-          sender_id: "user2",
-          recipient_id: "user1",
-          subject: "Re: Kitchen Renovation Project",
-          content: "Absolutely! I'd love to discuss the project with you. When would be a good time to chat?",
-          job_id: "1",
-          read: true,
-          created_at: "2024-02-10T14:30:00Z"
-        }
-      ];
+      let query = supabase
+        .from('user_messages')
+        .select('*')
+        .order('created_at', { ascending: true });
 
-      let filtered = mockMessages;
-      
       if (filters?.conversation_id) {
-        filtered = filtered.filter(msg => msg.job_id === filters.conversation_id);
+        query = query.eq('job_id', filters.conversation_id);
       }
       
       if (filters?.unread_only) {
-        filtered = filtered.filter(msg => !msg.read);
+        query = query.eq('read', false);
       }
 
-      return filtered;
+      const { data, error } = await query;
+      
+      if (error) {
+        console.error('Error fetching messages:', error);
+        // Fallback to empty array if table doesn't exist
+        return [];
+      }
+
+      return data || [];
     } catch (error) {
       console.error('Error fetching messages:', error);
-      throw new Error('Failed to fetch messages');
+      // Fallback to empty array if there's any error
+      return [];
     }
   }
 
   static async sendMessage(messageData: Omit<Message, 'id' | 'created_at' | 'read'>): Promise<Message> {
     try {
-      // Mock implementation
-      const newMessage: Message = {
-        id: Date.now().toString(),
-        ...messageData,
-        read: false,
-        created_at: new Date().toISOString(),
-      };
-      
-      console.log('Message sent:', newMessage);
-      return newMessage;
+      const { data, error } = await supabase
+        .from('user_messages')
+        .insert([{
+          sender_id: messageData.sender_id,
+          recipient_id: messageData.recipient_id,
+          subject: messageData.subject,
+          content: messageData.content,
+          job_id: messageData.job_id,
+          read: false,
+        }])
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error sending message:', error);
+        throw new Error('Failed to send message');
+      }
+
+      console.log('Message sent successfully:', data);
+      return data;
     } catch (error) {
       console.error('Error sending message:', error);
       throw new Error('Failed to send message');
