@@ -6,7 +6,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { Search, MessageCircle, Mail, Phone, Clock, BookOpen, Users, Shield, CreditCard, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
-import ProfileNavigation from "@/components/ProfileNavigation";
 import { useAuth } from "@/hooks/use-auth";
 import AppHeader from "@/components/AppHeader";
 import Footer from "@/components/Footer";
@@ -176,7 +175,6 @@ export default function HelpCenter() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      {user && <ProfileNavigation />}
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Header */}
         <div className="text-center mb-12">
