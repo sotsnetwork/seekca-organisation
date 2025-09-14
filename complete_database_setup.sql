@@ -173,8 +173,9 @@ ALTER TABLE project_files ENABLE ROW LEVEL SECURITY;
 ALTER TABLE payment_records ENABLE ROW LEVEL SECURITY;
 
 -- Create RLS policies for profiles
-CREATE POLICY "Users can view all profiles" ON profiles
-  FOR SELECT USING (true);
+-- Restrict profile access to authenticated users only to prevent public exposure of personal data
+CREATE POLICY "Authenticated users can view profiles" ON profiles
+  FOR SELECT TO authenticated USING (true);
 
 CREATE POLICY "Users can update their own profile" ON profiles
   FOR UPDATE USING (auth.uid() = user_id);
