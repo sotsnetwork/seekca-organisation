@@ -27,6 +27,11 @@ export default function AppHeader() {
                     <Link to="/post-job">Post a Job</Link>
                   </Button>
                 )}
+                {userRole === 'professional' && (
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/">Browse Jobs</Link>
+                  </Button>
+                )}
                 <Button variant="ghost" size="sm" asChild>
                   <Link to="/community">Community</Link>
                 </Button>
