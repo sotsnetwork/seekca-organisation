@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Edit, Save, X, Upload, Camera, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import { useUserRole } from "@/hooks/use-user-role";
 import SkillSelector from "@/components/SkillSelector";
 import CountrySelector from "@/components/CountrySelector";
 import CitySelector from "@/components/CitySelector";
@@ -27,7 +28,7 @@ const profileFormSchema = z.object({
   nickname: z.string().min(2, "Nickname must be at least 2 characters"),
   country: z.string().min(1, "Please select a country"),
   bio: z.string().max(500, "Bio must be less than 500 characters"),
-  hourlyRate: z.string().optional().or(z.literal("")),
+  hourlyRate: z.string().optional().or(z.literal("")), // Optional for all users, but only shown to professionals
   location: z.string().optional(),
 });
 
@@ -36,6 +37,7 @@ type ProfileFormData = z.infer<typeof profileFormSchema>;
 export default function Profile() {
   const AVATAR_BUCKET = 'avatars';
   const { user } = useAuth();
+  const { data: userRole } = useUserRole();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
@@ -453,52 +455,61 @@ export default function Profile() {
                       </div>
                     )}
                   </div>
-                  <div>
-                    <Label htmlFor="hourlyRate">Hourly Rate ($)</Label>
-                    <Input
-                      id="hourlyRate"
-                      type="number"
-                      {...register("hourlyRate")}
-                      disabled={!isEditing}
-                      placeholder="25"
-                    />
-                  </div>
-                  <div className="md:col-span-2">
-                    <Label>Professional Skills</Label>
-                    {isEditing && (
-                      <p className="text-sm text-muted-foreground mb-3">
-                        Select up to 5 skills that best represent your expertise. You can update these anytime.
-                      </p>
-                    )}
-                    {isEditing ? (
-                      <SkillSelector
-                        selectedSkills={selectedSkills}
-                        onSkillsChange={setSelectedSkills}
-                        maxSkills={5}
-                      />
-                    ) : (
-                      <div className="mt-2">
-                        {selectedSkills.length > 0 ? (
-                          <div className="flex flex-wrap gap-2">
-                            {selectedSkills.map((skill) => (
-                              <Badge key={skill} variant="outline">
-                                {skill}
-                              </Badge>
-                            ))}
-                          </div>
+                  {/* Only show hourly rate and skills for professionals */}
+                  {userRole === 'professional' && (
+                    <>
+                      <div>
+                        <Label htmlFor="hourlyRate">Hourly Rate ($)</Label>
+                        <Input
+                          id="hourlyRate"
+                          type="number"
+                          {...register("hourlyRate")}
+                          disabled={!isEditing}
+                          placeholder="25"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Label>Professional Skills</Label>
+                        {isEditing && (
+                          <p className="text-sm text-muted-foreground mb-3">
+                            Select up to 5 skills that best represent your expertise. You can update these anytime.
+                          </p>
+                        )}
+                        {isEditing ? (
+                          <SkillSelector
+                            selectedSkills={selectedSkills}
+                            onSkillsChange={setSelectedSkills}
+                            maxSkills={5}
+                          />
                         ) : (
-                          <p className="text-muted-foreground text-sm">No skills added yet</p>
+                          <div className="mt-2">
+                            {selectedSkills.length > 0 ? (
+                              <div className="flex flex-wrap gap-2">
+                                {selectedSkills.map((skill) => (
+                                  <Badge key={skill} variant="outline">
+                                    {skill}
+                                  </Badge>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-muted-foreground text-sm">No skills added yet</p>
+                            )}
+                          </div>
                         )}
                       </div>
-                    )}
-                  </div>
+                    </>
+                  )}
                   <div className="md:col-span-2">
                     <Label htmlFor="bio">Bio</Label>
                     <Input
                       id="bio"
                       {...register("bio")}
                       disabled={!isEditing}
-                      placeholder="Tell us about yourself and your expertise..."
+                      placeholder={
+                        userRole === 'hirer' 
+                          ? "Tell us about your company and what kind of projects you're looking for..."
+                          : "Tell us about yourself and your expertise..."
+                      }
                       className={errors.bio ? "border-destructive" : ""}
                     />
                     <div className="flex justify-between items-center mt-1">
@@ -510,6 +521,19 @@ export default function Profile() {
                       </p>
                     </div>
                   </div>
+                  
+                  {/* Role-specific information */}
+                  {userRole === 'hirer' && (
+                    <div className="md:col-span-2">
+                      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <h4 className="font-medium text-blue-900 mb-2">Hirer Account</h4>
+                        <p className="text-sm text-blue-700">
+                          As a hirer, you can post job opportunities and browse professional profiles to find the right talent for your projects. 
+                          Your profile will be visible to professionals when they view your job postings.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
