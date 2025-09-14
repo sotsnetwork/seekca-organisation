@@ -4,8 +4,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Calendar, DollarSign, Search, Filter, Clock, Briefcase } from "lucide-react";
+import { MapPin, Calendar, DollarSign, Search, Filter, Clock, Briefcase, Shield, AlertCircle } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { useUserRole } from "@/hooks/use-user-role";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -36,6 +37,7 @@ interface Job {
 
 export default function Jobs() {
   const { user } = useAuth();
+  const { data: userRole, isLoading: roleLoading } = useUserRole();
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [skillFilter, setSkillFilter] = useState("");
@@ -150,6 +152,43 @@ export default function Jobs() {
             </Button>
           </div>
         </div>
+      </div>
+    );
+  }
+
+  // Show loading while checking user role
+  if (roleLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Restrict access to professionals only
+  if (userRole !== 'professional') {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6 text-center">
+            <Shield className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+            <h2 className="text-xl font-semibold mb-4">Access Restricted</h2>
+            <p className="text-muted-foreground mb-6">
+              Only professionals can browse jobs. Hirers can post jobs and manage their listings instead.
+            </p>
+            <div className="space-y-3">
+              <Button asChild className="w-full">
+                <Link to="/post-job">Post a Job</Link>
+              </Button>
+              <Button variant="outline" asChild className="w-full">
+                <Link to="/profile">Update Profile</Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
