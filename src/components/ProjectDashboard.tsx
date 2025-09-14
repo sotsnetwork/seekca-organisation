@@ -65,23 +65,9 @@ export default function ProjectDashboard() {
       if (!user?.id) return [];
       
       try {
-        const { data, error } = await supabase
-          .from('projects')
-          .select(`
-            *,
-            professional:profiles!projects_professional_id_fkey(full_name, nickname, avatar_url),
-            hirer:profiles!projects_hirer_id_fkey(full_name, nickname, avatar_url),
-            milestones:project_milestones(id, title, amount, status, due_date)
-          `)
-          .or(`professional_id.eq.${user.id},hirer_id.eq.${user.id}`)
-          .order('created_at', { ascending: false });
-
-        if (error) {
-          console.error('Error fetching projects:', error);
-          return [];
-        }
-
-        return data || [];
+        // Mock implementation since projects table doesn't exist yet
+        console.log('Projects feature not yet implemented - returning empty array');
+        return [];
       } catch (err) {
         console.error('Exception fetching projects:', err);
         return [];
@@ -92,11 +78,9 @@ export default function ProjectDashboard() {
 
   // Calculate project statistics
   const totalProjects = projects.length;
-  const activeProjects = projects.filter(p => p.status === 'active').length;
-  const completedProjects = projects.filter(p => p.status === 'completed').length;
-  const totalEarnings = projects
-    .filter(p => p.professional_id === user?.id)
-    .reduce((sum, p) => sum + (p.total_budget || 0), 0);
+  const activeProjects = 0; // Mock data
+  const completedProjects = 0; // Mock data
+  const totalEarnings = 0; // Mock data
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -113,6 +113,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          job_id: string | null
+          read: boolean
+          recipient_id: string
+          sender_id: string
+          subject: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          job_id?: string | null
+          read?: boolean
+          recipient_id: string
+          sender_id: string
+          subject?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          job_id?: string | null
+          read?: boolean
+          recipient_id?: string
+          sender_id?: string
+          subject?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
