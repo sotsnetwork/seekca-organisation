@@ -5,13 +5,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Briefcase, MapPin, DollarSign, Calendar } from "lucide-react";
+import { ArrowLeft, Briefcase, MapPin, DollarSign, Calendar, Shield, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import { useUserRole } from "@/hooks/use-user-role";
 import AppHeader from "@/components/AppHeader";
 
 export default function PostJob() {
   const { user } = useAuth();
+  const { data: userRole, isLoading: roleLoading } = useUserRole();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -74,6 +76,45 @@ export default function PostJob() {
             <Button asChild className="w-full">
               <Link to="/auth">Sign In</Link>
             </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Show loading while checking user role
+  if (roleLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6 text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Restrict access to hirers only
+  if (userRole !== 'hirer') {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6 text-center">
+            <Shield className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+            <h2 className="text-xl font-semibold mb-4">Access Restricted</h2>
+            <p className="text-muted-foreground mb-6">
+              Only hirers can post jobs. Professionals can browse and apply for jobs instead.
+            </p>
+            <div className="space-y-3">
+              <Button asChild className="w-full">
+                <Link to="/">Browse Jobs</Link>
+              </Button>
+              <Button variant="outline" asChild className="w-full">
+                <Link to="/profile">Update Profile</Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
