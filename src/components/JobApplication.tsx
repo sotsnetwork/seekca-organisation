@@ -16,7 +16,7 @@ import {
   AlertCircle
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -52,35 +52,10 @@ export default function JobApplication({ job, onApplicationSubmitted }: JobAppli
     estimated_duration: ''
   });
 
-  // Check if user has already applied
-  const { data: existingApplication } = useQuery({
-    queryKey: ['job-application', job.id, user?.id],
-    queryFn: async () => {
-      if (!user?.id) return null;
-      
-      try {
-        const { data, error } = await supabase
-          .from('job_applications')
-          .select('*')
-          .eq('job_id', job.id)
-          .eq('professional_id', user.id)
-          .maybeSingle();
+  // Mock application status for now since job_applications table doesn't exist
+  const existingApplication = null;
 
-        if (error) {
-          console.error('Error checking application:', error);
-          return null;
-        }
-
-        return data;
-      } catch (err) {
-        console.error('Exception checking application:', err);
-        return null;
-      }
-    },
-    enabled: !!user?.id,
-  });
-
-  // Submit application mutation
+  // Submit application mutation - mock for now
   const submitApplicationMutation = useMutation({
     mutationFn: async (applicationData: {
       cover_letter: string;
@@ -89,39 +64,24 @@ export default function JobApplication({ job, onApplicationSubmitted }: JobAppli
     }) => {
       if (!user?.id) throw new Error('User not authenticated');
 
-      const { data, error } = await supabase
-        .from('job_applications')
-        .insert([{
-          job_id: job.id,
-          professional_id: user.id,
-          hirer_id: job.hirer.id,
-          cover_letter: applicationData.cover_letter,
-          proposed_rate: applicationData.proposed_rate,
-          estimated_duration: applicationData.estimated_duration,
-          status: 'pending'
-        }])
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
+      // Mock submission - replace with real implementation when job_applications table exists
+      console.log('Mock application submitted:', applicationData);
+      return { id: 'mock-id', ...applicationData };
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['job-application', job.id, user?.id] });
-      queryClient.invalidateQueries({ queryKey: ['jobs'] });
       setIsDialogOpen(false);
       setFormData({ cover_letter: '', proposed_rate: '', estimated_duration: '' });
       
       toast({
         title: "Application Submitted",
-        description: "Your application has been successfully submitted.",
+        description: "Your application has been successfully submitted (mock).",
       });
       
       onApplicationSubmitted?.();
     },
     onError: (error) => {
       toast({
-        title: "Application Error",
+        title: "Application Error", 
         description: `Failed to submit application: ${error.message}`,
         variant: "destructive",
       });

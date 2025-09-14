@@ -47,74 +47,17 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [fileTypeFilter, setFileTypeFilter] = useState("all");
 
-  // Fetch project files
-  const { data: files = [], isLoading } = useQuery({
-    queryKey: ['project-files', projectId],
-    queryFn: async () => {
-      try {
-        const { data, error } = await supabase
-          .from('project_files')
-          .select(`
-            *,
-            uploader:profiles!project_files_uploaded_by_fkey(full_name, nickname, avatar_url)
-          `)
-          .eq('project_id', projectId)
-          .order('created_at', { ascending: false });
+  // Mock implementation - project files feature not yet implemented
+  const files: ProjectFile[] = [];
+  const isLoading = false;
 
-        if (error) {
-          console.error('Error fetching files:', error);
-          return [];
-        }
-
-        return data || [];
-      } catch (err) {
-        console.error('Exception fetching files:', err);
-        return [];
-      }
-    },
-    enabled: !!projectId,
-  });
-
-  // Upload file mutation
+  // Mock upload mutation
   const uploadFileMutation = useMutation({
     mutationFn: async (file: File) => {
-      if (!user?.id) throw new Error('User not authenticated');
-
-      // Upload file to Supabase Storage
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-      const filePath = `project-files/${projectId}/${fileName}`;
-
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('project-files')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      // Get public URL
-      const { data: urlData } = supabase.storage
-        .from('project-files')
-        .getPublicUrl(filePath);
-
-      // Save file record to database
-      const { data, error } = await supabase
-        .from('project_files')
-        .insert([{
-          project_id: projectId,
-          uploaded_by: user.id,
-          file_name: file.name,
-          file_url: urlData.publicUrl,
-          file_size: file.size,
-          file_type: file.type
-        }])
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
+      console.log('Mock file upload:', file.name);
+      throw new Error('Project files feature not yet implemented');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['project-files', projectId] });
       toast({
         title: "File Uploaded",
         description: "The file has been successfully uploaded.",
@@ -129,18 +72,13 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
     },
   });
 
-  // Delete file mutation
+  // Mock delete mutation  
   const deleteFileMutation = useMutation({
     mutationFn: async (fileId: string) => {
-      const { error } = await supabase
-        .from('project_files')
-        .delete()
-        .eq('id', fileId);
-
-      if (error) throw error;
+      console.log('Mock file delete:', fileId);
+      throw new Error('Project files feature not yet implemented');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['project-files', projectId] });
       toast({
         title: "File Deleted",
         description: "The file has been successfully deleted.",
@@ -148,7 +86,7 @@ export default function ProjectFiles({ projectId }: ProjectFilesProps) {
     },
     onError: (error) => {
       toast({
-        title: "Delete Error",
+        title: "Delete Error", 
         description: `Failed to delete file: ${error.message}`,
         variant: "destructive",
       });

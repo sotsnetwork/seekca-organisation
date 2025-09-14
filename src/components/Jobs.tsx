@@ -51,7 +51,7 @@ export default function Jobs() {
           .from('jobs')
           .select(`
             *,
-            hirer:profiles!jobs_hirer_id_fkey(full_name, nickname, avatar_url)
+            hirer:profiles!jobs_user_id_fkey(full_name, nickname, avatar_url)
           `)
           .eq('status', 'active')
           .order('created_at', { ascending: false });
@@ -75,7 +75,20 @@ export default function Jobs() {
           return [];
         }
         
-        return data as Job[] || [];
+        return (data || []).map(job => {
+          // Safely handle potentially null hirer data
+          let hirerData;
+          if (job.hirer !== null && typeof job.hirer === 'object' && !('error' in job.hirer)) {
+            hirerData = job.hirer;
+          } else {
+            hirerData = { id: job.user_id, full_name: 'Hirer', nickname: 'Hirer' };
+          }
+          
+          return {
+            ...job,
+            hirer: hirerData
+          };
+        }) as Job[];
       } catch (err) {
         console.error('Error fetching jobs (this is expected if database tables don\'t exist yet):', err);
         return [];
