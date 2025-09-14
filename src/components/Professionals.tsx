@@ -98,9 +98,14 @@ export default function Professionals() {
     queryKey: ['profiles', searchTerm, countryFilter, skillFilter, priceRange],
     queryFn: async () => {
       try {
+        // First get all profiles with their user roles
         let query = supabase
           .from('profiles')
-          .select('*')
+          .select(`
+            *,
+            user_roles!inner(role)
+          `)
+          .eq('user_roles.role', 'professional') // Only get professionals
           .order('created_at', { ascending: false });
 
         if (searchTerm) {
@@ -139,6 +144,40 @@ export default function Professionals() {
     enabled: !!user,
   });
 
+  // Get project counts for each professional
+  const { data: projectCounts = {} } = useQuery({
+    queryKey: ['project-counts', apiProfessionals.map(p => p.user_id)],
+    queryFn: async () => {
+      if (apiProfessionals.length === 0) return {};
+      
+      try {
+        const userIds = apiProfessionals.map(p => p.user_id);
+        const { data, error } = await supabase
+          .from('projects')
+          .select('professional_id')
+          .in('professional_id', userIds)
+          .eq('status', 'completed');
+        
+        if (error) {
+          console.log('Error fetching project counts:', error);
+          return {};
+        }
+        
+        // Count projects per professional
+        const counts: Record<string, number> = {};
+        data?.forEach(project => {
+          counts[project.professional_id] = (counts[project.professional_id] || 0) + 1;
+        });
+        
+        return counts;
+      } catch (err) {
+        console.log('Error fetching project counts:', err);
+        return {};
+      }
+    },
+    enabled: apiProfessionals.length > 0,
+  });
+
   // Convert API data to component format
   const professionals = apiProfessionals.map(prof => ({
     id: prof.id,
@@ -152,7 +191,7 @@ export default function Professionals() {
     skills: prof.skills || [],
     rating: 4.5, // Mock rating since not in profiles table
     hourlyRate: prof.hourly_rate || 0,
-    completedProjects: Math.floor(Math.random() * 50), // Mock data
+    completedProjects: projectCounts[prof.user_id] || 0, // Real project count from database
     avatar: prof.avatar_url,
     description: prof.bio || "Professional",
     verified: Math.random() > 0.3, // Mock verification
