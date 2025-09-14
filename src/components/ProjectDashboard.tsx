@@ -18,6 +18,7 @@ import {
   Target
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { useUserRole } from "@/hooks/use-user-role";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
@@ -56,6 +57,7 @@ interface Project {
 
 export default function ProjectDashboard() {
   const { user } = useAuth();
+  const { data: userRole } = useUserRole();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   // Fetch user's projects
@@ -121,15 +123,22 @@ export default function ProjectDashboard() {
         </div>
         <h3 className="text-2xl font-semibold mb-4">No Projects Yet</h3>
         <p className="text-muted-foreground mb-6 text-lg">
-          You don't have any active projects. Apply for jobs or post projects to get started!
+          {userRole === 'hirer' 
+            ? "You haven't posted any jobs yet. Create your first job posting to find talented professionals!"
+            : "You don't have any active projects. Apply for jobs to get started!"
+          }
         </p>
         <div className="space-y-3">
-          <Button asChild>
-            <Link to="/jobs">Browse Jobs</Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link to="/post-job">Post a Job</Link>
-          </Button>
+          {userRole === 'professional' && (
+            <Button asChild>
+              <Link to="/">Browse Jobs</Link>
+            </Button>
+          )}
+          {userRole === 'hirer' && (
+            <Button asChild>
+              <Link to="/post-job">Post a Job</Link>
+            </Button>
+          )}
         </div>
       </div>
     );
