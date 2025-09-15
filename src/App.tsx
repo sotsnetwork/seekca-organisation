@@ -22,6 +22,7 @@ import Community from "./pages/Community";
 import Status from "./pages/Status";
 import Teams from "./pages/Teams";
 import TeamsManagement from "./pages/TeamsManagement";
+import PasswordReset from "./pages/PasswordReset";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/status" element={<Status />} />
             <Route path="/teams" element={<Teams />} />
             <Route path="/teams-management" element={<TeamsManagement />} />
+            <Route path="/reset-password" element={<PasswordReset />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
