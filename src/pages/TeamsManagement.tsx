@@ -6,11 +6,33 @@ import TeamDashboard from "@/components/TeamDashboard";
 
 export default function TeamsManagement() {
   const { user } = useAuth();
-  const { data: userRole, isLoading: roleLoading, error: roleError } = useUserRole();  if (!user) {
+  const { data: userRole, isLoading: roleLoading, error: roleError } = useUserRole();
+
+  if (!user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <p className="text-muted-foreground mb-4">Please sign in to manage your teams.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (roleLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-muted-foreground mb-4">Loading your permissions…</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (roleError) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-muted-foreground mb-4">Couldn't verify your permissions. Please retry.</p>
         </div>
       </div>
     );
