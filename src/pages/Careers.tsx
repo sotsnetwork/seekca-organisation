@@ -9,63 +9,63 @@ import Footer from "@/components/Footer";
 const jobOpenings = [
   {
     id: 1,
-    title: "Senior Frontend Developer",
-    department: "Engineering",
+    title: "Senior Operations Manager",
+    department: "Operations",
     location: "Remote",
     type: "Full-time",
-    salary: "$120k - $160k",
-    description: "Join our engineering team to build the next generation of marketplace features. You'll work on React, TypeScript, and modern web technologies.",
-    requirements: ["5+ years React experience", "TypeScript proficiency", "Remote work experience"]
+    salary: "$80k - $120k",
+    description: "Join our operations team to help manage and grow our professional services marketplace. You'll work on process improvement, vendor relations, and quality assurance.",
+    requirements: ["5+ years operations experience", "Marketplace/platform experience", "Remote work experience"]
   },
   {
     id: 2,
-    title: "Product Manager",
-    department: "Product",
-    location: "Remote / San Francisco",
+    title: "Customer Success Manager",
+    department: "Customer Success",
+    location: "Remote / New York",
     type: "Full-time",
-    salary: "$140k - $180k",
-    description: "Lead product strategy and execution for our core marketplace features. Work closely with engineering and design teams.",
-    requirements: ["3+ years product management", "Marketplace experience", "Data-driven mindset"]
+    salary: "$70k - $100k",
+    description: "Lead customer success initiatives for our professional services platform. Work closely with both professionals and clients to ensure satisfaction.",
+    requirements: ["3+ years customer success", "Professional services experience", "Strong communication skills"]
   },
   {
     id: 3,
-    title: "DevOps Engineer",
-    department: "Engineering",
+    title: "Quality Assurance Specialist",
+    department: "Quality",
     location: "Remote",
     type: "Full-time",
-    salary: "$130k - $170k",
-    description: "Build and maintain our cloud infrastructure, ensuring scalability and reliability for our global platform.",
-    requirements: ["AWS/GCP experience", "Kubernetes knowledge", "CI/CD expertise"]
+    salary: "$60k - $85k",
+    description: "Ensure quality standards for all professionals on our platform. Review credentials, conduct background checks, and maintain service standards.",
+    requirements: ["Background check experience", "Quality assurance knowledge", "Attention to detail"]
   },
   {
     id: 4,
-    title: "UX Designer",
-    department: "Design",
+    title: "Marketing Coordinator",
+    department: "Marketing",
     location: "Remote",
     type: "Full-time",
-    salary: "$110k - $140k",
-    description: "Design intuitive user experiences for professionals and businesses using our platform worldwide.",
-    requirements: ["4+ years UX design", "Figma proficiency", "Marketplace design experience"]
+    salary: "$50k - $70k",
+    description: "Help promote our professional services marketplace and connect skilled workers with clients who need their services.",
+    requirements: ["2+ years marketing experience", "Digital marketing knowledge", "Professional services experience"]
   },
   {
     id: 5,
-    title: "Customer Success Manager",
-    department: "Customer Success",
+    title: "Business Development Representative",
+    department: "Business Development",
     location: "Remote",
     type: "Full-time",
-    salary: "$90k - $120k",
-    description: "Help our customers succeed by providing exceptional support and building long-term relationships.",
-    requirements: ["2+ years customer success", "B2B experience", "Excellent communication"]
+    salary: "$60k - $80k",
+    description: "Help grow our platform by connecting with professional service providers and building partnerships.",
+    requirements: ["2+ years business development", "Professional services experience", "Excellent communication"]
   },
   {
     id: 6,
-    title: "Security Engineer",
-    department: "Security",
+    title: "Compliance Specialist",
+    department: "Compliance",
     location: "Remote",
     type: "Full-time",
-    salary: "$150k - $190k",
-    description: "Protect our platform and users by implementing robust security measures and monitoring systems.",
-    requirements: ["Security certification", "Penetration testing", "Compliance experience"]
+    salary: "$70k - $90k",
+    description: "Ensure our platform meets all regulatory requirements and maintains high standards for professional services.",
+    requirements: ["Compliance certification", "Regulatory knowledge", "Professional services experience"]
   }
 ];
 
