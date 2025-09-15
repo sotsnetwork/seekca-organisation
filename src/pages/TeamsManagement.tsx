@@ -6,9 +6,7 @@ import TeamDashboard from "@/components/TeamDashboard";
 
 export default function TeamsManagement() {
   const { user } = useAuth();
-  const { data: userRole } = useUserRole();
-
-  if (!user) {
+  const { data: userRole, isLoading: roleLoading, error: roleError } = useUserRole();  if (!user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
