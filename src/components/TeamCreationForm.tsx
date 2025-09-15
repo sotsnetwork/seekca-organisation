@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { X, Plus, Users, Briefcase, MapPin, Globe, Image } from "lucide-react";
+import { X, Plus, Users, MapPin, Globe, Image } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
@@ -302,10 +302,7 @@ export default function TeamCreationForm({ onSuccess }: { onSuccess?: () => void
                   Creating...
                 </>
               ) : (
-                <>
-                  <Briefcase className="w-4 h-4" />
-                  Create Team
-                </>
+                "Create Team"
               )}
             </Button>
           </div>
