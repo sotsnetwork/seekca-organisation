@@ -167,6 +167,48 @@ export type Database = {
         }
         Relationships: []
       }
+      user_settings: {
+        Row: {
+          created_at: string
+          email_notifications: boolean
+          id: string
+          language: string
+          marketing_emails: boolean
+          profile_visibility: string
+          project_updates: boolean
+          timezone: string
+          two_factor_auth: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_notifications?: boolean
+          id?: string
+          language?: string
+          marketing_emails?: boolean
+          profile_visibility?: string
+          project_updates?: boolean
+          timezone?: string
+          two_factor_auth?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email_notifications?: boolean
+          id?: string
+          language?: string
+          marketing_emails?: boolean
+          profile_visibility?: string
+          project_updates?: boolean
+          timezone?: string
+          two_factor_auth?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
