@@ -20,6 +20,8 @@ import HelpCenter from "./pages/HelpCenter";
 import APIDocs from "./pages/APIDocs";
 import Community from "./pages/Community";
 import Status from "./pages/Status";
+import Teams from "./pages/Teams";
+import TeamsManagement from "./pages/TeamsManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +50,8 @@ const App = () => (
             <Route path="/api-docs" element={<APIDocs />} />
             <Route path="/community" element={<Community />} />
             <Route path="/status" element={<Status />} />
+            <Route path="/teams" element={<Teams />} />
+            <Route path="/teams-management" element={<TeamsManagement />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
