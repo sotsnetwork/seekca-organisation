@@ -30,6 +30,8 @@ const profileFormSchema = z.object({
   bio: z.string().max(500, "Bio must be less than 500 characters"),
   hourlyRate: z.string().optional().or(z.literal("")), // Optional for all users, but only shown to professionals
   location: z.string().optional(),
+  visibility: z.enum(["public", "professionals_only", "private"]).optional(),
+  collaborationEnabled: z.boolean().optional(),
 });
 
 type ProfileFormData = z.infer<typeof profileFormSchema>;
@@ -62,6 +64,8 @@ export default function Profile() {
     hourlyRate: user?.user_metadata?.hourlyRate || '',
     location: user?.user_metadata?.location || '',
     avatarUrl: user?.user_metadata?.avatar_url || '',
+    visibility: user?.user_metadata?.visibility || 'public',
+    collaborationEnabled: user?.user_metadata?.collaboration_enabled !== false,
   });
 
   const {
@@ -80,6 +84,8 @@ export default function Profile() {
       bio: user?.user_metadata?.bio || '',
       hourlyRate: user?.user_metadata?.hourlyRate || '',
       location: user?.user_metadata?.location || '',
+      visibility: user?.user_metadata?.visibility || 'public',
+      collaborationEnabled: user?.user_metadata?.collaboration_enabled !== false,
     },
   });
 
@@ -110,6 +116,8 @@ export default function Profile() {
             hourly_rate: parseFloat(data.hourlyRate) || null,
             location: locationData,
             avatar_url: profileData.avatarUrl,
+            visibility: data.visibility || 'public',
+            collaboration_enabled: data.collaborationEnabled !== false,
           });
         profileError = error;
       } catch (err) {
@@ -130,6 +138,8 @@ export default function Profile() {
             hourly_rate: parseFloat(data.hourlyRate) || null,
             location: locationData,
             avatar_url: profileData.avatarUrl,
+            visibility: data.visibility || 'public',
+            collaboration_enabled: data.collaborationEnabled !== false,
           }
         });
 
@@ -521,6 +531,45 @@ export default function Profile() {
                       </p>
                     </div>
                   </div>
+
+                  {/* Visibility and Collaboration Settings - Only for Professionals */}
+                  {userRole === 'professional' && (
+                    <>
+                      <div className="md:col-span-2">
+                        <Label htmlFor="visibility">Profile Visibility</Label>
+                        <select
+                          id="visibility"
+                          {...register("visibility")}
+                          disabled={!isEditing}
+                          className="w-full p-2 border border-input rounded-md bg-background"
+                        >
+                          <option value="public">Public - Anyone can view</option>
+                          <option value="professionals_only">Professionals Only - Only other professionals can view</option>
+                          <option value="private">Private - Only visible to team members</option>
+                        </select>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Control who can see your profile when searching for team members
+                        </p>
+                      </div>
+                      <div className="md:col-span-2">
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id="collaborationEnabled"
+                            {...register("collaborationEnabled")}
+                            disabled={!isEditing}
+                            className="rounded border-input"
+                          />
+                          <Label htmlFor="collaborationEnabled" className="text-sm font-medium">
+                            Enable Team Collaboration
+                          </Label>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Allow other professionals to invite you to join their teams
+                        </p>
+                      </div>
+                    </>
+                  )}
                   
                   {/* Role-specific information */}
                   {userRole === 'hirer' && (
