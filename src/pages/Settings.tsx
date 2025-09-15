@@ -69,24 +69,19 @@ export default function Settings() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-destructive mb-4">Error loading settings: {error}</p>
-          <Button onClick={() => window.location.reload()}>
-            Retry
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  // If loading failed, render the page with defaults but show a small inline warning
+  const loadError = error;
 
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
       <ProfileNavigation />
       <main className="max-w-4xl mx-auto px-6 py-8">
+        {loadError && (
+          <div className="mb-4 rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-800">
+            Unable to load your saved settings. Showing defaults. You can change and save again.
+          </div>
+        )}
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <Button variant="outline" size="sm" asChild>
