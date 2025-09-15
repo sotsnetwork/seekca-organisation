@@ -141,7 +141,8 @@ export default function Professionals() {
         return [];
       }
     },
-    enabled: !!user,
+    // Always allow fetching so visitors can browse professionals
+    enabled: true,
   });
 
   // Get project counts for each professional
@@ -179,14 +180,14 @@ export default function Professionals() {
   });
 
   // Convert API data to component format
-  const professionals = apiProfessionals.map(prof => ({
+  const professionals = apiProfessionals.map((prof: any) => ({
     id: prof.id,
     name: prof.nickname || prof.full_name || "Professional",
     title: prof.bio || "Professional",
-    location: prof.location || "Location not specified",
+    location: prof.location || `${prof.city ?? ''}${prof.city && prof.state ? ', ' : ''}${prof.state ?? ''}` || "Location not specified",
     country: prof.country || "Unknown",
-    state: "",
-    city: "",
+    state: prof.state || "",
+    city: prof.city || "",
     town: "",
     skills: prof.skills || [],
     rating: 4.5, // Mock rating since not in profiles table
