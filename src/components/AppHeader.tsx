@@ -35,6 +35,16 @@ export default function AppHeader() {
                 <Button variant="ghost" size="sm" asChild>
                   <Link to="/community">Community</Link>
                 </Button>
+                {userRole === 'professional' && (
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/teams-management">My Teams</Link>
+                  </Button>
+                )}
+                {userRole === 'hirer' && (
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/teams">Browse Teams</Link>
+                  </Button>
+                )}
                 <NotificationBell />
                 <UserProfileDropdown />
               </>
