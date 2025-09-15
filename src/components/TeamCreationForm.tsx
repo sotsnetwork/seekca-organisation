@@ -26,11 +26,11 @@ const teamFormSchema = z.object({
 type TeamFormData = z.infer<typeof teamFormSchema>;
 
 const SKILL_OPTIONS = [
-  "Web Development", "Mobile Development", "UI/UX Design", "Graphic Design",
-  "Digital Marketing", "Content Writing", "SEO", "Social Media Management",
-  "Video Editing", "Photography", "Data Analysis", "Project Management",
-  "Customer Service", "Sales", "Accounting", "Legal Services",
-  "Consulting", "Translation", "Virtual Assistant", "E-commerce"
+  "Plumbing", "Electrical Work", "HVAC Installation", "Carpentry",
+  "Masonry", "Roofing", "Flooring Installation", "Painting",
+  "Tile Installation", "Concrete Work", "Drywall Installation", "Framing",
+  "Auto Repair", "Welding", "Landscaping", "Cleaning Services",
+  "Moving Services", "Handyman Services", "Appliance Repair", "Lock Services"
 ];
 
 export default function TeamCreationForm({ onSuccess }: { onSuccess?: () => void }) {
