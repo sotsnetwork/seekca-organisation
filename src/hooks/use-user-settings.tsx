@@ -49,8 +49,8 @@ export function useUserSettings() {
         .single();
 
       if (fetchError) {
-        if (fetchError.code === 'PGRST116') {
-          // No settings found, use defaults
+        if (fetchError.code === 'PGRST116' || fetchError.code === '42P01') {
+          // No settings found or table doesn't exist, use defaults
           setSettings(defaultSettings);
         } else {
           throw fetchError;
