@@ -6,27 +6,43 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Save, Bell, Shield, User, Globe } from "lucide-react";
+import { ArrowLeft, Save, Bell, Shield, User, Globe, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
+import { useUserSettings } from "@/hooks/use-user-settings";
 import AppHeader from "@/components/AppHeader";
 import ProfileNavigation from "@/components/ProfileNavigation";
 
 export default function Settings() {
   const { user } = useAuth();
-  const [settings, setSettings] = useState({
-    emailNotifications: true,
-    projectUpdates: true,
-    marketingEmails: false,
-    twoFactorAuth: false,
-    profileVisibility: 'public',
-    language: 'en',
-    timezone: 'UTC',
+  const {
+    settings,
+    isLoading,
+    isSaving,
+    error,
+    saveSettings,
+    updateSetting,
+    changePassword,
+  } = useUserSettings();
+
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
   });
 
-  const handleSave = () => {
-    // TODO: Implement settings save logic with Supabase
-    console.log('Settings saved:', settings);
+  const handleSave = async () => {
+    await saveSettings(settings);
+  };
+
+  const handlePasswordChange = async () => {
+    if (!passwordData.currentPassword || !passwordData.newPassword) {
+      return;
+    }
+    
+    const success = await changePassword(passwordData.currentPassword, passwordData.newPassword);
+    if (success) {
+      setPasswordData({ currentPassword: '', newPassword: '' });
+    }
   };
 
   if (!user) {
@@ -36,6 +52,30 @@ export default function Settings() {
           <p className="text-muted-foreground mb-4">Please sign in to view your settings.</p>
           <Button asChild>
             <Link to="/auth">Sign In</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading your settings...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-destructive mb-4">Error loading settings: {error}</p>
+          <Button onClick={() => window.location.reload()}>
+            Retry
           </Button>
         </div>
       </div>
@@ -82,7 +122,7 @@ export default function Settings() {
                 <Switch
                   id="emailNotifications"
                   checked={settings.emailNotifications}
-                  onCheckedChange={(checked) => setSettings(prev => ({ ...prev, emailNotifications: checked }))}
+                  onCheckedChange={(checked) => updateSetting('emailNotifications', checked)}
                 />
               </div>
               <Separator />
@@ -94,7 +134,7 @@ export default function Settings() {
                 <Switch
                   id="projectUpdates"
                   checked={settings.projectUpdates}
-                  onCheckedChange={(checked) => setSettings(prev => ({ ...prev, projectUpdates: checked }))}
+                  onCheckedChange={(checked) => updateSetting('projectUpdates', checked)}
                 />
               </div>
               <Separator />
@@ -106,7 +146,7 @@ export default function Settings() {
                 <Switch
                   id="marketingEmails"
                   checked={settings.marketingEmails}
-                  onCheckedChange={(checked) => setSettings(prev => ({ ...prev, marketingEmails: checked }))}
+                  onCheckedChange={(checked) => updateSetting('marketingEmails', checked)}
                 />
               </div>
             </CardContent>
@@ -132,7 +172,7 @@ export default function Settings() {
                 <Switch
                   id="twoFactorAuth"
                   checked={settings.twoFactorAuth}
-                  onCheckedChange={(checked) => setSettings(prev => ({ ...prev, twoFactorAuth: checked }))}
+                  onCheckedChange={(checked) => updateSetting('twoFactorAuth', checked)}
                 />
               </div>
               <Separator />
@@ -143,6 +183,8 @@ export default function Settings() {
                   type="password"
                   placeholder="Enter current password"
                   className="mt-2"
+                  value={passwordData.currentPassword}
+                  onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
                 />
               </div>
               <div>
@@ -152,7 +194,19 @@ export default function Settings() {
                   type="password"
                   placeholder="Enter new password"
                   className="mt-2"
+                  value={passwordData.newPassword}
+                  onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
                 />
+              </div>
+              <div className="flex justify-end">
+                <Button 
+                  onClick={handlePasswordChange}
+                  disabled={isSaving || !passwordData.currentPassword || !passwordData.newPassword}
+                  variant="outline"
+                >
+                  {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+                  Change Password
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -171,7 +225,7 @@ export default function Settings() {
             <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="profileVisibility">Profile Visibility</Label>
-                <Select value={settings.profileVisibility} onValueChange={(value) => setSettings(prev => ({ ...prev, profileVisibility: value }))}>
+                <Select value={settings.profileVisibility} onValueChange={(value) => updateSetting('profileVisibility', value as 'public' | 'professional' | 'private')}>
                   <SelectTrigger className="mt-2">
                     <SelectValue placeholder="Select visibility" />
                   </SelectTrigger>
@@ -199,7 +253,7 @@ export default function Settings() {
             <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="language">Language</Label>
-                <Select value={settings.language} onValueChange={(value) => setSettings(prev => ({ ...prev, language: value }))}>
+                <Select value={settings.language} onValueChange={(value) => updateSetting('language', value as 'en' | 'es' | 'fr' | 'de')}>
                   <SelectTrigger className="mt-2">
                     <SelectValue placeholder="Select language" />
                   </SelectTrigger>
@@ -213,7 +267,7 @@ export default function Settings() {
               </div>
               <div>
                 <Label htmlFor="timezone">Timezone</Label>
-                <Select value={settings.timezone} onValueChange={(value) => setSettings(prev => ({ ...prev, timezone: value }))}>
+                <Select value={settings.timezone} onValueChange={(value) => updateSetting('timezone', value)}>
                   <SelectTrigger className="mt-2">
                     <SelectValue placeholder="Select timezone" />
                   </SelectTrigger>
@@ -228,12 +282,18 @@ export default function Settings() {
             </CardContent>
           </Card>
 
-          {/* Save Button */}
+          {/* Auto-save indicator */}
           <div className="flex justify-end">
-            <Button onClick={handleSave} className="flex items-center gap-2">
-              <Save className="w-4 h-4" />
-              Save Settings
-            </Button>
+            <div className="text-sm text-muted-foreground">
+              {isSaving ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Saving...
+                </div>
+              ) : (
+                "Settings are saved automatically"
+              )}
+            </div>
           </div>
         </div>
       </main>
