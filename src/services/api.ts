@@ -21,15 +21,19 @@ export interface Professional {
 
 export interface Job {
   id: string;
+  user_id: string;
   title: string;
   description: string;
-  location: string;
-  budget: number;
-  skills_required: string[];
-  deadline?: string;
-  status: 'open' | 'in_progress' | 'completed' | 'cancelled';
+  budget_min: number | null;
+  budget_max: number | null;
+  currency: string;
+  skills: string[];
+  location: string | null;
+  remote_allowed: boolean;
+  project_duration: string | null;
+  status: 'active' | 'paused' | 'completed' | 'cancelled' | 'closed' | 'draft';
   created_at: string;
-  user_id: string;
+  updated_at: string;
 }
 
 export interface Message {
@@ -159,47 +163,22 @@ export class ApiService {
     category?: string;
   }): Promise<Job[]> {
     try {
-      // Mock data for now
-      const mockJobs: Job[] = [
-        {
-          id: "1",
-          title: "Kitchen Renovation",
-          description: "Complete kitchen renovation including cabinets, countertops, and appliances.",
-          location: "New York, NY",
-          budget: 15000,
-          skills_required: ["Carpentry", "Plumbing", "Electrical Work"],
-          deadline: "2024-03-15",
-          status: "open",
-          created_at: "2024-02-01T10:00:00Z",
-          user_id: "user1"
-        },
-        {
-          id: "2",
-          title: "Bathroom Remodel",
-          description: "Full bathroom remodel with new fixtures, tiles, and lighting.",
-          location: "Los Angeles, CA",
-          budget: 8000,
-          skills_required: ["Plumbing", "Tiling", "Electrical Work"],
-          deadline: "2024-03-30",
-          status: "open",
-          created_at: "2024-02-05T14:30:00Z",
-          user_id: "user2"
-        }
-      ];
+      let query = supabase
+        .from('jobs')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-      let filtered = mockJobs;
-      
       if (filters?.status) {
-        filtered = filtered.filter(job => job.status === filters.status);
+        query = query.eq('status', filters.status);
       }
-      
       if (filters?.location) {
-        filtered = filtered.filter(job => 
-          job.location.toLowerCase().includes(filters.location!.toLowerCase())
-        );
+        query = query.ilike('location', `%${filters.location}%`);
       }
+      // category not in schema yet; ignore for now
 
-      return filtered;
+      const { data, error } = await query;
+      if (error) throw error;
+      return (data || []) as Job[];
     } catch (error) {
       console.error('Error fetching jobs:', error);
       throw new Error('Failed to fetch jobs');
