@@ -60,6 +60,17 @@ export function useCreateJob() {
   });
 }
 
+export function useDeleteJob() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (jobId: string) => ApiService.deleteJob(jobId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.jobs });
+    },
+  });
+}
+
 // Messages hooks
 export function useMessages(filters?: {
   conversation_id?: string;
