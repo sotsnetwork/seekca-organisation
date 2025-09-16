@@ -266,9 +266,11 @@ export default function HelpCenter() {
                 <MessageCircle className="w-4 h-4 md:w-5 md:h-5 mr-2" />
                 Start Live Chat
               </Button>
-              <Button variant="outline" size="lg" className="w-full sm:w-auto bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary">
-                <Mail className="w-4 h-4 md:w-5 md:h-5 mr-2" />
-                Send Email
+              <Button variant="outline" size="lg" className="w-full sm:w-auto bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary" asChild>
+                <a href="mailto:seekcamarketplace@gmail.com">
+                  <Mail className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                  Send Email
+                </a>
               </Button>
             </div>
           </CardContent>
