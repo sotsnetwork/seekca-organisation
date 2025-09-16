@@ -21,6 +21,7 @@ import ProfileNavigation from "@/components/ProfileNavigation";
 import { ProfilePictureCropper } from "@/components/ProfilePictureCropper";
 import AppHeader from "@/components/AppHeader";
 import { useQueryClient } from "@tanstack/react-query";
+import { getCurrencyForCountry, getCurrencySymbol } from "@/lib/currency";
 
 // Profile form validation schema
 const profileFormSchema = z.object({
@@ -101,6 +102,9 @@ export default function Profile() {
         ? `${selectedCity.name}, ${selectedCity.state}, ${selectedCity.country}`
         : data.location || '';
 
+      // Get currency information based on country
+      const currencyInfo = getCurrencyForCountry(data.country);
+
       // Try to upsert profile data to the profiles table first
       let profileError = null;
       try {
@@ -118,6 +122,8 @@ export default function Profile() {
             avatar_url: profileData.avatarUrl,
             visibility: data.visibility || 'public',
             collaboration_enabled: data.collaborationEnabled !== false,
+            currency_code: currencyInfo.code,
+            currency_symbol: currencyInfo.symbol,
           });
         profileError = error;
       } catch (err) {
@@ -140,6 +146,8 @@ export default function Profile() {
             avatar_url: profileData.avatarUrl,
             visibility: data.visibility || 'public',
             collaboration_enabled: data.collaborationEnabled !== false,
+            currency_code: currencyInfo.code,
+            currency_symbol: currencyInfo.symbol,
           }
         });
 
@@ -469,7 +477,9 @@ export default function Profile() {
                   {userRole === 'professional' && (
                     <>
                       <div>
-                        <Label htmlFor="hourlyRate">Hourly Rate ($)</Label>
+                        <Label htmlFor="hourlyRate">
+                          Hourly Rate ({getCurrencySymbol(watchedValues.country || 'United States')})
+                        </Label>
                         <Input
                           id="hourlyRate"
                           type="number"
@@ -477,6 +487,9 @@ export default function Profile() {
                           disabled={!isEditing}
                           placeholder="25"
                         />
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Currency: {getCurrencyForCountry(watchedValues.country || 'United States').name}
+                        </p>
                       </div>
                       <div className="md:col-span-2">
                         <Label>Professional Skills</Label>
