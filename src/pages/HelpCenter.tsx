@@ -49,7 +49,7 @@ const faqCategories = [
       },
       {
         question: "What fees does SeekCa charge?",
-        answer: "We charge a small service fee (typically 5-8%) on completed jobs. This covers payment processing, platform maintenance, and customer support. There are no upfront costs or monthly fees for professionals."
+        answer: "SeekCa is completely free for both hirers and professionals! No platform fees, no service charges, no hidden costs. We believe in connecting talent with opportunity without barriers."
       },
       {
         question: "How do I handle disputes with clients?",
@@ -103,7 +103,7 @@ const faqCategories = [
       },
       {
         question: "Are there any hidden fees?",
-        answer: "No hidden fees! Our pricing is transparent. We charge a small service fee (5-8%) on completed jobs, which is clearly displayed before you confirm any booking."
+        answer: "Absolutely no hidden fees! SeekCa is completely free for both hirers and professionals. No platform fees, no service charges, no hidden costs. What you see is what you get."
       },
       {
         question: "Can I get a refund?",
