@@ -103,7 +103,7 @@ export default function Profile() {
         : data.location || '';
 
       // Get currency information based on country
-      const currencyInfo = getCurrencyForCountry(data.country);
+      const currencyInfo = getCurrencyForCountry(data.country || 'United States');
 
       // Try to upsert profile data to the profiles table first
       let profileError = null;
@@ -204,11 +204,6 @@ export default function Profile() {
         title: "Profile Updated",
         description: "Your profile has been successfully updated.",
       });
-
-      // Force a page refresh to ensure role-based routing works correctly
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
     } catch (error) {
       console.error('Error updating profile:', error);
       toast({
