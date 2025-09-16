@@ -24,13 +24,13 @@ CREATE TABLE IF NOT EXISTS public.messages (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   
   -- Ensure sender is a participant in the conversation
+  -- Ensure sender is a participant in the conversation
   CHECK (
-    sender_id = conversation_id IN (
+    conversation_id IN (
       SELECT id FROM public.conversations 
       WHERE participant1_id = sender_id OR participant2_id = sender_id
     )
-  )
-);
+  ));
 
 -- Create indexes for performance
 CREATE INDEX IF NOT EXISTS conversations_participant1_idx ON public.conversations(participant1_id);
@@ -154,12 +154,21 @@ CREATE OR REPLACE FUNCTION public.mark_messages_as_read(
 RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
-AS $$
+AS $
 BEGIN
+  -- Verify reader is a participant in the conversation
+  IF NOT EXISTS (
+    SELECT 1 FROM public.conversations
+    WHERE id = conversation_uuid
+      AND (participant1_id = reader_id OR participant2_id = reader_id)
+  ) THEN
+    RAISE EXCEPTION 'Reader is not a participant in this conversation';
+  END IF;
+  
   UPDATE public.messages
   SET read_at = NOW()
   WHERE conversation_id = conversation_uuid
     AND sender_id != reader_id
     AND read_at IS NULL;
 END;
-$$;
+$;
