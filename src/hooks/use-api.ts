@@ -1,12 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ApiService, Professional, Job, Message } from "@/services/api";
+import { ApiService, Professional, Job, Message, Conversation } from "@/services/api";
 
 // Query keys
 export const queryKeys = {
   professionals: ['professionals'] as const,
   professional: (id: string) => ['professionals', id] as const,
   jobs: ['jobs'] as const,
-  messages: ['messages'] as const,
+  conversations: ['conversations'] as const,
+  messages: (conversationId: string) => ['messages', conversationId] as const,
 };
 
 // Professionals hooks
@@ -71,16 +72,23 @@ export function useDeleteJob() {
   });
 }
 
-// Messages hooks
-export function useMessages(filters?: {
-  conversation_id?: string;
-  unread_only?: boolean;
-}) {
+// Messaging hooks
+export function useConversations() {
   return useQuery({
-    queryKey: [...queryKeys.messages, filters],
-    queryFn: () => ApiService.getMessages(filters),
+    queryKey: queryKeys.conversations,
+    queryFn: () => ApiService.getConversations(),
     staleTime: 30 * 1000, // 30 seconds
     refetchInterval: 30 * 1000, // Refetch every 30 seconds for real-time updates
+  });
+}
+
+export function useMessages(conversationId: string) {
+  return useQuery({
+    queryKey: queryKeys.messages(conversationId),
+    queryFn: () => ApiService.getMessages(conversationId),
+    enabled: !!conversationId,
+    staleTime: 10 * 1000, // 10 seconds
+    refetchInterval: 10 * 1000, // Refetch every 10 seconds for real-time updates
   });
 }
 
@@ -88,11 +96,42 @@ export function useSendMessage() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (messageData: Omit<Message, 'id' | 'created_at' | 'read'>) => 
-      ApiService.sendMessage(messageData),
+    mutationFn: ({ conversationId, content, messageType }: { 
+      conversationId: string; 
+      content: string; 
+      messageType?: 'text' | 'image' | 'file' | 'system' 
+    }) => ApiService.sendMessage(conversationId, content, messageType),
+    onSuccess: (_, variables) => {
+      // Invalidate and refetch messages for this conversation
+      queryClient.invalidateQueries({ queryKey: queryKeys.messages(variables.conversationId) });
+      // Invalidate conversations list to update last message
+      queryClient.invalidateQueries({ queryKey: queryKeys.conversations });
+    },
+  });
+}
+
+export function useGetOrCreateConversation() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (otherUserId: string) => ApiService.getOrCreateConversation(otherUserId),
     onSuccess: () => {
-      // Invalidate and refetch messages
-      queryClient.invalidateQueries({ queryKey: queryKeys.messages });
+      // Invalidate conversations list
+      queryClient.invalidateQueries({ queryKey: queryKeys.conversations });
+    },
+  });
+}
+
+export function useMarkMessagesAsRead() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: (conversationId: string) => ApiService.markMessagesAsRead(conversationId),
+    onSuccess: (_, conversationId) => {
+      // Invalidate conversations to update unread counts
+      queryClient.invalidateQueries({ queryKey: queryKeys.conversations });
+      // Invalidate messages for this conversation
+      queryClient.invalidateQueries({ queryKey: queryKeys.messages(conversationId) });
     },
   });
 }
