@@ -111,8 +111,8 @@ export default function Contact() {
                     <p className="text-muted-foreground mb-2">
                       Our friendly team is here to help.
                     </p>
-                    <a href="mailto:hello@seekca.com" className="text-primary hover:underline">
-                      hello@seekca.com
+                    <a href="mailto:seekcamarketplace@gmail.com" className="text-primary hover:underline">
+                      seekcamarketplace@gmail.com
                     </a>
                   </div>
                 </div>
@@ -126,8 +126,8 @@ export default function Contact() {
                     <p className="text-muted-foreground mb-2">
                       Mon-Fri from 8am to 5pm.
                     </p>
-                    <a href="tel:+1-555-000-0000" className="text-primary hover:underline">
-                      +1 (555) 000-0000
+                    <a href="tel:+2348140096173" className="text-primary hover:underline">
+                      +234 814 009 6173
                     </a>
                   </div>
                 </div>
