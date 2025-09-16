@@ -10,12 +10,17 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
 import { useUserRole } from "@/hooks/use-user-role";
 import AppHeader from "@/components/AppHeader";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useDeleteJob } from "@/hooks/use-api";
+import { toast } from "sonner";
 
 export default function PostJob() {
   const { user } = useAuth();
   const { data: userRole, isLoading: roleLoading } = useUserRole();
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const { mutateAsync: deleteJob, isPending: deleting } = useDeleteJob();
 
   const [jobData, setJobData] = useState({
     title: '',
@@ -283,7 +288,65 @@ export default function PostJob() {
             </form>
           </CardContent>
         </Card>
+
+        {/* Your posted jobs */}
+        <div className="mt-10">
+          <h2 className="text-2xl font-semibold mb-4">Your Job Posts</h2>
+          <UserJobsList onDelete={async (id) => {
+            try {
+              await deleteJob(id);
+              toast.success('Job deleted');
+            } catch (e) {
+              toast.error('Failed to delete job');
+            }
+          }} />
+        </div>
       </div>
+    </div>
+  );
+}
+
+function UserJobsList({ onDelete }: { onDelete: (id: string) => Promise<void> | void }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ['my-jobs'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return data || [] as Array<{ id: string; title: string; created_at: string; status: string }>;
+    }
+  });
+
+  if (isLoading) return null;
+
+  if (!data || data.length === 0) {
+    return (
+      <p className="text-muted-foreground">You haven't posted any jobs yet.</p>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      {data.map(job => (
+        <div key={job.id} className="flex items-center justify-between border rounded-md p-3">
+          <div>
+            <div className="font-medium">{job.title}</div>
+            <div className="text-xs text-muted-foreground">Posted {new Date(job.created_at).toLocaleString()} • {job.status}</div>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => onDelete(job.id)}
+              disabled={deleting}
+            >
+              Delete
+            </Button>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
