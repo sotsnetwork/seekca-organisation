@@ -85,7 +85,7 @@ export default function CTA() {
               <div className="flex items-center justify-center gap-8 text-primary-foreground/80 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-success rounded-full" />
-                  <span>No Setup Fees</span>
+                  <span>100% Free</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-success rounded-full" />
