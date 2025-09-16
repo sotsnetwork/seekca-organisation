@@ -25,6 +25,7 @@ import Teams from "./pages/Teams";
 import TeamsManagement from "./pages/TeamsManagement";
 import PasswordReset from "./pages/PasswordReset";
 import NotFound from "./pages/NotFound";
+import { Analytics } from '@vercel/analytics/react';
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <TooltipProvider>
+            <Analytics />
             <Toaster />
             <Sonner />
             <Routes>
