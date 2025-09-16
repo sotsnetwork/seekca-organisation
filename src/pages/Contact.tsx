@@ -45,30 +45,30 @@ export default function Contact() {
   });
 
   const onSubmit = async (data: ContactFormData) => {
-    submitContactForm.mutate({
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      phone: data.phone || "",
-      subject: data.subject,
-      message: data.message,
-    }, {
-      onSuccess: () => {
-        toast({
-          title: "Message sent successfully!",
-          description: "We'll get back to you within 24 hours.",
-        });
-        setIsSubmitted(true);
-        reset();
-      },
-      onError: () => {
-        toast({
-          title: "Error sending message",
-          description: "Please try again later.",
-          variant: "destructive",
-        });
-      },
-    });
+    try {
+      await submitContactForm.mutateAsync({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone || "",
+        subject: data.subject,
+        message: data.message,
+      });
+      
+      toast({
+        title: "Message sent successfully!",
+        description: "We'll get back to you within 24 hours.",
+      });
+      setIsSubmitted(true);
+      reset();
+    } catch (error) {
+      console.error('Contact form error:', error);
+      toast({
+        title: "Error sending message",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
