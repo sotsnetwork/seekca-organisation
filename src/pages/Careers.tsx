@@ -1,73 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, DollarSign, Users } from "lucide-react";
+import { MapPin, Clock, Users, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import AppHeader from "@/components/AppHeader";
 import Footer from "@/components/Footer";
-
-const jobOpenings = [
-  {
-    id: 1,
-    title: "Senior Operations Manager",
-    department: "Operations",
-    location: "Remote",
-    type: "Full-time",
-    salary: "$80k - $120k",
-    description: "Join our operations team to help manage and grow our professional services marketplace. You'll work on process improvement, vendor relations, and quality assurance.",
-    requirements: ["5+ years operations experience", "Marketplace/platform experience", "Remote work experience"]
-  },
-  {
-    id: 2,
-    title: "Customer Success Manager",
-    department: "Customer Success",
-    location: "Remote / New York",
-    type: "Full-time",
-    salary: "$70k - $100k",
-    description: "Lead customer success initiatives for our professional services platform. Work closely with both professionals and clients to ensure satisfaction.",
-    requirements: ["3+ years customer success", "Professional services experience", "Strong communication skills"]
-  },
-  {
-    id: 3,
-    title: "Quality Assurance Specialist",
-    department: "Quality",
-    location: "Remote",
-    type: "Full-time",
-    salary: "$60k - $85k",
-    description: "Ensure quality standards for all professionals on our platform. Review credentials, conduct background checks, and maintain service standards.",
-    requirements: ["Background check experience", "Quality assurance knowledge", "Attention to detail"]
-  },
-  {
-    id: 4,
-    title: "Marketing Coordinator",
-    department: "Marketing",
-    location: "Remote",
-    type: "Full-time",
-    salary: "$50k - $70k",
-    description: "Help promote our professional services marketplace and connect skilled workers with clients who need their services.",
-    requirements: ["2+ years marketing experience", "Digital marketing knowledge", "Professional services experience"]
-  },
-  {
-    id: 5,
-    title: "Business Development Representative",
-    department: "Business Development",
-    location: "Remote",
-    type: "Full-time",
-    salary: "$60k - $80k",
-    description: "Help grow our platform by connecting with professional service providers and building partnerships.",
-    requirements: ["2+ years business development", "Professional services experience", "Excellent communication"]
-  },
-  {
-    id: 6,
-    title: "Compliance Specialist",
-    department: "Compliance",
-    location: "Remote",
-    type: "Full-time",
-    salary: "$70k - $90k",
-    description: "Ensure our platform meets all regulatory requirements and maintains high standards for professional services.",
-    requirements: ["Compliance certification", "Regulatory knowledge", "Professional services experience"]
-  }
-];
 
 const benefits = [
   {
@@ -113,7 +50,7 @@ export default function Careers() {
           <div className="flex items-center justify-center gap-8 text-primary-foreground/80">
             <div className="flex items-center gap-2">
               <Users className="w-5 h-5" />
-              <span>50+ Team Members</span>
+              <span>2 Team Members</span>
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-5 h-5" />
@@ -153,7 +90,7 @@ export default function Careers() {
         </div>
       </section>
 
-      {/* Job Openings */}
+      {/* No Open Positions */}
       <section className="py-24 bg-card">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -161,50 +98,28 @@ export default function Careers() {
               Open Positions
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Join our growing team and help shape the future of professional collaboration.
+              We're a small, focused team building something great. Check back soon for opportunities!
             </p>
           </div>
           
-          <div className="space-y-6">
-            {jobOpenings.map((job) => (
-              <Card key={job.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div>
-                      <CardTitle className="text-xl mb-2">{job.title}</CardTitle>
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                        <Badge variant="secondary">{job.department}</Badge>
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
-                          <span>{job.location}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          <span>{job.type}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <DollarSign className="w-4 h-4" />
-                          <span>{job.salary}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <Button>Apply Now</Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="mb-4">{job.description}</CardDescription>
-                  <div>
-                    <h4 className="font-semibold text-foreground mb-2">Key Requirements:</h4>
-                    <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                      {job.requirements.map((req, index) => (
-                        <li key={index}>{req}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Card className="max-w-2xl mx-auto">
+            <CardContent className="p-12 text-center">
+              <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto mb-6">
+                <Users className="w-12 h-12 text-muted-foreground" />
+              </div>
+              <h3 className="text-2xl font-heading font-bold text-foreground mb-4">
+                No Open Positions
+              </h3>
+              <p className="text-muted-foreground mb-6">
+                We're currently not hiring, but we're always interested in connecting with talented individuals 
+                who share our vision for the future of work.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                As a small team of 2, we're focused on building and growing our platform. 
+                We'll post new opportunities here when we're ready to expand our team.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
@@ -212,14 +127,17 @@ export default function Careers() {
       <section className="py-24">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-6">
-            Don't See Your Role?
+            Interested in Our Mission?
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            We're always looking for talented individuals who share our vision. 
-            Send us your resume and let's talk about how you can contribute to our mission.
+            While we're not actively hiring, we'd love to hear from talented individuals who share our vision. 
+            Send us your information and we'll keep you in mind for future opportunities.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">Send Resume</Button>
+            <Button size="lg" className="flex items-center gap-2">
+              <Mail className="w-4 h-4" />
+              Send Your Information
+            </Button>
             <Button size="lg" variant="outline">
               Learn About Our Culture
             </Button>
