@@ -893,8 +893,8 @@ export default function Professionals() {
                         </a>
                       </Button>
                       <Button variant="outline" asChild>
-                        <a href="https://twitter.com/intent/tweet?text=Check%20out%20SeekCa%20-%20a%20marketplace%20for%20professionals%20and%20hirers!" target="_blank">
-                          Share on Twitter
+                        <a href="https://x.com/intent/tweet?text=Check%20out%20SeekCa%20-%20a%20marketplace%20for%20professionals%20and%20hirers!" target="_blank" rel="noopener noreferrer">
+                          Share on X
                         </a>
                       </Button>
                     </div>
