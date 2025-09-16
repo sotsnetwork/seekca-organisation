@@ -17,25 +17,30 @@ import { Link } from "react-router-dom";
 import { getCountries, getStatesByCountry, getAllCitiesByCountry, searchCities, type City } from "@/data/cities";
 import CitySelector from "@/components/CitySelector";
 import { getCurrencySymbol, getCurrencyForCountry } from "@/lib/currency";
+import ProfessionalProfileModal from "@/components/ProfessionalProfileModal";
+import MessageModal from "@/components/MessageModal";
 
 interface Professional {
   id: string;
-  name: string;
-  title: string;
-  location: string;
-  country: string;
+  user_id: string;
+  full_name: string;
+  nickname: string;
+  bio?: string;
+  skills: string[];
+  hourly_rate?: number;
+  location?: string;
+  country?: string;
   state?: string;
   city?: string;
   town?: string;
-  skills: string[];
-  rating: number;
-  hourlyRate: number;
-  currencyCode?: string;
-  currencySymbol?: string;
-  completedProjects: number;
-  avatar?: string;
-  description: string;
+  avatar_url?: string;
   verified: boolean;
+  created_at: string;
+  currency_code?: string;
+  currency_symbol?: string;
+  // Computed fields
+  rating?: number;
+  completedProjects?: number;
 }
 
 export default function Professionals() {
@@ -57,6 +62,28 @@ export default function Professionals() {
   const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
   const [nearbyFilter, setNearbyFilter] = useState(false);
   const [sortBy, setSortBy] = useState<'rating' | 'price' | 'distance' | 'name'>('rating');
+  const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(false);
+
+  const handleViewProfile = (professional: Professional) => {
+    setSelectedProfessional(professional);
+    setShowProfileModal(true);
+  };
+
+  const handleHire = (professional: Professional) => {
+    // TODO: Implement hire functionality
+    console.log('Hiring:', professional);
+  };
+
+  const handleMessage = (professional: Professional) => {
+    setSelectedProfessional(professional);
+    setShowMessageModal(true);
+  };
+
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  };
 
   // Location detection
   useEffect(() => {
@@ -190,8 +217,10 @@ export default function Professionals() {
     
     return {
       id: prof.id,
-      name: prof.nickname || prof.full_name || "Professional",
-      title: prof.bio || "Professional",
+      user_id: prof.user_id,
+      full_name: prof.full_name || "Professional",
+      nickname: prof.nickname || "Professional",
+      bio: prof.bio,
       location: prof.location || `${prof.city ?? ''}${prof.city && prof.state ? ', ' : ''}${prof.state ?? ''}` || "Location not specified",
       country: prof.country || "Unknown",
       state: prof.state || "",
@@ -199,13 +228,13 @@ export default function Professionals() {
       town: "",
       skills: prof.skills || [],
       rating: 4.5, // Mock rating since not in profiles table
-      hourlyRate: prof.hourly_rate || 0,
-      currencyCode,
-      currencySymbol,
+      hourly_rate: prof.hourly_rate || 0,
+      currency_code: currencyCode,
+      currency_symbol: currencySymbol,
       completedProjects: projectCounts[prof.user_id] || 0, // Real project count from database
-      avatar: prof.avatar_url,
-      description: prof.bio || "Professional",
+      avatar_url: prof.avatar_url,
       verified: Math.random() > 0.3, // Mock verification
+      created_at: prof.created_at,
     };
   });
 
@@ -259,8 +288,9 @@ export default function Professionals() {
   const filteredProfessionals = professionals.filter(professional => {
     // Search term filter
     const matchesSearch = searchTerm === "" || 
-      professional.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      professional.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      professional.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      professional.nickname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (professional.bio && professional.bio.toLowerCase().includes(searchTerm.toLowerCase())) ||
       professional.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       professional.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()));
     
@@ -286,7 +316,7 @@ export default function Professionals() {
       (ratingFilter === "5" && professional.rating === 5);
     
     // Price range filter
-    const matchesPriceRange = professional.hourlyRate >= priceRange[0] && professional.hourlyRate <= priceRange[1];
+    const matchesPriceRange = (professional.hourly_rate || 0) >= priceRange[0] && (professional.hourly_rate || 0) <= priceRange[1];
     
     // Verified filter
     const matchesVerified = !verifiedFilter || professional.verified;
@@ -756,15 +786,15 @@ export default function Professionals() {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         <Avatar className="w-12 h-12">
-                          <AvatarImage src={professional.avatar} />
+                          <AvatarImage src={professional.avatar_url} />
                           <AvatarFallback className="bg-primary text-primary-foreground">
-                            {getInitials(professional.name)}
+                            {getInitials(professional.full_name)}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <CardTitle className="text-lg">{professional.name}</CardTitle>
+                          <CardTitle className="text-lg">{professional.full_name}</CardTitle>
                           <CardDescription className="text-sm">
-                            {professional.title}
+                            @{professional.nickname}
                           </CardDescription>
                         </div>
                       </div>
@@ -826,15 +856,22 @@ export default function Professionals() {
 
                     <div className="flex items-center justify-between pt-2">
                       <div className="text-lg font-semibold text-primary">
-                        {professional.currencySymbol}{professional.hourlyRate}/hr
+                        {professional.currency_symbol}{professional.hourly_rate}/hr
                       </div>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleMessage(professional)}
+                        >
                           <MessageSquare className="w-4 h-4 mr-2" />
                           Message
                         </Button>
-                        <Button size="sm">
-                          Hire Now
+                        <Button 
+                          size="sm"
+                          onClick={() => handleViewProfile(professional)}
+                        >
+                          View Profile
                         </Button>
                       </div>
                     </div>
@@ -877,6 +914,21 @@ export default function Professionals() {
           </>
         )}
       </div>
+
+      {/* Modals */}
+      <ProfessionalProfileModal
+        professional={selectedProfessional}
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+        onHire={handleHire}
+        onMessage={handleMessage}
+      />
+      
+      <MessageModal
+        professional={selectedProfessional}
+        isOpen={showMessageModal}
+        onClose={() => setShowMessageModal(false)}
+      />
     </div>
   );
 }
