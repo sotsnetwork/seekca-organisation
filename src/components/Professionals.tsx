@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { getCountries, getStatesByCountry, getAllCitiesByCountry, searchCities, type City } from "@/data/cities";
 import CitySelector from "@/components/CitySelector";
+import { getCurrencySymbol, getCurrencyForCountry } from "@/lib/currency";
 
 interface Professional {
   id: string;
@@ -29,6 +30,8 @@ interface Professional {
   skills: string[];
   rating: number;
   hourlyRate: number;
+  currencyCode?: string;
+  currencySymbol?: string;
   completedProjects: number;
   avatar?: string;
   description: string;
@@ -180,23 +183,31 @@ export default function Professionals() {
   });
 
   // Convert API data to component format
-  const professionals = apiProfessionals.map((prof: any) => ({
-    id: prof.id,
-    name: prof.nickname || prof.full_name || "Professional",
-    title: prof.bio || "Professional",
-    location: prof.location || `${prof.city ?? ''}${prof.city && prof.state ? ', ' : ''}${prof.state ?? ''}` || "Location not specified",
-    country: prof.country || "Unknown",
-    state: prof.state || "",
-    city: prof.city || "",
-    town: "",
-    skills: prof.skills || [],
-    rating: 4.5, // Mock rating since not in profiles table
-    hourlyRate: prof.hourly_rate || 0,
-    completedProjects: projectCounts[prof.user_id] || 0, // Real project count from database
-    avatar: prof.avatar_url,
-    description: prof.bio || "Professional",
-    verified: Math.random() > 0.3, // Mock verification
-  }));
+  const professionals = apiProfessionals.map((prof: any) => {
+    // Get currency info from database or fallback to country-based currency
+    const currencyCode = prof.currency_code || getCurrencyForCountry(prof.country || 'United States').code;
+    const currencySymbol = prof.currency_symbol || getCurrencySymbol(prof.country || 'United States');
+    
+    return {
+      id: prof.id,
+      name: prof.nickname || prof.full_name || "Professional",
+      title: prof.bio || "Professional",
+      location: prof.location || `${prof.city ?? ''}${prof.city && prof.state ? ', ' : ''}${prof.state ?? ''}` || "Location not specified",
+      country: prof.country || "Unknown",
+      state: prof.state || "",
+      city: prof.city || "",
+      town: "",
+      skills: prof.skills || [],
+      rating: 4.5, // Mock rating since not in profiles table
+      hourlyRate: prof.hourly_rate || 0,
+      currencyCode,
+      currencySymbol,
+      completedProjects: projectCounts[prof.user_id] || 0, // Real project count from database
+      avatar: prof.avatar_url,
+      description: prof.bio || "Professional",
+      verified: Math.random() > 0.3, // Mock verification
+    };
+  });
 
   // Professionals will be fetched from Supabase database
 
@@ -520,7 +531,7 @@ export default function Professionals() {
                     {/* Price Range */}
                     <div>
                       <Label className="text-sm font-medium mb-3 block">
-                        Hourly Rate: ${priceRange[0]} - ${priceRange[1]}
+                        Hourly Rate: $0 - $100 (USD)
                       </Label>
                       <Slider
                         value={priceRange}
@@ -815,7 +826,7 @@ export default function Professionals() {
 
                     <div className="flex items-center justify-between pt-2">
                       <div className="text-lg font-semibold text-primary">
-                        ${professional.hourlyRate}/hr
+                        {professional.currencySymbol}{professional.hourlyRate}/hr
                       </div>
                       <div className="flex gap-2">
                         <Button variant="outline" size="sm">
