@@ -201,11 +201,17 @@ export const COUNTRY_CURRENCIES: Record<string, { code: string; symbol: string; 
 
 // Get currency info for a country
 export function getCurrencyForCountry(country: string): { code: string; symbol: string; name: string } {
+  if (!country || typeof country !== 'string') {
+    return { code: 'USD', symbol: '$', name: 'US Dollar' };
+  }
   return COUNTRY_CURRENCIES[country] || { code: 'USD', symbol: '$', name: 'US Dollar' };
 }
 
 // Format currency amount
 export function formatCurrency(amount: number, country: string): string {
+  if (typeof amount !== 'number' || isNaN(amount)) {
+    return '$0';
+  }
   const currency = getCurrencyForCountry(country);
   return `${currency.symbol}${amount.toLocaleString()}`;
 }
