@@ -6,10 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Send, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { useGetOrCreateConversation, useSendMessage } from "@/hooks/use-api";
 import { toast } from "sonner";
 
 interface Professional {
   id: string;
+  user_id: string;
   full_name: string;
   nickname: string;
   avatar_url?: string;
@@ -28,7 +30,8 @@ export default function MessageModal({
 }: MessageModalProps) {
   const { user } = useAuth();
   const [message, setMessage] = useState("");
-  const [isSending, setIsSending] = useState(false);
+  const getOrCreateConversationMutation = useGetOrCreateConversation();
+  const sendMessageMutation = useSendMessage();
 
   if (!professional) return null;
 
@@ -43,19 +46,23 @@ export default function MessageModal({
       return;
     }
 
-    setIsSending(true);
     try {
-      // TODO: Implement real messaging with Supabase
-      // For now, simulate sending
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Get or create conversation
+      const conversationId = await getOrCreateConversationMutation.mutateAsync(professional.user_id);
+      
+      // Send message
+      await sendMessageMutation.mutateAsync({
+        conversationId,
+        content: message.trim(),
+        messageType: 'text'
+      });
       
       toast.success(`Message sent to ${professional.full_name}`);
       setMessage("");
       onClose();
     } catch (error) {
+      console.error('Failed to send message:', error);
       toast.error("Failed to send message");
-    } finally {
-      setIsSending(false);
     }
   };
 
@@ -103,11 +110,11 @@ export default function MessageModal({
             </Button>
             <Button
               onClick={handleSend}
-              disabled={isSending || !message.trim()}
+              disabled={sendMessageMutation.isPending || getOrCreateConversationMutation.isPending || !message.trim()}
               className="flex-1"
             >
               <Send className="w-4 h-4 mr-2" />
-              {isSending ? "Sending..." : "Send"}
+              {sendMessageMutation.isPending || getOrCreateConversationMutation.isPending ? "Sending..." : "Send"}
             </Button>
           </div>
         </div>
