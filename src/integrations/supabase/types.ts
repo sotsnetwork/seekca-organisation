@@ -74,6 +74,8 @@ export type Database = {
           bio: string | null
           country: string | null
           created_at: string
+          currency_code: string | null
+          currency_symbol: string | null
           full_name: string | null
           hourly_rate: number | null
           id: string
@@ -88,6 +90,8 @@ export type Database = {
           bio?: string | null
           country?: string | null
           created_at?: string
+          currency_code?: string | null
+          currency_symbol?: string | null
           full_name?: string | null
           hourly_rate?: number | null
           id?: string
@@ -102,6 +106,8 @@ export type Database = {
           bio?: string | null
           country?: string | null
           created_at?: string
+          currency_code?: string | null
+          currency_symbol?: string | null
           full_name?: string | null
           hourly_rate?: number | null
           id?: string
