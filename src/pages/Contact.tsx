@@ -309,9 +309,9 @@ export default function Contact() {
                   What fees does SeekCa charge?
                 </h3>
                 <p className="text-muted-foreground">
-                  SeekCa charges a small platform fee on completed projects. For businesses, 
-                  there's a 3% processing fee. For professionals, there's a 5% service fee. 
-                  No upfront costs or hidden charges.
+                  SeekCa is completely free for both hirers and professionals! No platform fees, 
+                  no service charges, no hidden costs. We believe in connecting talent with 
+                  opportunity without barriers.
                 </p>
               </CardContent>
             </Card>
