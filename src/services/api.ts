@@ -224,6 +224,22 @@ export class ApiService {
     }
   }
 
+  static async deleteJob(jobId: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('jobs')
+        .delete()
+        .eq('id', jobId);
+
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      console.error('Error deleting job:', error);
+      throw new Error('Failed to delete job');
+    }
+  }
+
   // Messages - Mock implementation since user_messages table access is restricted
   static async getMessages(filters?: {
     conversation_id?: string;
