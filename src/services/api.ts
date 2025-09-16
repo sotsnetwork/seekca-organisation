@@ -38,13 +38,41 @@ export interface Job {
 
 export interface Message {
   id: string;
+  conversation_id: string;
   sender_id: string;
-  recipient_id: string;
-  subject: string;
   content: string;
-  job_id?: string;
-  read: boolean;
+  message_type: 'text' | 'image' | 'file' | 'system';
+  read_at: string | null;
   created_at: string;
+  sender?: {
+    id: string;
+    full_name: string;
+    nickname: string;
+    avatar_url?: string;
+  };
+}
+
+export interface Conversation {
+  id: string;
+  participant1_id: string;
+  participant2_id: string;
+  last_message_at: string;
+  created_at: string;
+  updated_at: string;
+  participant1?: {
+    id: string;
+    full_name: string;
+    nickname: string;
+    avatar_url?: string;
+  };
+  participant2?: {
+    id: string;
+    full_name: string;
+    nickname: string;
+    avatar_url?: string;
+  };
+  last_message?: Message;
+  unread_count?: number;
 }
 
 // API Service Functions
@@ -219,36 +247,123 @@ export class ApiService {
     }
   }
 
-  // Messages - Mock implementation since user_messages table access is restricted
-  static async getMessages(filters?: {
-    conversation_id?: string;
-    unread_only?: boolean;
-  }): Promise<Message[]> {
+  // Messaging System
+  static async getConversations(): Promise<Conversation[]> {
     try {
-      // Return empty array for now - implement with proper messaging system later
-      console.log('Messages feature not yet implemented');
-      return [];
+      const { data, error } = await supabase
+        .from('conversations')
+        .select(`
+          *,
+          participant1:profiles!conversations_participant1_id_fkey(id, full_name, nickname, avatar_url),
+          participant2:profiles!conversations_participant2_id_fkey(id, full_name, nickname, avatar_url),
+          last_message:messages!conversations_last_message_at_fkey(
+            id, content, created_at, sender_id,
+            sender:profiles!messages_sender_id_fkey(id, full_name, nickname, avatar_url)
+          )
+        `)
+        .order('last_message_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Calculate unread counts for each conversation
+      const conversationsWithUnread = await Promise.all(
+        (data || []).map(async (conv) => {
+          const { count } = await supabase
+            .from('messages')
+            .select('*', { count: 'exact', head: true })
+            .eq('conversation_id', conv.id)
+            .is('read_at', null)
+            .neq('sender_id', (await supabase.auth.getUser()).data.user?.id);
+
+          return {
+            ...conv,
+            unread_count: count || 0
+          };
+        })
+      );
+
+      return conversationsWithUnread as Conversation[];
     } catch (error) {
-      console.error('Error fetching messages:', error);
-      return [];
+      console.error('Error fetching conversations:', error);
+      throw new Error('Failed to fetch conversations');
     }
   }
 
-  static async sendMessage(messageData: Omit<Message, 'id' | 'created_at' | 'read'>): Promise<Message> {
+  static async getMessages(conversationId: string): Promise<Message[]> {
     try {
-      // Mock implementation - replace with real messaging system later
-      const newMessage: Message = {
-        id: Date.now().toString(),
-        ...messageData,
-        read: false,
-        created_at: new Date().toISOString(),
-      };
-      
-      console.log('Message sent (mock):', newMessage);
-      return newMessage;
+      const { data, error } = await supabase
+        .from('messages')
+        .select(`
+          *,
+          sender:profiles!messages_sender_id_fkey(id, full_name, nickname, avatar_url)
+        `)
+        .eq('conversation_id', conversationId)
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+      return (data || []) as Message[];
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      throw new Error('Failed to fetch messages');
+    }
+  }
+
+  static async sendMessage(conversationId: string, content: string, messageType: 'text' | 'image' | 'file' | 'system' = 'text'): Promise<Message> {
+    try {
+      const { data: user } = await supabase.auth.getUser();
+      if (!user.user) throw new Error('User not authenticated');
+
+      const { data, error } = await supabase
+        .from('messages')
+        .insert({
+          conversation_id: conversationId,
+          sender_id: user.user.id,
+          content,
+          message_type: messageType
+        })
+        .select(`
+          *,
+          sender:profiles!messages_sender_id_fkey(id, full_name, nickname, avatar_url)
+        `)
+        .single();
+
+      if (error) throw error;
+      return data as Message;
     } catch (error) {
       console.error('Error sending message:', error);
       throw new Error('Failed to send message');
+    }
+  }
+
+  static async getOrCreateConversation(otherUserId: string): Promise<string> {
+    try {
+      const { data: user } = await supabase.auth.getUser();
+      if (!user.user) throw new Error('User not authenticated');
+
+      const { data, error } = await supabase.rpc('get_or_create_conversation', {
+        user1_id: user.user.id,
+        user2_id: otherUserId
+      });
+
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Error getting/creating conversation:', error);
+      throw new Error('Failed to get or create conversation');
+    }
+  }
+
+  static async markMessagesAsRead(conversationId: string): Promise<void> {
+    try {
+      const { error } = await supabase.rpc('mark_messages_as_read', {
+        conversation_uuid: conversationId,
+        reader_id: (await supabase.auth.getUser()).data.user?.id
+      });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error marking messages as read:', error);
+      throw new Error('Failed to mark messages as read');
     }
   }
 
