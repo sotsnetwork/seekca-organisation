@@ -34,7 +34,12 @@ export default function ProfessionalSearch({ teamId, onInviteSent }: Professiona
   const [searchTerm, setSearchTerm] = useState("");
   const [skillFilter, setSkillFilter] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
-  const [selectedProfessional, setSelectedProfessional] = useState<any>(null);
+  const [selectedProfessional, setSelectedProfessional] = useState<{
+    id: string;
+    full_name: string;
+    skills: string[];
+    location?: string;
+  } | null>(null);
   const [inviteMessage, setInviteMessage] = useState("");
   const [showInviteDialog, setShowInviteDialog] = useState(false);
 
@@ -145,7 +150,7 @@ export default function ProfessionalSearch({ teamId, onInviteSent }: Professiona
     },
   });
 
-  const handleInviteClick = (professional: any) => {
+  const handleInviteClick = (professional: { id: string; full_name: string; skills: string[]; location?: string }) => {
     setSelectedProfessional(professional);
     setInviteMessage(`Hi ${professional.full_name}, I'd like to invite you to join our team "${teamInfo?.name}". We're looking for someone with your skills to collaborate on exciting projects!`);
     setShowInviteDialog(true);
