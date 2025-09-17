@@ -210,7 +210,25 @@ export default function Professionals() {
   });
 
   // Convert API data to component format
-  const professionals = apiProfessionals.map((prof: any) => {
+  const professionals = apiProfessionals.map((prof: {
+    id: string;
+    user_id: string;
+    full_name: string;
+    nickname: string;
+    bio?: string;
+    skills: string[];
+    hourly_rate?: number;
+    location?: string;
+    country?: string;
+    state?: string;
+    city?: string;
+    town?: string;
+    avatar_url?: string;
+    verified: boolean;
+    created_at: string;
+    currency_code?: string;
+    currency_symbol?: string;
+  }) => {
     // Get currency info from database or fallback to country-based currency
     const currencyCode = prof.currency_code || getCurrencyForCountry(prof.country || 'United States').code;
     const currencySymbol = prof.currency_symbol || getCurrencySymbol(prof.country || 'United States');
@@ -608,7 +626,7 @@ export default function Professionals() {
                     {/* Sort Options */}
                     <div>
                       <Label className="text-sm font-medium mb-3 block">Sort By</Label>
-                      <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+                      <Select value={sortBy} onValueChange={(value: string) => setSortBy(value)}>
                         <SelectTrigger>
                           <SelectValue placeholder="Sort professionals by" />
                         </SelectTrigger>
