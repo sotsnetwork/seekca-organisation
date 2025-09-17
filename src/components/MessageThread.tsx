@@ -32,7 +32,7 @@ export default function MessageThread({ conversation }: MessageThreadProps) {
     if (conversation && user) {
       markAsReadMutation.mutate(conversation.id);
     }
-  }, [conversation, user]);
+  }, [conversation, user, markAsReadMutation]);
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
