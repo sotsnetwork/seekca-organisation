@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Check, ChevronsUpDown, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -55,10 +55,10 @@ export default function CitySelector({
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
   const [filteredCities, setFilteredCities] = useState<City[]>([]);
 
-  const countries = getCountries();
-  const states = selectedCountry ? getStatesByCountry(selectedCountry) : [];
-  const cities = selectedState ? getCitiesByState(selectedCountry, selectedState) : 
-                selectedCountry ? getAllCitiesByCountry(selectedCountry) : [];
+  const countries = useMemo(() => getCountries(), []);
+  const states = useMemo(() => selectedCountry ? getStatesByCountry(selectedCountry) : [], [selectedCountry]);
+  const cities = useMemo(() => selectedState ? getCitiesByState(selectedCountry, selectedState) : 
+                selectedCountry ? getAllCitiesByCountry(selectedCountry) : [], [selectedCountry, selectedState]);
 
   // Initialize with current value
   useEffect(() => {
