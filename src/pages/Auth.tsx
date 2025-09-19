@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, AlertCircle, CheckCircle } from "lucide-react";
+import { ArrowLeft, AlertCircle, CheckCircle, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import logoIcon from "@/assets/logo-icon.png";
@@ -36,6 +36,11 @@ export default function Auth() {
     role: ''
   });
   const [forgotPasswordData, setForgotPasswordData] = useState({ email: '' });
+
+  // Password visibility toggles
+  const [showSignInPassword, setShowSignInPassword] = useState(false);
+  const [showSignUpPassword, setShowSignUpPassword] = useState(false);
+  const [showSignUpConfirm, setShowSignUpConfirm] = useState(false);
 
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -244,16 +249,26 @@ export default function Auth() {
                       required
                     />
                   </div>
-                                     <div>
-                     <Label htmlFor="password">Password</Label>
-                     <Input
-                       id="password"
-                       type="password"
-                       placeholder="Enter your password"
-                       value={signInData.password}
-                       onChange={(e) => handleInputChange('signin', 'password', e.target.value)}
-                       required
-                     />
+                  <div>
+                    <Label htmlFor="password">Password</Label>
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showSignInPassword ? 'text' : 'password'}
+                        placeholder="Enter your password"
+                        value={signInData.password}
+                        onChange={(e) => handleInputChange('signin', 'password', e.target.value)}
+                        required
+                      />
+                      <button
+                        type="button"
+                        aria-label={showSignInPassword ? 'Hide password' : 'Show password'}
+                        onClick={() => setShowSignInPassword((v) => !v)}
+                        className="absolute inset-y-0 right-3 flex items-center text-muted-foreground hover:text-foreground"
+                      >
+                        {showSignInPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
                      <div className="text-right mt-2">
                        <button
                          type="button"
@@ -305,25 +320,45 @@ export default function Auth() {
                   </div>
                   <div>
                     <Label htmlFor="signupPassword">Password</Label>
-                    <Input
-                      id="signupPassword"
-                      type="password"
-                      placeholder="Create a password (min. 6 characters)"
-                      value={signUpData.password}
-                      onChange={(e) => handleInputChange('signup', 'password', e.target.value)}
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="signupPassword"
+                        type={showSignUpPassword ? 'text' : 'password'}
+                        placeholder="Create a password (min. 6 characters)"
+                        value={signUpData.password}
+                        onChange={(e) => handleInputChange('signup', 'password', e.target.value)}
+                        required
+                      />
+                      <button
+                        type="button"
+                        aria-label={showSignUpPassword ? 'Hide password' : 'Show password'}
+                        onClick={() => setShowSignUpPassword((v) => !v)}
+                        className="absolute inset-y-0 right-3 flex items-center text-muted-foreground hover:text-foreground"
+                      >
+                        {showSignUpPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
                   </div>
                   <div>
                     <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      placeholder="Confirm your password"
-                      value={signUpData.confirmPassword}
-                      onChange={(e) => handleInputChange('signup', 'confirmPassword', e.target.value)}
-                      required
-                    />
+                    <div className="relative">
+                      <Input
+                        id="confirmPassword"
+                        type={showSignUpConfirm ? 'text' : 'password'}
+                        placeholder="Confirm your password"
+                        value={signUpData.confirmPassword}
+                        onChange={(e) => handleInputChange('signup', 'confirmPassword', e.target.value)}
+                        required
+                      />
+                      <button
+                        type="button"
+                        aria-label={showSignUpConfirm ? 'Hide password' : 'Show password'}
+                        onClick={() => setShowSignUpConfirm((v) => !v)}
+                        className="absolute inset-y-0 right-3 flex items-center text-muted-foreground hover:text-foreground"
+                      >
+                        {showSignUpConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
                   </div>
                   <div>
                     <Label htmlFor="country">Country</Label>
