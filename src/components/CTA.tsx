@@ -38,26 +38,32 @@ export default function CTA() {
           {/* Background Pattern */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/20 via-transparent to-primary/10" />
           
-          <CardContent className="relative z-10 p-6 md:p-16 pb-10 md:pb-16 text-center">
+          <CardContent className="relative z-10 p-6 sm:p-8 md:p-16 pb-10 sm:pb-8 md:pb-16 text-center">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl md:text-5xl lg:text-6xl font-heading font-bold text-primary-foreground mb-4 md:mb-6 leading-tight">
+              <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-heading font-bold text-primary-foreground mb-4 md:mb-6 leading-tight">
                 Ready to Build Your Next Project?
               </h2>
               
-              <p className="text-sm md:text-xl text-primary-foreground/90 mb-6 md:mb-12 max-w-2xl mx-auto">
+              <p className="text-sm sm:text-base md:text-xl text-primary-foreground/90 mb-6 md:mb-12 max-w-2xl mx-auto">
                 Join thousands of businesses and professionals already collaborating on SeekCa. Start your journey today.
               </p>
               
               <div className="grid md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-12">
-                <div className="bg-background/10 backdrop-blur-sm rounded-lg p-4 md:p-6 border border-primary-foreground/20">
-                  <Users className="w-6 h-6 md:w-8 md:h-8 text-primary-foreground mb-3 md:mb-4 mx-auto" />
-                  <h3 className="text-base md:text-xl font-heading font-semibold text-primary-foreground mb-2">
+                <div className="bg-background/10 backdrop-blur-sm rounded-lg p-4 sm:p-5 md:p-6 border border-primary-foreground/20">
+                  <Users className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-primary-foreground mb-3 sm:mb-4 md:mb-4 mx-auto" />
+                  <h3 className="text-base sm:text-lg md:text-xl font-heading font-semibold text-primary-foreground mb-2">
                     For Businesses
                   </h3>
-                  <p className="text-primary-foreground/80 mb-4 text-sm md:text-base leading-relaxed">
+                  <p className="text-primary-foreground/80 mb-4 text-sm sm:text-base md:text-base leading-relaxed">
                     Find verified professionals for your remote projects. Access global talent with local expertise.
                   </p>
-                  <Button variant="secondary" size="md" className="w-full" asChild>
+                  <Button variant="secondary" size="sm" className="w-full sm:hidden" asChild>
+                    <Link to={businessAction.to}>
+                      {businessAction.text}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Link>
+                  </Button>
+                  <Button variant="secondary" size="lg" className="w-full hidden sm:inline-flex" asChild>
                     <Link to={businessAction.to}>
                       {businessAction.text}
                       <ArrowRight className="w-4 h-4 ml-2" />
@@ -65,15 +71,21 @@ export default function CTA() {
                   </Button>
                 </div>
                 
-                <div className="bg-background/10 backdrop-blur-sm rounded-lg p-4 md:p-6 border border-primary-foreground/20">
-                  <Shield className="w-6 h-6 md:w-8 md:h-8 text-primary-foreground mb-3 md:mb-4 mx-auto" />
-                  <h3 className="text-base md:text-xl font-heading font-semibold text-primary-foreground mb-2">
+                <div className="bg-background/10 backdrop-blur-sm rounded-lg p-4 sm:p-5 md:p-6 border border-primary-foreground/20">
+                  <Shield className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-primary-foreground mb-3 sm:mb-4 md:mb-4 mx-auto" />
+                  <h3 className="text-base sm:text-lg md:text-xl font-heading font-semibold text-primary-foreground mb-2">
                     For Professionals
                   </h3>
-                  <p className="text-primary-foreground/80 mb-4 text-sm md:text-base leading-relaxed">
+                  <p className="text-primary-foreground/80 mb-4 text-sm sm:text-base md:text-base leading-relaxed">
                     Get verified and access global opportunities. Build your reputation and grow your business.
                   </p>
-                  <Button variant="secondary" size="md" className="w-full" asChild>
+                  <Button variant="secondary" size="sm" className="w-full sm:hidden" asChild>
+                    <Link to={professionalAction.to}>
+                      {professionalAction.text}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Link>
+                  </Button>
+                  <Button variant="secondary" size="lg" className="w-full hidden sm:inline-flex" asChild>
                     <Link to={professionalAction.to}>
                       {professionalAction.text}
                       <ArrowRight className="w-4 h-4 ml-2" />
@@ -82,7 +94,7 @@ export default function CTA() {
                 </div>
               </div>
               
-              <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-primary-foreground/80 text-xs md:text-sm pt-2">
+              <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-primary-foreground/80 text-xs sm:text-sm md:text-sm pt-2">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-success rounded-full" />
                   <span>100% Free</span>
