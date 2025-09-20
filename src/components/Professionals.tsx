@@ -137,6 +137,7 @@ export default function Professionals() {
             user_roles!inner(role)
           `)
           .eq('user_roles.role', 'professional') // Only get professionals
+          .in('visibility', ['public', 'professionals_only']) // Only show profiles that are visible
           .order('created_at', { ascending: false });
 
         if (searchTerm) {
