@@ -203,7 +203,7 @@ export default function ProfessionalSearch({ teamId, onInviteSent }: Professiona
               <Label htmlFor="skill-filter">Filter by Skill</Label>
               <Input
                 id="skill-filter"
-                placeholder="e.g., Web Development"
+                placeholder="e.g., Electrician, Plumber, Carpenter"
                 value={skillFilter}
                 onChange={(e) => setSkillFilter(e.target.value)}
               />
