@@ -58,7 +58,11 @@ SELECT
   COALESCE(u.raw_user_meta_data->>'nickname', 'User'),
   COALESCE(u.raw_user_meta_data->>'country', 'Nigeria'),
   COALESCE(u.raw_user_meta_data->>'bio', 'Professional on SeekCa'),
-  COALESCE((u.raw_user_meta_data->>'skills')::TEXT[], ARRAY[]::TEXT[]),
+  CASE 
+    WHEN u.raw_user_meta_data->>'skills' IS NOT NULL 
+    THEN (u.raw_user_meta_data->>'skills')::TEXT[]
+    ELSE ARRAY[]::TEXT[]
+  END,
   COALESCE((u.raw_user_meta_data->>'hourly_rate')::DECIMAL, 25.00),
   COALESCE(u.raw_user_meta_data->>'location', 'Lagos, Nigeria')
 FROM auth.users u
