@@ -86,7 +86,7 @@ WHERE p.user_id IS NULL;
 INSERT INTO user_roles (user_id, role)
 SELECT 
   u.id,
-  COALESCE(u.raw_user_meta_data->>'role', 'professional')
+  COALESCE(u.raw_user_meta_data->>'role', 'professional')::user_role
 FROM auth.users u
 LEFT JOIN user_roles ur ON u.id = ur.user_id
 WHERE ur.user_id IS NULL;
