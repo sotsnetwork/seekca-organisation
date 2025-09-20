@@ -142,14 +142,16 @@ export default function Jobs() {
         const { data, error } = await query;
         
         if (error) {
-          console.error('Database query error (this is expected if jobs table doesn\'t exist yet):', error);
-          // Return mock data for testing when database is empty
-          return getMockJobs();
+          console.error('Database query error:', error);
+          return [];
         }
         
-        // If no data from database, return mock data for testing
+        console.log('Jobs fetched from database:', data);
+        
+        // Return actual data from database
         if (!data || data.length === 0) {
-          return getMockJobs();
+          console.log('No jobs found in database');
+          return [];
         }
         
         return data.map(job => {
@@ -167,8 +169,8 @@ export default function Jobs() {
           };
         }) as Job[];
       } catch (err) {
-        console.error('Error fetching jobs (this is expected if database tables don\'t exist yet):', err);
-        return getMockJobs();
+        console.error('Error fetching jobs:', err);
+        return [];
       }
     },
     enabled: !!user,
