@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Calendar, DollarSign, Search, Filter, Clock, Briefcase, Shield, AlertCircle } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useUserRole } from "@/hooks/use-user-role";
+import { useProfileCompletion } from "@/hooks/use-profile-completion";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -35,9 +36,77 @@ interface Job {
   };
 }
 
+// Mock data for testing when database is empty
+const getMockJobs = (): Job[] => [
+  {
+    id: "mock-job-1",
+    title: "Electrician Needed for Home Wiring",
+    description: "We need a licensed electrician to install new electrical outlets and upgrade our home wiring system. Must have experience with residential electrical work and proper safety protocols.",
+    budget_min: 80.00,
+    budget_max: 150.00,
+    currency: "USD",
+    skills: ["Electrical Work", "Home Wiring", "Outlet Installation", "Safety Compliance"],
+    location: "New York, NY",
+    remote_allowed: true,
+    project_duration: "2-4 weeks",
+    status: "active",
+    created_at: "2024-01-15T10:00:00Z",
+    updated_at: "2024-01-15T10:00:00Z",
+    hirer: {
+      id: "mock-hirer-1",
+      full_name: "John Smith",
+      nickname: "JohnS",
+      avatar_url: ""
+    }
+  },
+  {
+    id: "mock-job-2",
+    title: "Interior Designer for Home Renovation",
+    description: "Seeking a talented interior designer to help redesign our living room and kitchen. Must have experience with space planning, color schemes, and furniture selection.",
+    budget_min: 100.00,
+    budget_max: 200.00,
+    currency: "USD",
+    skills: ["Interior Design", "Space Planning", "Color Schemes", "Furniture Selection"],
+    location: "San Francisco, CA",
+    remote_allowed: true,
+    project_duration: "3-6 weeks",
+    status: "active",
+    created_at: "2024-01-20T14:30:00Z",
+    updated_at: "2024-01-20T14:30:00Z",
+    hirer: {
+      id: "mock-hirer-2",
+      full_name: "Sarah Johnson",
+      nickname: "SarahJ",
+      avatar_url: ""
+    }
+  },
+  {
+    id: "mock-job-3",
+    title: "Plumber for Bathroom Renovation",
+    description: "Need an experienced plumber to install new fixtures and update plumbing for our bathroom renovation. Must have experience with residential plumbing and local building codes.",
+    budget_min: 70.00,
+    budget_max: 130.00,
+    currency: "USD",
+    skills: ["Plumbing", "Bathroom Renovation", "Fixture Installation", "Building Codes"],
+    location: "London, UK",
+    remote_allowed: false,
+    project_duration: "4-8 weeks",
+    status: "active",
+    created_at: "2024-02-01T09:15:00Z",
+    updated_at: "2024-02-01T09:15:00Z",
+    hirer: {
+      id: "mock-hirer-3",
+      full_name: "Mike Chen",
+      nickname: "MikeC",
+      avatar_url: ""
+    }
+  }
+];
+
 export default function Jobs() {
   const { user } = useAuth();
   const { data: userRole, isLoading: roleLoading } = useUserRole();
+  const { data: profileCompletion, isLoading: profileLoading } = useProfileCompletion();
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [skillFilter, setSkillFilter] = useState("");
@@ -74,10 +143,16 @@ export default function Jobs() {
         
         if (error) {
           console.error('Database query error (this is expected if jobs table doesn\'t exist yet):', error);
-          return [];
+          // Return mock data for testing when database is empty
+          return getMockJobs();
         }
         
-        return (data || []).map(job => {
+        // If no data from database, return mock data for testing
+        if (!data || data.length === 0) {
+          return getMockJobs();
+        }
+        
+        return data.map(job => {
           // Safely handle potentially null hirer data
           let hirerData;
           if (job.hirer !== null && typeof job.hirer === 'object' && !('error' in job.hirer)) {
@@ -93,7 +168,7 @@ export default function Jobs() {
         }) as Job[];
       } catch (err) {
         console.error('Error fetching jobs (this is expected if database tables don\'t exist yet):', err);
-        return [];
+        return getMockJobs();
       }
     },
     enabled: !!user,
@@ -156,8 +231,8 @@ export default function Jobs() {
     );
   }
 
-  // Show loading while checking user role
-  if (roleLoading) {
+  // Show loading while checking user role and profile completion
+  if (roleLoading || profileLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -241,7 +316,33 @@ export default function Jobs() {
 
         {/* Job Listings */}
         <div className="space-y-6">
-          {jobs && jobs.length > 0 ? (
+          {/* Show complete profile section if profile is not complete */}
+          {profileCompletion && !profileCompletion.isComplete ? (
+            <div className="text-center py-16">
+              <div className="max-w-md mx-auto">
+                <div className="bg-muted rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                  <Briefcase className="w-10 h-10 text-muted-foreground" />
+                </div>
+                <h3 className="text-2xl font-semibold mb-4">Complete Your Profile First</h3>
+                <p className="text-muted-foreground mb-6 text-lg">
+                  Complete your professional profile to start browsing job opportunities and get notified when new jobs are posted!
+                </p>
+                <div className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    💡 <strong>Missing:</strong> {profileCompletion.missingFields.join(', ')}
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <Button asChild>
+                      <Link to="/profile">Complete Profile</Link>
+                    </Button>
+                    <Button variant="outline" asChild>
+                      <Link to="/settings">Notification Settings</Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : jobs && jobs.length > 0 ? (
             jobs.map((job) => (
               <Card key={job.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
@@ -325,16 +426,13 @@ export default function Jobs() {
                 </div>
                 <h3 className="text-2xl font-semibold mb-4">No job opportunities yet</h3>
                 <p className="text-muted-foreground mb-6 text-lg">
-                  We're working on bringing you the best job opportunities. Check back soon or complete your profile to get notified when jobs are posted!
+                  We're working on bringing you the best job opportunities. Check back soon for new postings!
                 </p>
                 <div className="space-y-3">
                   <p className="text-sm text-muted-foreground">
-                    💡 <strong>Tip:</strong> Complete your professional profile to be the first to know about new opportunities
+                    💡 <strong>Tip:</strong> Set up notifications to be the first to know about new opportunities
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                    <Button asChild>
-                      <Link to="/profile">Complete Profile</Link>
-                    </Button>
                     <Button variant="outline" asChild>
                       <Link to="/settings">Notification Settings</Link>
                     </Button>
