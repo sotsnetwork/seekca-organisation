@@ -38,9 +38,55 @@ export default function PostJob() {
     setMessage(null);
 
     try {
-      // TODO: Implement actual job posting logic with Supabase
-      // For now, just simulate success
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      // Parse budget range (e.g., "$500 - $2000" or "$500-$2000")
+      let budgetMin = null;
+      let budgetMax = null;
+      if (jobData.budget) {
+        const budgetMatch = jobData.budget.match(/\$?(\d+(?:,\d{3})*(?:\.\d{2})?)\s*-\s*\$?(\d+(?:,\d{3})*(?:\.\d{2})?)/);
+        if (budgetMatch) {
+          budgetMin = parseFloat(budgetMatch[1].replace(/,/g, ''));
+          budgetMax = parseFloat(budgetMatch[2].replace(/,/g, ''));
+        } else {
+          // Single amount
+          const singleMatch = jobData.budget.match(/\$?(\d+(?:,\d{3})*(?:\.\d{2})?)/);
+          if (singleMatch) {
+            budgetMin = parseFloat(singleMatch[1].replace(/,/g, ''));
+          }
+        }
+      }
+
+      // Extract skills from requirements (simple implementation)
+      const skills = jobData.requirements 
+        ? jobData.requirements.split(',').map(s => s.trim()).filter(s => s.length > 0)
+        : [];
+
+      // Insert job into Supabase
+      const { data, error } = await supabase
+        .from('jobs')
+        .insert({
+          user_id: user.id,
+          title: jobData.title,
+          description: jobData.description,
+          budget_min: budgetMin,
+          budget_max: budgetMax,
+          currency: 'USD',
+          skills: skills,
+          location: jobData.location,
+          remote_allowed: true, // Default to true for now
+          project_duration: jobData.duration,
+          status: 'active'
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error posting job:', error);
+        throw new Error(`Failed to post job: ${error.message}`);
+      }
       
       setMessage({ 
         type: 'success', 
@@ -58,7 +104,11 @@ export default function PostJob() {
         requirements: ''
       });
     } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to post job. Please try again.' });
+      console.error('Job posting error:', error);
+      setMessage({ 
+        type: 'error', 
+        text: `Failed to post job: ${error instanceof Error ? error.message : 'Unknown error'}` 
+      });
     } finally {
       setIsLoading(false);
     }
