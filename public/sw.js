@@ -9,7 +9,7 @@ const STATIC_ASSETS = [
   '/index.html',
   '/src/main.tsx',
   '/src/index.css',
-  '/Blue Icon.png',
+  '/blue-icon.png',
   '/Full logo.png',
   '/favicon.ico',
 ];
@@ -118,8 +118,8 @@ self.addEventListener('push', (event) => {
     
     const options = {
       body: data.body,
-      icon: '/Blue Icon.png',
-      badge: '/Blue Icon.png',
+      icon: '/blue-icon.png',
+      badge: '/blue-icon.png',
       vibrate: [100, 50, 100],
       data: {
         dateOfArrival: Date.now(),
@@ -129,12 +129,12 @@ self.addEventListener('push', (event) => {
         {
           action: 'explore',
           title: 'View',
-          icon: '/Blue Icon.png'
+          icon: '/blue-icon.png'
         },
         {
           action: 'close',
           title: 'Close',
-          icon: '/Blue Icon.png'
+          icon: '/blue-icon.png'
         }
       ]
     };
