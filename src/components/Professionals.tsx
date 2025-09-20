@@ -906,12 +906,12 @@ export default function Professionals() {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <Button variant="outline" asChild>
-                        <a href="mailto:?subject=Join SeekCa Marketplace&body=Check out SeekCa - a marketplace for professionals and hirers!">
+                        <a href="mailto:?subject=Join SeekCa Marketplace&body=Check out SeekCa - a marketplace for professionals and hirers! Visit us at https://www.seekca.org/">
                           Share via Email
                         </a>
                       </Button>
                       <Button variant="outline" asChild>
-                        <a href="https://x.com/intent/tweet?text=Check%20out%20SeekCa%20-%20a%20marketplace%20for%20professionals%20and%20hirers!" target="_blank" rel="noopener noreferrer">
+                        <a href="https://x.com/intent/tweet?text=Check%20out%20SeekCa%20-%20a%20marketplace%20for%20professionals%20and%20hirers!%20https://www.seekca.org/" target="_blank" rel="noopener noreferrer">
                           Share on X
                         </a>
                       </Button>
