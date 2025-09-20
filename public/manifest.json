@@ -1,0 +1,27 @@
+{
+  "name": "SeekCa - Hire & Collab with Verified Professionals",
+  "short_name": "SeekCa",
+  "description": "Global marketplace connecting businesses with KYC-verified professionals. Secure payments, milestone tracking, and real-time collaboration for remote projects.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F9FAFB",
+  "theme_color": "#1E4DD8",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/blue-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/blue-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "social"],
+  "lang": "en",
+  "dir": "ltr"
+}
