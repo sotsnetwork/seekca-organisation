@@ -8,7 +8,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { withLazyLoading } from "@/components/LazyWrapper";
 import { usePerformance } from "@/hooks/use-performance";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
-import { Analytics } from '@vercel/analytics/react';
+// import { Analytics } from '@vercel/analytics/react';
 
 // Critical pages loaded immediately
 import Index from "./pages/Index";
@@ -55,7 +55,7 @@ const App = () => {
       <BrowserRouter>
         <AuthProvider>
           <TooltipProvider>
-            <Analytics />
+            {/* <Analytics /> */}
             <Toaster />
             <Sonner />
             <PerformanceMonitor />
