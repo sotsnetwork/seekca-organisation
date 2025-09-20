@@ -31,9 +31,9 @@ export default function Footer() {
   return (
     <footer className="bg-card border-t border-border">
       <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid lg:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-16 mb-12">
           {/* Brand Section */}
-          <div className="lg:col-span-2">
+          <div>
             <div className="flex items-center gap-3 mb-6">
             <img src={logoIcon} alt="SeekCa" className="w-8 h-8" />
               <span className="text-2xl font-heading font-bold text-foreground">SeekCa</span>
@@ -63,7 +63,7 @@ export default function Footer() {
           </div>
 
           {/* Links Sections */}
-          <div>
+          <div className="lg:ml-4">
             <h3 className="font-heading font-semibold text-foreground mb-4">Company</h3>
             <ul className="space-y-3">
             {footerLinks.company.map((link) => (
