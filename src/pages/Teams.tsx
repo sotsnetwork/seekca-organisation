@@ -143,7 +143,7 @@ export default function Teams() {
               <div>
                 <label className="text-sm font-medium mb-2 block">Filter by Skill</label>
                 <Input
-                  placeholder="e.g., Web Development"
+                  placeholder="e.g., Electrician, Plumber, Carpenter"
                   value={skillFilter}
                   onChange={(e) => setSkillFilter(e.target.value)}
                 />
