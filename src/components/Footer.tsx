@@ -5,10 +5,6 @@ import logoIcon from "@/assets/logo-icon.png";
 import { useAuth } from "@/hooks/use-auth";
 
 const footerLinks = {
-  product: [
-    { name: "Features", href: "/#features" },
-    { name: "How it Works", href: "/#how-it-works" }
-  ],
   company: [
     { name: "About", href: "/about" },
     { name: "Blog", href: "/blog" },
@@ -67,19 +63,6 @@ export default function Footer() {
           </div>
 
           {/* Links Sections */}
-          <div>
-            <h3 className="font-heading font-semibold text-foreground mb-4">Product</h3>
-            <ul className="space-y-3">
-              {footerLinks.product.map((link) => (
-                <li key={link.name}>
-                  <Link to={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           <div>
             <h3 className="font-heading font-semibold text-foreground mb-4">Company</h3>
             <ul className="space-y-3">
