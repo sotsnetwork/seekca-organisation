@@ -15,7 +15,8 @@ import {
   FileText,
   Users,
   TrendingUp,
-  Target
+  Target,
+  MapPin
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useUserRole } from "@/hooks/use-user-role";
@@ -60,16 +61,47 @@ export default function ProjectDashboard() {
   const { data: userRole } = useUserRole();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  // Fetch user's projects
+  // Fetch user's projects/jobs
   const { data: projects = [], isLoading } = useQuery({
-    queryKey: ['user-projects', user?.id],
+    queryKey: ['user-projects', user?.id, userRole],
     queryFn: async () => {
       if (!user?.id) return [];
       
       try {
-        // Mock implementation since projects table doesn't exist yet
-        console.log('Projects feature not yet implemented - returning empty array');
-        return [];
+        if (userRole === 'hirer') {
+          // For hirers, fetch their posted jobs
+          const { data: jobs, error } = await supabase
+            .from('jobs')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false });
+
+          if (error) {
+            console.error('Error fetching hirer jobs:', error);
+            return [];
+          }
+
+          // Transform jobs to project format
+          return (jobs || []).map(job => ({
+            id: job.id,
+            title: job.title,
+            description: job.description,
+            status: job.status,
+            budget: job.budget_max || job.budget_min || 0,
+            currency: job.currency,
+            location: job.location,
+            skills: job.skills || [],
+            created_at: job.created_at,
+            updated_at: job.updated_at,
+            project_duration: job.project_duration,
+            remote_allowed: job.remote_allowed
+          }));
+        } else {
+          // For professionals, this would be their assigned projects
+          // For now, return empty array since projects table doesn't exist yet
+          console.log('Professional projects feature not yet implemented - returning empty array');
+          return [];
+        }
       } catch (err) {
         console.error('Exception fetching projects:', err);
         return [];
@@ -80,9 +112,11 @@ export default function ProjectDashboard() {
 
   // Calculate project statistics
   const totalProjects = projects.length;
-  const activeProjects = 0; // Mock data
-  const completedProjects = 0; // Mock data
-  const totalEarnings = 0; // Mock data
+  const activeProjects = projects.filter(p => p.status === 'active').length;
+  const completedProjects = projects.filter(p => p.status === 'completed').length;
+  const totalEarnings = projects
+    .filter(p => p.status === 'completed')
+    .reduce((sum, p) => sum + (p.budget || 0), 0);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -255,13 +289,68 @@ export default function ProjectDashboard() {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center gap-2">
                     <DollarSign className="w-4 h-4 text-muted-foreground" />
-                    <span>${project.total_budget.toLocaleString()}</span>
+                    <span>
+                      {userRole === 'hirer' 
+                        ? (project.budget_min && project.budget_max 
+                            ? `${project.currency} ${project.budget_min.toLocaleString()} - ${project.budget_max.toLocaleString()}`
+                            : project.budget 
+                              ? `${project.currency} ${project.budget.toLocaleString()}`
+                              : 'Budget not specified'
+                          )
+                        : `$${project.total_budget?.toLocaleString() || '0'}`
+                      }
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-muted-foreground" />
-                    <span>{new Date(project.start_date).toLocaleDateString()}</span>
+                    <span>
+                      {userRole === 'hirer' 
+                        ? (project.project_duration || 'No duration specified')
+                        : new Date(project.start_date).toLocaleDateString()
+                      }
+                    </span>
                   </div>
                 </div>
+
+                {/* Additional details for hirer jobs */}
+                {userRole === 'hirer' && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-muted-foreground" />
+                        <span>Posted {new Date(project.created_at).toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-muted-foreground" />
+                        <span>{project.remote_allowed ? 'Remote OK' : 'On-site'}</span>
+                      </div>
+                    </div>
+
+                    {/* Location */}
+                    {project.location && (
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <MapPin className="w-4 h-4" />
+                        <span>{project.location}</span>
+                      </div>
+                    )}
+
+                    {/* Skills */}
+                    {project.skills && project.skills.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {project.skills.slice(0, 3).map((skill, index) => (
+                          <Badge key={index} variant="secondary" className="text-xs">
+                            {skill}
+                          </Badge>
+                        ))}
+                        {project.skills.length > 3 && (
+                          <Badge variant="secondary" className="text-xs">
+                            +{project.skills.length - 3} more
+                          </Badge>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
 
                 {/* Milestones Progress */}
                 {project.milestones && project.milestones.length > 0 && (
@@ -281,20 +370,41 @@ export default function ProjectDashboard() {
 
                 {/* Action Buttons */}
                 <div className="flex gap-2">
-                  <Button 
-                    size="sm" 
-                    onClick={() => setSelectedProject(project)}
-                    className="flex-1"
-                  >
-                    <MessageSquare className="w-4 h-4 mr-2" />
-                    View Details
-                  </Button>
-                  <Button size="sm" variant="outline" asChild>
-                    <Link to={`/project/${project.id}`}>
-                      <FileText className="w-4 h-4 mr-2" />
-                      Manage
-                    </Link>
-                  </Button>
+                  {userRole === 'hirer' ? (
+                    <>
+                      <Button 
+                        size="sm" 
+                        onClick={() => setSelectedProject(project)}
+                        className="flex-1"
+                      >
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        View Applications
+                      </Button>
+                      <Button size="sm" variant="outline" asChild>
+                        <Link to={`/post-job?edit=${project.id}`}>
+                          <FileText className="w-4 h-4 mr-2" />
+                          Edit Job
+                        </Link>
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button 
+                        size="sm" 
+                        onClick={() => setSelectedProject(project)}
+                        className="flex-1"
+                      >
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        View Details
+                      </Button>
+                      <Button size="sm" variant="outline" asChild>
+                        <Link to={`/project/${project.id}`}>
+                          <FileText className="w-4 h-4 mr-2" />
+                          Manage
+                        </Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </CardContent>
