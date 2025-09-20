@@ -147,6 +147,7 @@ export default function Jobs() {
         }
         
         console.log('Jobs fetched from database:', data);
+        console.log('Number of jobs found:', data?.length || 0);
         
         // Return actual data from database
         if (!data || data.length === 0) {
