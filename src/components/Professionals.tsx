@@ -43,117 +43,6 @@ interface Professional {
   completedProjects?: number;
 }
 
-// Mock data for testing when database is empty
-const getMockProfessionals = (): Professional[] => [
-  {
-    id: "mock-1",
-    user_id: "mock-user-1",
-    full_name: "John Okafor",
-    nickname: "JohnO",
-    bio: "Experienced electrician with 8+ years in residential and commercial electrical work. Licensed and certified with excellent customer reviews.",
-    skills: ["Electrical Work", "Home Wiring", "Outlet Installation", "Circuit Repair", "Safety Compliance"],
-    hourly_rate: 45.00,
-    location: "Lagos, Lagos, Nigeria",
-    country: "Nigeria",
-    state: "Lagos",
-    city: "Lagos",
-    verified: true,
-    created_at: "2024-01-15T10:00:00Z",
-    currency_code: "NGN",
-    currency_symbol: "₦",
-    completedProjects: 12
-  },
-  {
-    id: "mock-2",
-    user_id: "mock-user-2",
-    full_name: "Sarah Adebayo",
-    nickname: "SarahA",
-    bio: "Professional plumber specializing in residential plumbing, pipe repairs, and bathroom renovations. 10+ years experience.",
-    skills: ["Plumbing", "Pipe Repair", "Bathroom Renovation", "Fixture Installation", "Water Heater Repair"],
-    hourly_rate: 40.00,
-    location: "Lagos, Lagos, Nigeria",
-    country: "Nigeria",
-    state: "Lagos",
-    city: "Lagos",
-    verified: true,
-    created_at: "2024-01-20T14:30:00Z",
-    currency_code: "NGN",
-    currency_symbol: "₦",
-    completedProjects: 8
-  },
-  {
-    id: "mock-3",
-    user_id: "mock-user-3",
-    full_name: "Michael Chukwu",
-    nickname: "MikeC",
-    bio: "Expert carpenter and furniture maker with a passion for quality woodwork. Specializes in custom furniture and home repairs.",
-    skills: ["Carpentry", "Furniture Making", "Wood Repair", "Custom Cabinets", "Home Repairs"],
-    hourly_rate: 35.00,
-    location: "Lagos, Lagos, Nigeria",
-    country: "Nigeria",
-    state: "Lagos",
-    city: "Lagos",
-    verified: true,
-    created_at: "2024-02-01T09:15:00Z",
-    currency_code: "NGN",
-    currency_symbol: "₦",
-    completedProjects: 15
-  },
-  {
-    id: "mock-4",
-    user_id: "mock-user-4",
-    full_name: "Grace Okonkwo",
-    nickname: "GraceO",
-    bio: "Professional interior designer with expertise in space planning, color schemes, and modern home design. 6+ years experience.",
-    skills: ["Interior Design", "Space Planning", "Color Schemes", "Furniture Selection", "Home Staging"],
-    hourly_rate: 50.00,
-    location: "Lagos, Lagos, Nigeria",
-    country: "Nigeria",
-    state: "Lagos",
-    city: "Lagos",
-    verified: true,
-    created_at: "2024-02-05T11:45:00Z",
-    currency_code: "NGN",
-    currency_symbol: "₦",
-    completedProjects: 6
-  },
-  {
-    id: "mock-5",
-    user_id: "mock-user-5",
-    full_name: "David Nwosu",
-    nickname: "DavidN",
-    bio: "Skilled landscaper and garden designer. Creates beautiful outdoor spaces and maintains gardens for residential properties.",
-    skills: ["Landscaping", "Garden Design", "Tree Care", "Lawn Maintenance", "Outdoor Lighting"],
-    hourly_rate: 30.00,
-    location: "Lagos, Lagos, Nigeria",
-    country: "Nigeria",
-    state: "Lagos",
-    city: "Lagos",
-    verified: true,
-    created_at: "2024-02-10T16:20:00Z",
-    currency_code: "NGN",
-    currency_symbol: "₦",
-    completedProjects: 9
-  },
-  {
-    id: "mock-6",
-    user_id: "mock-user-6",
-    full_name: "Blessing Iwu",
-    nickname: "BlessingI",
-    bio: "Professional painter with expertise in interior and exterior painting. Uses high-quality materials and provides excellent finishes.",
-    skills: ["House Painting", "Interior Painting", "Exterior Painting", "Color Consultation", "Wall Preparation"],
-    hourly_rate: 25.00,
-    location: "Lagos, Lagos, Nigeria",
-    country: "Nigeria",
-    state: "Lagos",
-    city: "Lagos",
-    verified: true,
-    created_at: "2024-02-15T13:10:00Z",
-    currency_code: "NGN",
-    currency_symbol: "₦",
-    completedProjects: 11
-  }
-];
 
 export default function Professionals() {
   const { user } = useAuth();
@@ -272,21 +161,56 @@ export default function Professionals() {
 
         const { data, error } = await query;
         
+        console.log('Database query result:', { data, error });
+        
         if (error) {
           console.log('Database query error:', error);
-          // Return mock data for testing when database is empty
-          return getMockProfessionals();
+          return [];
         }
         
-        // If no data from database, return mock data for testing
+        // Return actual data from database
         if (!data || data.length === 0) {
-          return getMockProfessionals();
+          console.log('No professionals found in database, trying alternative query...');
+          
+          // Try alternative query without join
+          const { data: altData, error: altError } = await supabase
+            .from('profiles')
+            .select('*')
+            .order('created_at', { ascending: false });
+            
+          if (altError) {
+            console.log('Alternative query also failed:', altError);
+            return [];
+          }
+          
+          if (!altData || altData.length === 0) {
+            console.log('No profiles found at all');
+            return [];
+          }
+          
+          // Filter for professionals manually
+          const professionalIds = await supabase
+            .from('user_roles')
+            .select('user_id')
+            .eq('role', 'professional');
+            
+          if (professionalIds.error) {
+            console.log('Error fetching professional roles:', professionalIds.error);
+            return [];
+          }
+          
+          const profIds = professionalIds.data?.map(r => r.user_id) || [];
+          const professionals = altData.filter(p => profIds.includes(p.user_id));
+          
+          console.log('Found professionals via alternative query:', professionals.length);
+          return professionals;
         }
         
+        console.log('Found professionals:', data.length);
         return data;
       } catch (err) {
         console.log('Error fetching profiles:', err);
-        return getMockProfessionals();
+        return [];
       }
     },
     // Always allow fetching so visitors can browse professionals
