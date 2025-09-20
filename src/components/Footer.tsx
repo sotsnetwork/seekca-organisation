@@ -6,10 +6,8 @@ import { useAuth } from "@/hooks/use-auth";
 
 const footerLinks = {
   product: [
-    { name: "Features", href: "#features" },
-    { name: "How it Works", href: "#how-it-works" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "Security", href: "#security" }
+    { name: "Features", href: "/#features" },
+    { name: "How it Works", href: "/#how-it-works" }
   ],
   company: [
     { name: "About", href: "/about" },
@@ -74,9 +72,9 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.product.map((link) => (
                 <li key={link.name}>
-                  <a href={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
+                  <Link to={link.href} className="text-muted-foreground hover:text-foreground transition-colors">
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
