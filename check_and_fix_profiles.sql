@@ -51,7 +51,7 @@ WHERE p.user_id IS NULL
 ORDER BY u.created_at DESC;
 
 -- 5. Create profiles for users who don't have them
-INSERT INTO profiles (user_id, full_name, nickname, country, bio, skills, hourly_rate, location, verified)
+INSERT INTO profiles (user_id, full_name, nickname, country, bio, skills, hourly_rate, location)
 SELECT 
   u.id,
   COALESCE(u.raw_user_meta_data->>'full_name', 'User'),
@@ -60,8 +60,7 @@ SELECT
   COALESCE(u.raw_user_meta_data->>'bio', 'Professional on SeekCa'),
   COALESCE((u.raw_user_meta_data->>'skills')::TEXT[], ARRAY[]::TEXT[]),
   COALESCE((u.raw_user_meta_data->>'hourly_rate')::DECIMAL, 25.00),
-  COALESCE(u.raw_user_meta_data->>'location', 'Lagos, Nigeria'),
-  true
+  COALESCE(u.raw_user_meta_data->>'location', 'Lagos, Nigeria')
 FROM auth.users u
 LEFT JOIN profiles p ON u.id = p.user_id
 WHERE p.user_id IS NULL;
