@@ -162,6 +162,7 @@ export default function Professionals() {
         const { data, error } = await query;
         
         console.log('Database query result:', { data, error });
+        console.log('Number of professionals found:', data?.length || 0);
         
         if (error) {
           console.log('Database query error:', error);
@@ -203,6 +204,9 @@ export default function Professionals() {
           const professionals = altData.filter(p => profIds.includes(p.user_id));
           
           console.log('Found professionals via alternative query:', professionals.length);
+          console.log('Professional IDs from user_roles:', profIds);
+          console.log('All profiles:', altData);
+          console.log('Filtered professionals:', professionals);
           return professionals;
         }
         
@@ -252,6 +256,7 @@ export default function Professionals() {
   });
 
   // Convert API data to component format
+  console.log('apiProfessionals before mapping:', apiProfessionals);
   const professionals = apiProfessionals.map((prof: {
     id: string;
     user_id: string;
@@ -297,6 +302,9 @@ export default function Professionals() {
       created_at: prof.created_at,
     };
   });
+
+  console.log('Final professionals array:', professionals);
+  console.log('Number of professionals to display:', professionals.length);
 
   // Professionals will be fetched from Supabase database
 
