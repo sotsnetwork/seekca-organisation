@@ -94,7 +94,20 @@ export default function ProjectDashboard() {
             created_at: job.created_at,
             updated_at: job.updated_at,
             project_duration: job.project_duration,
-            remote_allowed: job.remote_allowed
+            remote_allowed: job.remote_allowed,
+            // Add default professional and hirer objects to prevent undefined errors
+            professional: {
+              id: job.user_id || '',
+              full_name: 'Professional',
+              nickname: 'Professional',
+              avatar_url: undefined
+            },
+            hirer: {
+              id: job.user_id || '',
+              full_name: 'Hirer',
+              nickname: 'Hirer',
+              avatar_url: undefined
+            }
           }));
         } else {
           // For professionals, this would be their assigned projects
@@ -261,25 +274,25 @@ export default function ProjectDashboard() {
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <Avatar className="w-8 h-8">
-                      <AvatarImage src={project.professional.avatar_url} />
+                      <AvatarImage src={project.professional?.avatar_url} />
                       <AvatarFallback>
-                        {project.professional.full_name?.charAt(0) || 'P'}
+                        {project.professional?.full_name?.charAt(0) || 'P'}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="text-sm font-medium">{project.professional.nickname}</p>
+                      <p className="text-sm font-medium">{project.professional?.nickname || 'Professional'}</p>
                       <p className="text-xs text-muted-foreground">Professional</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Avatar className="w-8 h-8">
-                      <AvatarImage src={project.hirer.avatar_url} />
+                      <AvatarImage src={project.hirer?.avatar_url} />
                       <AvatarFallback>
-                        {project.hirer.full_name?.charAt(0) || 'H'}
+                        {project.hirer?.full_name?.charAt(0) || 'H'}
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="text-sm font-medium">{project.hirer.nickname}</p>
+                      <p className="text-sm font-medium">{project.hirer?.nickname || 'Hirer'}</p>
                       <p className="text-xs text-muted-foreground">Hirer</p>
                     </div>
                   </div>
@@ -464,25 +477,25 @@ export default function ProjectDashboard() {
                       <CardContent className="space-y-4">
                         <div className="flex items-center gap-3">
                           <Avatar>
-                            <AvatarImage src={selectedProject.professional.avatar_url} />
+                            <AvatarImage src={selectedProject.professional?.avatar_url} />
                             <AvatarFallback>
-                              {selectedProject.professional.full_name?.charAt(0) || 'P'}
+                              {selectedProject.professional?.full_name?.charAt(0) || 'P'}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <p className="font-medium">{selectedProject.professional.nickname}</p>
+                            <p className="font-medium">{selectedProject.professional?.nickname || 'Professional'}</p>
                             <p className="text-sm text-muted-foreground">Professional</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-3">
                           <Avatar>
-                            <AvatarImage src={selectedProject.hirer.avatar_url} />
+                            <AvatarImage src={selectedProject.hirer?.avatar_url} />
                             <AvatarFallback>
-                              {selectedProject.hirer.full_name?.charAt(0) || 'H'}
+                              {selectedProject.hirer?.full_name?.charAt(0) || 'H'}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <p className="font-medium">{selectedProject.hirer.nickname}</p>
+                            <p className="font-medium">{selectedProject.hirer?.nickname || 'Hirer'}</p>
                             <p className="text-sm text-muted-foreground">Hirer</p>
                           </div>
                         </div>
