@@ -172,6 +172,22 @@ export default function Jobs() {
         // Return actual data from database
         if (!data || data.length === 0) {
           console.log('No jobs found in database');
+          
+          // Try a simpler query without the hirer join to see if jobs exist
+          console.log('Trying fallback query without hirer join...');
+          const { data: fallbackData, error: fallbackError } = await supabase
+            .from('jobs')
+            .select('*')
+            .eq('status', 'active')
+            .order('created_at', { ascending: false });
+            
+          if (fallbackError) {
+            console.error('Fallback query also failed:', fallbackError);
+          } else {
+            console.log('Fallback query result:', fallbackData);
+            console.log('Fallback jobs found:', fallbackData?.length || 0);
+          }
+          
           return [];
         }
         
