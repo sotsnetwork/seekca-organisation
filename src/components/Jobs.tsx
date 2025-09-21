@@ -122,7 +122,7 @@ export default function Jobs() {
           .from('jobs')
           .select(`
             *,
-            hirer:profiles!jobs_user_id_fkey(full_name, nickname, avatar_url)
+            hirer:profiles!user_id(full_name, nickname, avatar_url)
           `)
           .eq('status', 'active')
           .order('created_at', { ascending: false });
@@ -140,6 +140,13 @@ export default function Jobs() {
         }
 
         const { data, error } = await query;
+        
+        console.log('Jobs query result:', { data, error });
+        console.log('Query filters applied:', {
+          searchTerm,
+          locationFilter,
+          skillFilter
+        });
         
         if (error) {
           console.error('Database query error:', error);
