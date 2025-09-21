@@ -133,8 +133,10 @@ export default function Professionals() {
   // Set user location from profile data
   useEffect(() => {
     if (userProfile) {
+      console.log('User profile data:', userProfile);
       // Parse location string to extract state and city
       const parsedLocation = parseLocation(userProfile.location || '');
+      console.log('Parsed location:', parsedLocation);
       
       setUserLocation({
         country: userProfile.country || 'Nigeria',
@@ -218,6 +220,15 @@ export default function Professionals() {
         
         console.log('Database query result:', { data, error });
         console.log('Number of professionals found:', data?.length || 0);
+        console.log('Query filters applied:', {
+          searchTerm,
+          targetCountry,
+          skillFilter,
+          stateFilter,
+          cityFilter,
+          nearbyFilter,
+          priceRange
+        });
         
         if (error) {
           console.log('Database query error:', error);
@@ -262,6 +273,15 @@ export default function Professionals() {
           console.log('Professional IDs from user_roles:', profIds);
           console.log('All profiles:', altData);
           console.log('Filtered professionals:', professionals);
+          console.log('Alternative query filters:', {
+            searchTerm,
+            targetCountry,
+            skillFilter,
+            stateFilter,
+            cityFilter,
+            nearbyFilter,
+            priceRange
+          });
           return professionals;
         }
         
@@ -678,11 +698,21 @@ export default function Professionals() {
                       if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(
                           (position) => {
-                            setUserLocation({
-                              country: "Nigeria",
-                              state: "Lagos", 
-                              city: "Lagos"
-                            });
+                            // Use profile location as fallback instead of hardcoded Lagos
+                            if (userProfile) {
+                              const parsedLocation = parseLocation(userProfile.location || '');
+                              setUserLocation({
+                                country: userProfile.country || 'Nigeria',
+                                state: parsedLocation.state,
+                                city: parsedLocation.city
+                              });
+                            } else {
+                              setUserLocation({
+                                country: "Nigeria",
+                                state: "Unknown", 
+                                city: "Unknown"
+                              });
+                            }
                             setLocationPermission('granted');
                           },
                           (error) => {
