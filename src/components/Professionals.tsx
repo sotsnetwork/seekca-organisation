@@ -397,13 +397,7 @@ export default function Professionals() {
   console.log('Available states:', availableStates);
   console.log('Selected state:', stateFilter);
   console.log('Available towns:', availableTowns);
-  const uniqueTowns = Array.from(new Set(professionals.map(p => p.town).filter(Boolean))).sort();
 
-  // All available countries for the dropdown
-  const allCountries = [
-    "Nigeria", "USA", "UK", "Canada", "Germany", "France", "Australia", "Japan", 
-    "Brazil", "India", "South Africa", "Mexico", "Italy", "Spain", "Netherlands"
-  ];
   
   // Get unique skills for skill filter
   const allSkills = professionals.flatMap(p => p.skills);
@@ -411,23 +405,23 @@ export default function Professionals() {
 
   // Filter states, cities, and towns based on selected country
   const filteredStates = countryFilter 
-    ? uniqueStates.filter(state => 
+    ? availableStates.filter(state => 
         professionals.some(p => p.country === countryFilter && p.state === state)
       )
-    : uniqueStates;
+    : availableStates;
 
   const filteredCities = (countryFilter || stateFilter)
-    ? uniqueCities.filter(city => 
+    ? availableTowns.filter(city => 
         professionals.some(p => 
           (!countryFilter || p.country === countryFilter) &&
           (!stateFilter || p.state === stateFilter) &&
           p.city === city
         )
       )
-    : uniqueCities;
+    : availableTowns;
 
   const filteredTowns = (countryFilter || stateFilter || cityFilter)
-    ? uniqueTowns.filter(town => 
+    ? availableTowns.filter(town => 
         professionals.some(p => 
           (!countryFilter || p.country === countryFilter) &&
           (!stateFilter || p.state === stateFilter) &&
@@ -435,7 +429,7 @@ export default function Professionals() {
           p.town === town
         )
       )
-    : uniqueTowns;
+    : availableTowns;
 
   // Filter professionals based on all criteria
   const filteredProfessionals = professionals.filter(professional => {
