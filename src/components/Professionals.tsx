@@ -16,7 +16,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { getCountries, getStatesByCountry, getAllCitiesByCountry, searchCities, type City } from "@/data/cities";
 import { nigeriaStates } from "@/data/nigeria-states";
-import { globalCountries, getStatesByCountry as getGlobalStatesByCountry, getCitiesByState, getAllCountries, getAllRegions } from "@/data/global-locations";
 import CitySelector from "@/components/CitySelector";
 import { getCurrencySymbol, getCurrencyForCountry } from "@/lib/currency";
 import ProfessionalProfileModal from "@/components/ProfessionalProfileModal";
@@ -51,7 +50,6 @@ export default function Professionals() {
   const [searchTerm, setSearchTerm] = useState("");
   const [skillFilter, setSkillFilter] = useState("");
   const [rateFilter, setRateFilter] = useState("");
-  const [regionFilter, setRegionFilter] = useState("");
   const [countryFilter, setCountryFilter] = useState("");
   const [stateFilter, setStateFilter] = useState("");
   const [cityFilter, setCityFilter] = useState("");
@@ -163,7 +161,7 @@ export default function Professionals() {
 
   // Fetch professionals from Supabase profiles table
   const { data: apiProfessionals = [], isLoading, error } = useQuery({
-    queryKey: ['profiles', searchTerm, regionFilter, countryFilter, stateFilter, cityFilter, skillFilter, priceRange, nearbyFilter, userLocation?.country],
+    queryKey: ['profiles', searchTerm, countryFilter, stateFilter, cityFilter, skillFilter, priceRange, nearbyFilter, userLocation?.country],
     queryFn: async () => {
       try {
         // First get all profiles with their user roles
@@ -185,35 +183,30 @@ export default function Professionals() {
           ? countryFilter 
           : userLocation?.country;
         
-        // Temporarily disable country filtering to test
+        // Filter by country - default to user's country if no filter set
         console.log('Target country for filtering:', targetCountry);
-        // if (targetCountry) {
-        //   query = query.eq('country', targetCountry);
-        // }
+        if (targetCountry) {
+          query = query.eq('country', targetCountry);
+        }
 
         if (skillFilter && skillFilter !== "all-skills") {
           query = query.contains('skills', [skillFilter]);
         }
 
-        // Temporarily disable location filtering to test
-        console.log('State filter:', stateFilter);
-        console.log('City filter:', cityFilter);
-        console.log('Nearby filter:', nearbyFilter);
-        
         // Filter by state if specified
-        // if (stateFilter && stateFilter !== "all-states") {
-        //   query = query.ilike('location', `%${stateFilter}%`);
-        // }
+        if (stateFilter && stateFilter !== "all-states") {
+          query = query.ilike('location', `%${stateFilter}%`);
+        }
 
         // Filter by town if specified
-        // if (cityFilter && cityFilter !== "all-cities") {
-        //   query = query.ilike('location', `%${cityFilter}%`);
-        // }
+        if (cityFilter && cityFilter !== "all-cities") {
+          query = query.ilike('location', `%${cityFilter}%`);
+        }
 
         // Nearby filter - show only professionals from same state
-        // if (nearbyFilter && userLocation?.state) {
-        //   query = query.ilike('location', `%${userLocation.state}%`);
-        // }
+        if (nearbyFilter && userLocation?.state) {
+          query = query.ilike('location', `%${userLocation.state}%`);
+        }
 
         if (priceRange[0] > 0) {
           query = query.gte('hourly_rate', priceRange[0]);
@@ -401,32 +394,28 @@ export default function Professionals() {
 
   // Professionals will be fetched from Supabase database
 
-  // Get all regions
-  const allRegions = getAllRegions();
+  // Simple country-based approach
+  const availableCountries = [
+    { name: "Nigeria", code: "NG" },
+    { name: "United States", code: "US" },
+    { name: "United Kingdom", code: "GB" },
+    { name: "Canada", code: "CA" },
+    { name: "Germany", code: "DE" },
+    { name: "France", code: "FR" },
+    { name: "India", code: "IN" },
+    { name: "Australia", code: "AU" }
+  ];
   
-  // Get countries based on selected region
-  const getCountriesForRegion = (region: string) => {
-    if (!region || region === "all-regions") return getAllCountries();
-    return globalCountries.filter(country => country.region === region).map(country => ({
-      name: country.name,
-      code: country.code
-    }));
-  };
-  
-  const availableCountries = getCountriesForRegion(regionFilter);
-  
-  // Get states for selected country
+  // Get states for selected country (using Nigeria states for now)
   const availableStates = countryFilter && countryFilter !== "all-countries" 
-    ? getGlobalStatesByCountry(countryFilter).map(state => state.name).sort()
+    ? nigeriaStates.map(state => state.name).sort()
     : [];
   
-  // Get cities/towns for selected state and country
-  const availableTowns = stateFilter && stateFilter !== "all-states" && countryFilter
-    ? getCitiesByState(countryFilter, stateFilter).map(city => city.name).sort()
+  // Get cities/towns for selected state
+  const availableTowns = stateFilter && stateFilter !== "all-states" 
+    ? nigeriaStates.find(state => state.name === stateFilter)?.cities.map(city => city.name).sort() || []
     : [];
   
-  console.log('All regions:', allRegions);
-  console.log('Selected region:', regionFilter);
   console.log('Available countries:', availableCountries);
   console.log('Selected country:', countryFilter);
   console.log('Available states:', availableStates);
@@ -532,7 +521,6 @@ export default function Professionals() {
     setSearchTerm("");
     setSkillFilter("");
     setRateFilter("");
-    setRegionFilter("");
     setCountryFilter("");
     setStateFilter("");
     setCityFilter("");
@@ -551,7 +539,6 @@ export default function Professionals() {
     searchTerm,
     skillFilter && skillFilter !== "all-skills" ? skillFilter : "",
     rateFilter,
-    regionFilter && regionFilter !== "all-regions" ? regionFilter : "",
     countryFilter && countryFilter !== "all-countries" ? countryFilter : "",
     stateFilter && stateFilter !== "all-states" ? stateFilter : "",
     cityFilter && cityFilter !== "all-cities" ? cityFilter : "",
@@ -610,28 +597,7 @@ export default function Professionals() {
             </div>
             
             {/* Filter Row 1 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-              {/* Region Filter */}
-              <Select value={regionFilter} onValueChange={(value) => {
-                setRegionFilter(value);
-                setCountryFilter("");
-                setStateFilter("");
-                setCityFilter("");
-                setTownFilter("");
-              }}>
-              <SelectTrigger>
-                  <SelectValue placeholder="Select Region" />
-              </SelectTrigger>
-              <SelectContent>
-                  <SelectItem value="all-regions">All Regions</SelectItem>
-                  {allRegions.map((region) => (
-                    <SelectItem key={region} value={region}>
-                      {region}
-                    </SelectItem>
-                  ))}
-               </SelectContent>
-            </Select>
-
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {/* Country Filter */}
               <Select value={countryFilter} onValueChange={(value) => {
                 setCountryFilter(value);
