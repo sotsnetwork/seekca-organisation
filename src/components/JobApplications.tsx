@@ -52,59 +52,32 @@ interface JobApplicationsProps {
 export default function JobApplications({ jobId, jobTitle, isOpen, onClose }: JobApplicationsProps) {
   const [selectedApplication, setSelectedApplication] = useState<JobApplication | null>(null);
 
-  // For now, we'll create mock applications since we don't have a job_applications table yet
+  // Query for real job applications (when job_applications table exists)
   const { data: applications = [], isLoading } = useQuery({
     queryKey: ['jobApplications', jobId],
     queryFn: async () => {
-      // Mock data for demonstration
-      const mockApplications: JobApplication[] = [
-        {
-          id: 'app-1',
-          job_id: jobId,
-          professional_id: 'prof-1',
-          proposal: 'I have 5+ years of experience in welding and metal fabrication. I can complete this project within the specified timeframe and deliver high-quality work.',
-          proposed_rate: 45,
-          estimated_duration: '2-3 weeks',
-          status: 'pending',
-          created_at: new Date().toISOString(),
-          professional: {
-            id: 'prof-1',
-            full_name: 'John Smith',
-            nickname: 'JohnS',
-            bio: 'Experienced welder with expertise in structural welding and custom metalwork.',
-            skills: ['Welding', 'Metal Fabrication', 'Structural Work'],
-            hourly_rate: 45,
-            location: 'Lagos, Nigeria',
-            avatar_url: undefined,
-            rating: 4.8,
-            completed_projects: 23
-          }
-        },
-        {
-          id: 'app-2',
-          job_id: jobId,
-          professional_id: 'prof-2',
-          proposal: 'Professional welder with certification in TIG and MIG welding. I specialize in precision welding and can work with various metals.',
-          proposed_rate: 50,
-          estimated_duration: '1-2 weeks',
-          status: 'pending',
-          created_at: new Date().toISOString(),
-          professional: {
-            id: 'prof-2',
-            full_name: 'Michael Johnson',
-            nickname: 'MikeJ',
-            bio: 'Certified welder with 8 years of experience in industrial and commercial projects.',
-            skills: ['TIG Welding', 'MIG Welding', 'Precision Work'],
-            hourly_rate: 50,
-            location: 'Abuja, Nigeria',
-            avatar_url: undefined,
-            rating: 4.9,
-            completed_projects: 31
-          }
+      try {
+        // For now, return empty array since we don't have job_applications table yet
+        // When the table is created, this query will fetch real applications
+        const { data, error } = await supabase
+          .from('job_applications')
+          .select(`
+            *,
+            professional:profiles!professional_id(full_name, nickname, bio, skills, hourly_rate, location, avatar_url)
+          `)
+          .eq('job_id', jobId)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error fetching job applications:', error);
+          return [];
         }
-      ];
-      
-      return mockApplications;
+
+        return data || [];
+      } catch (error) {
+        console.error('Exception fetching job applications:', error);
+        return [];
+      }
     },
     enabled: isOpen && !!jobId,
   });
