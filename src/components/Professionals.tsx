@@ -86,29 +86,61 @@ export default function Professionals() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
-  // Location detection
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          // In a real app, you would reverse geocode the coordinates to get location details
-          // For now, we'll use a mock location detection
-          setUserLocation({
-            country: "Nigeria", // This would be determined from coordinates
-            state: "Lagos",
-            city: "Lagos"
-          });
-          setLocationPermission('granted');
-        },
-        (error) => {
-          console.log('Location access denied:', error);
-          setLocationPermission('denied');
-        }
-      );
-    } else {
-      setLocationPermission('denied');
+  // Helper function to parse location string and extract state and city
+  const parseLocation = (location: string) => {
+    if (!location) return { city: '', state: '' };
+    
+    const parts = location.split(',').map(part => part.trim());
+    if (parts.length >= 2) {
+      return {
+        city: parts[0],
+        state: parts[1]
+      };
+    } else if (parts.length === 1) {
+      return {
+        city: parts[0],
+        state: ''
+      };
     }
-  }, []);
+    return { city: '', state: '' };
+  };
+
+  // Get user's profile location instead of browser geolocation
+  const { data: userProfile } = useQuery({
+    queryKey: ['user-profile', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('country, location, state, city')
+        .eq('user_id', user.id)
+        .single();
+      
+      if (error) {
+        console.log('Error fetching user profile:', error);
+        return null;
+      }
+      
+      return data;
+    },
+    enabled: !!user?.id,
+  });
+
+  // Set user location from profile data
+  useEffect(() => {
+    if (userProfile) {
+      // Parse location string to extract state and city
+      const parsedLocation = parseLocation(userProfile.location || '');
+      
+      setUserLocation({
+        country: userProfile.country || 'Nigeria',
+        state: parsedLocation.state,
+        city: parsedLocation.city
+      });
+      setLocationPermission('granted');
+    }
+  }, [userProfile]);
 
   // Calculate distance between two locations (simplified)
   const calculateDistance = (prof: Professional) => {
@@ -126,7 +158,7 @@ export default function Professionals() {
 
   // Fetch professionals from Supabase profiles table
   const { data: apiProfessionals = [], isLoading, error } = useQuery({
-    queryKey: ['profiles', searchTerm, countryFilter, skillFilter, priceRange],
+    queryKey: ['profiles', searchTerm, countryFilter, stateFilter, cityFilter, skillFilter, priceRange, nearbyFilter, userLocation?.country],
     queryFn: async () => {
       try {
         // First get all profiles with their user roles
@@ -143,12 +175,32 @@ export default function Professionals() {
           query = query.or(`full_name.ilike.%${searchTerm}%,nickname.ilike.%${searchTerm}%,bio.ilike.%${searchTerm}%`);
         }
 
-        if (countryFilter && countryFilter !== "all-countries") {
-          query = query.eq('country', countryFilter);
+        // Filter by country - default to user's country if no filter set
+        const targetCountry = countryFilter && countryFilter !== "all-countries" 
+          ? countryFilter 
+          : userLocation?.country;
+        
+        if (targetCountry) {
+          query = query.eq('country', targetCountry);
         }
 
         if (skillFilter && skillFilter !== "all-skills") {
           query = query.contains('skills', [skillFilter]);
+        }
+
+        // Filter by state if specified
+        if (stateFilter && stateFilter !== "all-states") {
+          query = query.ilike('location', `%${stateFilter}%`);
+        }
+
+        // Filter by city if specified
+        if (cityFilter && cityFilter !== "all-cities") {
+          query = query.ilike('location', `%${cityFilter}%`);
+        }
+
+        // Nearby filter - show only professionals from same state
+        if (nearbyFilter && userLocation?.state) {
+          query = query.ilike('location', `%${userLocation.state}%`);
         }
 
         if (priceRange[0] > 0) {
@@ -276,6 +328,9 @@ export default function Professionals() {
     currency_code?: string;
     currency_symbol?: string;
   }) => {
+    // Parse location to extract state and city
+    const parsedLocation = parseLocation(prof.location || '');
+    
     // Get currency info from database or fallback to country-based currency
     const currencyCode = prof.currency_code || getCurrencyForCountry(prof.country || 'United States').code;
     const currencySymbol = prof.currency_symbol || getCurrencySymbol(prof.country || 'United States');
@@ -286,10 +341,10 @@ export default function Professionals() {
       full_name: prof.full_name || "Professional",
       nickname: prof.nickname || "Professional",
       bio: prof.bio,
-      location: prof.location || `${prof.city ?? ''}${prof.city && prof.state ? ', ' : ''}${prof.state ?? ''}` || "Location not specified",
+      location: prof.location || "Location not specified",
       country: prof.country || "Unknown",
-      state: prof.state || "",
-      city: prof.city || "",
+      state: parsedLocation.state,
+      city: parsedLocation.city,
       town: "",
       skills: prof.skills || [],
       rating: 4.5, // Mock rating since not in profiles table
@@ -312,6 +367,14 @@ export default function Professionals() {
   const uniqueCountries = Array.from(new Set(professionals.map(p => p.country))).sort();
   const uniqueStates = Array.from(new Set(professionals.map(p => p.state).filter(Boolean))).sort();
   const uniqueCities = Array.from(new Set(professionals.map(p => p.city).filter(Boolean))).sort();
+  
+  console.log('Unique countries:', uniqueCountries);
+  console.log('Unique states:', uniqueStates);
+  console.log('Unique cities:', uniqueCities);
+  
+  // Add sample data for testing if no real data
+  const sampleStates = uniqueStates.length > 0 ? uniqueStates : ['Bayelsa', 'Lagos', 'Abuja', 'Rivers', 'Kano'];
+  const sampleCities = uniqueCities.length > 0 ? uniqueCities : ['Yenagoa', 'Lagos', 'Abuja', 'Port Harcourt', 'Kano'];
   const uniqueTowns = Array.from(new Set(professionals.map(p => p.town).filter(Boolean))).sort();
 
   // All available countries for the dropdown
@@ -437,6 +500,8 @@ export default function Professionals() {
     skillFilter && skillFilter !== "all-skills" ? skillFilter : "",
     rateFilter,
     countryFilter && countryFilter !== "all-countries" ? countryFilter : "",
+    stateFilter && stateFilter !== "all-states" ? stateFilter : "",
+    cityFilter && cityFilter !== "all-cities" ? cityFilter : "",
     selectedCity ? `${selectedCity.name}, ${selectedCity.state}` : "",
     ratingFilter && ratingFilter !== "any-rating" ? ratingFilter : "",
     availabilityFilter && availabilityFilter !== "any-availability" ? availabilityFilter : "",
@@ -492,7 +557,7 @@ export default function Professionals() {
             </div>
             
             {/* Filter Row 1 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
               <Select value={countryFilter} onValueChange={(value) => {
                 setCountryFilter(value);
                 setStateFilter("");
@@ -507,6 +572,43 @@ export default function Professionals() {
                   {allCountries.map((country) => (
                     <SelectItem key={country} value={country}>
                       {country}
+                    </SelectItem>
+                  ))}
+               </SelectContent>
+            </Select>
+
+              {/* State Filter */}
+              <Select value={stateFilter} onValueChange={(value) => {
+                setStateFilter(value);
+                setCityFilter("");
+                setTownFilter("");
+              }}>
+              <SelectTrigger>
+                  <SelectValue placeholder="Select State" />
+              </SelectTrigger>
+              <SelectContent>
+                  <SelectItem value="all-states">All States</SelectItem>
+                  {sampleStates.map((state) => (
+                    <SelectItem key={state} value={state}>
+                      {state}
+                    </SelectItem>
+                  ))}
+               </SelectContent>
+            </Select>
+
+              {/* City Filter */}
+              <Select value={cityFilter} onValueChange={(value) => {
+                setCityFilter(value);
+                setTownFilter("");
+              }}>
+              <SelectTrigger>
+                  <SelectValue placeholder="Select City" />
+              </SelectTrigger>
+              <SelectContent>
+                  <SelectItem value="all-cities">All Cities</SelectItem>
+                  {sampleCities.map((city) => (
+                    <SelectItem key={city} value={city}>
+                      {city}
                     </SelectItem>
                   ))}
                </SelectContent>
