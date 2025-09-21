@@ -185,28 +185,35 @@ export default function Professionals() {
           ? countryFilter 
           : userLocation?.country;
         
-        if (targetCountry) {
-          query = query.eq('country', targetCountry);
-        }
+        // Temporarily disable country filtering to test
+        console.log('Target country for filtering:', targetCountry);
+        // if (targetCountry) {
+        //   query = query.eq('country', targetCountry);
+        // }
 
         if (skillFilter && skillFilter !== "all-skills") {
           query = query.contains('skills', [skillFilter]);
         }
 
+        // Temporarily disable location filtering to test
+        console.log('State filter:', stateFilter);
+        console.log('City filter:', cityFilter);
+        console.log('Nearby filter:', nearbyFilter);
+        
         // Filter by state if specified
-        if (stateFilter && stateFilter !== "all-states") {
-          query = query.ilike('location', `%${stateFilter}%`);
-        }
+        // if (stateFilter && stateFilter !== "all-states") {
+        //   query = query.ilike('location', `%${stateFilter}%`);
+        // }
 
         // Filter by town if specified
-        if (cityFilter && cityFilter !== "all-cities") {
-          query = query.ilike('location', `%${cityFilter}%`);
-        }
+        // if (cityFilter && cityFilter !== "all-cities") {
+        //   query = query.ilike('location', `%${cityFilter}%`);
+        // }
 
         // Nearby filter - show only professionals from same state
-        if (nearbyFilter && userLocation?.state) {
-          query = query.ilike('location', `%${userLocation.state}%`);
-        }
+        // if (nearbyFilter && userLocation?.state) {
+        //   query = query.ilike('location', `%${userLocation.state}%`);
+        // }
 
         if (priceRange[0] > 0) {
           query = query.gte('hourly_rate', priceRange[0]);
@@ -229,6 +236,14 @@ export default function Professionals() {
           nearbyFilter,
           priceRange
         });
+        
+        // Log the actual data to see what we're getting
+        if (data && data.length > 0) {
+          console.log('First professional data:', data[0]);
+          console.log('All professional names:', data.map(p => p.full_name || p.nickname));
+        } else {
+          console.log('No data returned from query');
+        }
         
         if (error) {
           console.log('Database query error:', error);
