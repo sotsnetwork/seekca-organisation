@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { getCountries, getStatesByCountry, getAllCitiesByCountry, searchCities, type City } from "@/data/cities";
 import { nigeriaStates } from "@/data/nigeria-states";
+import { globalCountries, getStatesByCountry as getGlobalStatesByCountry, getCitiesByState, getAllCountries, getAllRegions } from "@/data/global-locations";
 import CitySelector from "@/components/CitySelector";
 import { getCurrencySymbol, getCurrencyForCountry } from "@/lib/currency";
 import ProfessionalProfileModal from "@/components/ProfessionalProfileModal";
@@ -50,6 +51,7 @@ export default function Professionals() {
   const [searchTerm, setSearchTerm] = useState("");
   const [skillFilter, setSkillFilter] = useState("");
   const [rateFilter, setRateFilter] = useState("");
+  const [regionFilter, setRegionFilter] = useState("");
   const [countryFilter, setCountryFilter] = useState("");
   const [stateFilter, setStateFilter] = useState("");
   const [cityFilter, setCityFilter] = useState("");
@@ -159,7 +161,7 @@ export default function Professionals() {
 
   // Fetch professionals from Supabase profiles table
   const { data: apiProfessionals = [], isLoading, error } = useQuery({
-    queryKey: ['profiles', searchTerm, countryFilter, stateFilter, cityFilter, skillFilter, priceRange, nearbyFilter, userLocation?.country],
+    queryKey: ['profiles', searchTerm, regionFilter, countryFilter, stateFilter, cityFilter, skillFilter, priceRange, nearbyFilter, userLocation?.country],
     queryFn: async () => {
       try {
         // First get all profiles with their user roles
@@ -364,22 +366,37 @@ export default function Professionals() {
 
   // Professionals will be fetched from Supabase database
 
-  // Get all Nigeria states for the dropdown
-  const allNigeriaStates = nigeriaStates.map(state => state.name).sort();
+  // Get all regions
+  const allRegions = getAllRegions();
   
-  // Get towns/cities for the selected state
-  const getTownsForState = (stateName: string) => {
-    const state = nigeriaStates.find(s => s.name === stateName);
-    return state ? state.cities.map(city => city.name).sort() : [];
+  // Get countries based on selected region
+  const getCountriesForRegion = (region: string) => {
+    if (!region || region === "all-regions") return getAllCountries();
+    return globalCountries.filter(country => country.region === region).map(country => ({
+      name: country.name,
+      code: country.code
+    }));
   };
   
-  const availableTowns = stateFilter && stateFilter !== "all-states" 
-    ? getTownsForState(stateFilter) 
+  const availableCountries = getCountriesForRegion(regionFilter);
+  
+  // Get states for selected country
+  const availableStates = countryFilter && countryFilter !== "all-countries" 
+    ? getGlobalStatesByCountry(countryFilter).map(state => state.name).sort()
     : [];
   
-  console.log('All Nigeria states:', allNigeriaStates);
+  // Get cities/towns for selected state and country
+  const availableTowns = stateFilter && stateFilter !== "all-states" && countryFilter
+    ? getCitiesByState(countryFilter, stateFilter).map(city => city.name).sort()
+    : [];
+  
+  console.log('All regions:', allRegions);
+  console.log('Selected region:', regionFilter);
+  console.log('Available countries:', availableCountries);
+  console.log('Selected country:', countryFilter);
+  console.log('Available states:', availableStates);
   console.log('Selected state:', stateFilter);
-  console.log('Available towns for selected state:', availableTowns);
+  console.log('Available towns:', availableTowns);
   const uniqueTowns = Array.from(new Set(professionals.map(p => p.town).filter(Boolean))).sort();
 
   // All available countries for the dropdown
@@ -486,6 +503,7 @@ export default function Professionals() {
     setSearchTerm("");
     setSkillFilter("");
     setRateFilter("");
+    setRegionFilter("");
     setCountryFilter("");
     setStateFilter("");
     setCityFilter("");
@@ -504,6 +522,7 @@ export default function Professionals() {
     searchTerm,
     skillFilter && skillFilter !== "all-skills" ? skillFilter : "",
     rateFilter,
+    regionFilter && regionFilter !== "all-regions" ? regionFilter : "",
     countryFilter && countryFilter !== "all-countries" ? countryFilter : "",
     stateFilter && stateFilter !== "all-states" ? stateFilter : "",
     cityFilter && cityFilter !== "all-cities" ? cityFilter : "",
@@ -562,7 +581,29 @@ export default function Professionals() {
             </div>
             
             {/* Filter Row 1 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+              {/* Region Filter */}
+              <Select value={regionFilter} onValueChange={(value) => {
+                setRegionFilter(value);
+                setCountryFilter("");
+                setStateFilter("");
+                setCityFilter("");
+                setTownFilter("");
+              }}>
+              <SelectTrigger>
+                  <SelectValue placeholder="Select Region" />
+              </SelectTrigger>
+              <SelectContent>
+                  <SelectItem value="all-regions">All Regions</SelectItem>
+                  {allRegions.map((region) => (
+                    <SelectItem key={region} value={region}>
+                      {region}
+                    </SelectItem>
+                  ))}
+               </SelectContent>
+            </Select>
+
+              {/* Country Filter */}
               <Select value={countryFilter} onValueChange={(value) => {
                 setCountryFilter(value);
                 setStateFilter("");
@@ -572,11 +613,11 @@ export default function Professionals() {
               <SelectTrigger>
                   <SelectValue placeholder="Select Country" />
               </SelectTrigger>
-                             <SelectContent>
+              <SelectContent>
                   <SelectItem value="all-countries">All Countries</SelectItem>
-                  {allCountries.map((country) => (
-                    <SelectItem key={country} value={country}>
-                      {country}
+                  {availableCountries.map((country) => (
+                    <SelectItem key={country.name} value={country.name}>
+                      {country.name}
                     </SelectItem>
                   ))}
                </SelectContent>
@@ -593,7 +634,7 @@ export default function Professionals() {
               </SelectTrigger>
               <SelectContent>
                   <SelectItem value="all-states">All States</SelectItem>
-                  {allNigeriaStates.map((state) => (
+                  {availableStates.map((state) => (
                     <SelectItem key={state} value={state}>
                       {state}
                     </SelectItem>
