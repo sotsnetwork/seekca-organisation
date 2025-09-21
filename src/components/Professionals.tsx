@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { getCountries, getStatesByCountry, getAllCitiesByCountry, searchCities, type City } from "@/data/cities";
+import { nigeriaStates } from "@/data/nigeria-states";
 import CitySelector from "@/components/CitySelector";
 import { getCurrencySymbol, getCurrencyForCountry } from "@/lib/currency";
 import ProfessionalProfileModal from "@/components/ProfessionalProfileModal";
@@ -193,7 +194,7 @@ export default function Professionals() {
           query = query.ilike('location', `%${stateFilter}%`);
         }
 
-        // Filter by city if specified
+        // Filter by town if specified
         if (cityFilter && cityFilter !== "all-cities") {
           query = query.ilike('location', `%${cityFilter}%`);
         }
@@ -363,18 +364,22 @@ export default function Professionals() {
 
   // Professionals will be fetched from Supabase database
 
-  // Get unique location data for hierarchical filtering
-  const uniqueCountries = Array.from(new Set(professionals.map(p => p.country))).sort();
-  const uniqueStates = Array.from(new Set(professionals.map(p => p.state).filter(Boolean))).sort();
-  const uniqueCities = Array.from(new Set(professionals.map(p => p.city).filter(Boolean))).sort();
+  // Get all Nigeria states for the dropdown
+  const allNigeriaStates = nigeriaStates.map(state => state.name).sort();
   
-  console.log('Unique countries:', uniqueCountries);
-  console.log('Unique states:', uniqueStates);
-  console.log('Unique cities:', uniqueCities);
+  // Get towns/cities for the selected state
+  const getTownsForState = (stateName: string) => {
+    const state = nigeriaStates.find(s => s.name === stateName);
+    return state ? state.cities.map(city => city.name).sort() : [];
+  };
   
-  // Add sample data for testing if no real data
-  const sampleStates = uniqueStates.length > 0 ? uniqueStates : ['Bayelsa', 'Lagos', 'Abuja', 'Rivers', 'Kano'];
-  const sampleCities = uniqueCities.length > 0 ? uniqueCities : ['Yenagoa', 'Lagos', 'Abuja', 'Port Harcourt', 'Kano'];
+  const availableTowns = stateFilter && stateFilter !== "all-states" 
+    ? getTownsForState(stateFilter) 
+    : [];
+  
+  console.log('All Nigeria states:', allNigeriaStates);
+  console.log('Selected state:', stateFilter);
+  console.log('Available towns for selected state:', availableTowns);
   const uniqueTowns = Array.from(new Set(professionals.map(p => p.town).filter(Boolean))).sort();
 
   // All available countries for the dropdown
@@ -557,7 +562,7 @@ export default function Professionals() {
             </div>
             
             {/* Filter Row 1 */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <Select value={countryFilter} onValueChange={(value) => {
                 setCountryFilter(value);
                 setStateFilter("");
@@ -588,7 +593,7 @@ export default function Professionals() {
               </SelectTrigger>
               <SelectContent>
                   <SelectItem value="all-states">All States</SelectItem>
-                  {sampleStates.map((state) => (
+                  {allNigeriaStates.map((state) => (
                     <SelectItem key={state} value={state}>
                       {state}
                     </SelectItem>
@@ -596,24 +601,27 @@ export default function Professionals() {
                </SelectContent>
             </Select>
 
-              {/* City Filter */}
+              {/* Towns Filter */}
               <Select value={cityFilter} onValueChange={(value) => {
                 setCityFilter(value);
                 setTownFilter("");
               }}>
               <SelectTrigger>
-                  <SelectValue placeholder="Select City" />
+                  <SelectValue placeholder="Select Town" />
               </SelectTrigger>
               <SelectContent>
-                  <SelectItem value="all-cities">All Cities</SelectItem>
-                  {sampleCities.map((city) => (
-                    <SelectItem key={city} value={city}>
-                      {city}
+                  <SelectItem value="all-cities">All Towns</SelectItem>
+                  {availableTowns.map((town) => (
+                    <SelectItem key={town} value={town}>
+                      {town}
                     </SelectItem>
                   ))}
                </SelectContent>
             </Select>
-              
+            </div>
+
+            {/* Filter Row 2 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               <Select value={ratingFilter} onValueChange={setRatingFilter}>
               <SelectTrigger>
                   <SelectValue placeholder="Minimum Rating" />
@@ -671,7 +679,7 @@ export default function Professionals() {
               </div>
             </div>
             
-            {/* Filter Row 2 */}
+            {/* Advanced Filters */}
             <div className="flex flex-wrap gap-2">
               <Dialog open={showAdvancedFilters} onOpenChange={setShowAdvancedFilters}>
                 <DialogTrigger asChild>
