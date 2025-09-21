@@ -150,11 +150,24 @@ export default function Jobs() {
         
         if (error) {
           console.error('Database query error:', error);
+          console.error('Error details:', error.message, error.details, error.hint);
           return [];
         }
         
         console.log('Jobs fetched from database:', data);
         console.log('Number of jobs found:', data?.length || 0);
+        
+        // Log each job individually for debugging
+        if (data && data.length > 0) {
+          data.forEach((job, index) => {
+            console.log(`Job ${index + 1}:`, {
+              id: job.id,
+              title: job.title,
+              status: job.status,
+              hirer: job.hirer
+            });
+          });
+        }
         
         // Return actual data from database
         if (!data || data.length === 0) {
