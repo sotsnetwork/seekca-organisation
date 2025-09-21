@@ -26,6 +26,7 @@ import { Link } from "react-router-dom";
 import ProjectMilestones from "./ProjectMilestones";
 import ProjectMessages from "./ProjectMessages";
 import ProjectFiles from "./ProjectFiles";
+import JobApplications from "./JobApplications";
 
 interface Project {
   id: string;
@@ -60,6 +61,15 @@ export default function ProjectDashboard() {
   const { user } = useAuth();
   const { data: userRole } = useUserRole();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [showApplicationsModal, setShowApplicationsModal] = useState(false);
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
+  const [selectedJobTitle, setSelectedJobTitle] = useState<string>('');
+
+  const handleViewApplications = (jobId: string, jobTitle: string) => {
+    setSelectedJobId(jobId);
+    setSelectedJobTitle(jobTitle);
+    setShowApplicationsModal(true);
+  };
 
   // Fetch user's projects/jobs
   const { data: projects = [], isLoading } = useQuery({
@@ -240,7 +250,7 @@ export default function ProjectDashboard() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalEarnings.toLocaleString()}</div>
+            <div className="text-2xl font-bold">${(totalEarnings || 0).toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               From all projects
             </p>
@@ -305,12 +315,12 @@ export default function ProjectDashboard() {
                     <span>
                       {userRole === 'hirer' 
                         ? (project.budget_min && project.budget_max 
-                            ? `${project.currency} ${project.budget_min.toLocaleString()} - ${project.budget_max.toLocaleString()}`
+                            ? `${project.currency} ${(project.budget_min || 0).toLocaleString()} - ${(project.budget_max || 0).toLocaleString()}`
                             : project.budget 
-                              ? `${project.currency} ${project.budget.toLocaleString()}`
+                              ? `${project.currency} ${(project.budget || 0).toLocaleString()}`
                               : 'Budget not specified'
                           )
-                        : `$${project.total_budget?.toLocaleString() || '0'}`
+                        : `$${(project.total_budget || 0).toLocaleString()}`
                       }
                     </span>
                   </div>
@@ -385,9 +395,9 @@ export default function ProjectDashboard() {
                 <div className="flex gap-2">
                   {userRole === 'hirer' ? (
                     <>
-                      <Button 
-                        size="sm" 
-                        onClick={() => setSelectedProject(project)}
+                      <Button
+                        size="sm"
+                        onClick={() => handleViewApplications(project.id, project.title)}
                         className="flex-1"
                       >
                         <MessageSquare className="w-4 h-4 mr-2" />
@@ -457,7 +467,7 @@ export default function ProjectDashboard() {
                       </CardHeader>
                       <CardContent className="space-y-2">
                         <p><strong>Description:</strong> {selectedProject.description}</p>
-                        <p><strong>Budget:</strong> ${selectedProject.total_budget.toLocaleString()}</p>
+                        <p><strong>Budget:</strong> ${(selectedProject.total_budget || 0).toLocaleString()}</p>
                         <p><strong>Status:</strong> 
                           <Badge className={`ml-2 ${getStatusColor(selectedProject.status)}`}>
                             {selectedProject.status}
@@ -519,6 +529,20 @@ export default function ProjectDashboard() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Job Applications Modal */}
+      {selectedJobId && (
+        <JobApplications
+          jobId={selectedJobId}
+          jobTitle={selectedJobTitle}
+          isOpen={showApplicationsModal}
+          onClose={() => {
+            setShowApplicationsModal(false);
+            setSelectedJobId(null);
+            setSelectedJobTitle('');
+          }}
+        />
       )}
     </div>
   );
